@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FuncLibrary/Type.h"
 #include "GameFramework/Actor.h"
 #include "NR_Projectile.generated.h"
+
 
 UCLASS()
 class NEURON_API ANR_Projectile : public AActor
@@ -15,6 +17,18 @@ public:
 	// Sets default values for this actor's properties
 	ANR_Projectile();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class UStaticMeshComponent* BulletMesh = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class USphereComponent* BulletCollisionSphere = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class UProjectileMovementComponent* BulletProjectileMovement = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class UParticleSystemComponent* BulletFX = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+		FProjectileInfo ProjectileSetting;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -23,4 +37,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+		virtual void InitProjectile(FProjectileInfo InitParam);
+
+	//Collision start
+	UFUNCTION()
+		virtual void BulletCollisionSphereHit(class UPrimitiveComponent* HitComp, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	//Collision end
+
+	//Change velocity
+	virtual void PostNetReceiveVelocity(const FVector& NewVelocity) override;
 };

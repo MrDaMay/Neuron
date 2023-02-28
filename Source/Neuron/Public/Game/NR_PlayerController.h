@@ -34,7 +34,8 @@ public:
 	//Delegate for respawn character
 	FOnRespawn OnRespawn;
 	//Delegate for open/close menu widget
-	FOnOpenMenuWidget OnOpenMenuWidget;
+	UPROPERTY(BlueprintAssignable, Category = "MenuWidget")
+		FOnOpenMenuWidget OnOpenMenuWidget;
 	//Delegate what player was absolutely dead
 	FOnEndGame OnEndGame;
 

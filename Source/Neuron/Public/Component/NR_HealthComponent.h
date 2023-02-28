@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "NR_HealthComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChange, float, Health);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDead);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NEURON_API UNR_HealthComponent : public UActorComponent
@@ -16,13 +18,26 @@ public:
 	// Sets default values for this component's properties
 	UNR_HealthComponent();
 
+	//Delegate for widget
+	FOnHealthChange OnHealthChange;
+	//Delegate for dead
+	FOnDead OnDead;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	float Health = 100.0f;
+	bool IsAlive = true;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	//Function for check alive 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		bool GetIsAlive();
+	//Function increment Health
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		virtual void ChangeHealthValue(float ChangeValue);
 };

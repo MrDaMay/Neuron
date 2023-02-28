@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "NR_GameMode.generated.h"
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndGame, bool, bIsWin);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndGameDelegate, bool, IsWin);
 
 /**
  * 
@@ -18,8 +19,9 @@ class NEURON_API ANR_GameMode : public AGameModeBase
 public:
 
 	//Delegate for widget
-	FOnEndGame OnEndGame;
+	UPROPERTY(BlueprintAssignable, Category = "EndGame")
+		FOnEndGameDelegate OnEndGameDelegate;
 
 	//Event for create finish widget and end game
-	void EndGame(bool bIsWin);
+	void EndGame(bool IsWin);
 };

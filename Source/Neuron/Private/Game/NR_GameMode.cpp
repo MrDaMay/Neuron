@@ -3,7 +3,7 @@
 
 #include "Game/NR_GameMode.h"
 
-void ANR_GameMode::EndGame(bool bIsWin)
+void ANR_GameMode::EndGame(bool IsWin)
 {
-	OnEndGame.Broadcast(bIsWin);
+	OnEndGameDelegate.Broadcast(IsWin);
 }

@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Component/NR_HealthComponent.h"
+#include "Component/NR_InventoryComponent.h"
+#include "Weapon/NR_Weapon.h"
+#include "FuncLibrary/Type.h"
 #include "NR_Character.generated.h"
 
 UCLASS()
@@ -11,13 +15,40 @@ class NEURON_API ANR_Character : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 public:
 	// Sets default values for this character's properties
 	ANR_Character();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	/** Returns TopDownCameraComponent subobject **/
+	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/** Returns InventoryComponent subobject **/
+	FORCEINLINE class UNR_InventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
+	/** Returns HealthComponent subobject **/
+	FORCEINLINE class UNR_HealthComponent* GetHealthComponent() const { return HealthComponent; }
+
+private:
+	/** Top down camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* TopDownCameraComponent;
+
+	/** Camera boom positioning the camera above the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+		class UNR_InventoryComponent* InventoryComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
+		class UNR_HealthComponent* HealthComponent;
 
 public:	
 	// Called every frame
@@ -26,4 +57,85 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Cursor start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+		UMaterialInterface* CursorMaterial = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
+		FVector CursorSize = FVector(20.0f, 40.0f, 40.0f);
+	UDecalComponent* CurrentCursor = nullptr;
+	//Cursor end
+
+	//Input start
+	float AxisX = 0.0f;
+	float AxisY = 0.0f;
+	UFUNCTION()
+		void InputAxisX(float Value);
+	UFUNCTION()
+		void InputAxisY(float Value);
+	UFUNCTION()
+		void InputAttackPressed();
+	UFUNCTION()
+		void InputAttackReleased();
+	//Input end
+
+	//Weapon start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		ANR_Weapon* CurrentWeapon = nullptr;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+		int32 CurrentIndexWeapon = 0;
+	UFUNCTION(BlueprintCallable)
+		ANR_Weapon* GetCurrentWeapon();
+	UFUNCTION(BlueprintCallable)
+		void InitWeapon(FName IdWeaponName, FAdditionalWeaponInfo WeaponAdditionalInfo, int32 NewCurrentIndexWeapon);
+	UFUNCTION()
+		void TryPickUpWeapon();
+	UFUNCTION()
+		void TryReloadWeapon();
+	UFUNCTION(BlueprintCallable)
+		void TrySwitchWeapon();
+	UFUNCTION()
+		void WeaponReloadStart(UAnimMontage* Anim);
+	UFUNCTION()
+		void WeaponReloadEnd(bool bIsSuccess, int32 AmmoSpent);
+	UFUNCTION(BlueprintNativeEvent)
+		void WeaponReloadStart_BP(UAnimMontage* Anim);
+	UFUNCTION(BlueprintNativeEvent)
+		void WeaponReloadEnd_BP(bool bIsSuccess, int32 AmmoSpent);
+	UFUNCTION()
+		void WeaponFireStart(UAnimMontage* Anim);
+	UFUNCTION(BlueprintNativeEvent)
+		void WeaponFireStart_BP(UAnimMontage* Anim);
+	UFUNCTION(BlueprintCallable)
+		void StartSwitchWeapon();
+	UFUNCTION(BlueprintNativeEvent)
+		void StartSwitchWeapon_BP();
+	UFUNCTION(BlueprintCallable)
+		void EndSwitchWeapon();
+	UFUNCTION(BlueprintNativeEvent)
+		void EndSwitchWeapon_BP();
+	//ToDo OverlapPickUpWeapon = nullptr;
+	//Weapon end
+
+	//Tick function start
+	UFUNCTION()
+		void MovementTick(float DeltaTime);
+	//Tick function end
+
+	//Shoot start
+	FVector MouseLocation;
+	FVector LineEnd;
+	UFUNCTION(BlueprintCallable)
+		void AttackEvent(bool bIsFire);
+	//Shoot end
+
+	//Dead start
+	UFUNCTION()
+		void CharDead();
+	UFUNCTION(BlueprintNativeEvent)
+		void CharDead_BP();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
+		UAnimMontage* DeathMontage;
+	UFUNCTION()
+		void AbsolutelyDead(bool IsWin);
+	//Dead end
 };

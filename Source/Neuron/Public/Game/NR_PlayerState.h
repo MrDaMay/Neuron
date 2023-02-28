@@ -24,7 +24,8 @@ protected:
 public:
 
 	//Delegate for widget
-	FOnIncrementScore OnIncrementScore;
+	UPROPERTY(BlueprintAssignable, Category = "IcrementScore")
+		FOnIncrementScore OnIncrementScore;
 
 	//Function for increment score
 	void IncrementScore(float MutableScore);

@@ -32,3 +32,36 @@ void UNR_HealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+bool UNR_HealthComponent::GetIsAlive()
+{
+	return IsAlive;
+}
+
+void UNR_HealthComponent::ChangeHealthValue(float ChangeValue)
+{
+	//Check alive
+	if (IsAlive == true)
+	{
+		//Increment health
+		Health += ChangeValue;
+
+
+		if (Health > 100.0f)
+		{
+			Health = 100.0f;
+		}
+		else
+		{
+			if (Health <= 0.0f)
+			{
+				Health = 0.0f;
+				OnDead.Broadcast();
+				IsAlive = false;
+			}
+		}
+
+		//Say widget what health changed
+		OnHealthChange.Broadcast(Health);
+	}
+}
+

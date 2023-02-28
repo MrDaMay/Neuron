@@ -1,0 +1,183 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/DataTable.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Type.generated.h"
+
+// enumeration for weapon
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	RifleType UMETA(DisplayName = "Rifle"),
+	GunType UMETA(DisplayName = "Gun"),
+	GrenadeType UMETA(DisplayName = "Grende"),
+	LaserType UMETA(DisplayName = "Laser"),
+};
+
+
+//Information about projectile. Link, meshes, emmiters, damages, speed
+USTRUCT(BlueprintType)
+struct FProjectileInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		TSubclassOf<class ANR_Projectile> Projectile = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		UStaticMesh* ProjectileStaticMesh = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		FTransform ProjectileStaticMeshOffset = FTransform();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		UParticleSystem* ProjectileTrailFx = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		FTransform ProjectileTrailFxOffset = FTransform();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		float ProjectileDamage = 100.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		float ProjectileLifeTime = 20.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		float ProjectInitSpeed = 2000.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		float ProjectMaxSpeed = 1000.0f;
+
+	//Hit
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+		UMaterialInterface* HitDecal;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+		USoundBase* HitSound = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+		UParticleSystem* HitFXs;
+
+	//Explose
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
+		UParticleSystem* ExploseFX = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
+		USoundBase* ExploseSound = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
+		float ProjectileMaxRadiusDamage = 200.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
+		float ProjectileInnerRadiusDamage = 50.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
+		float ExploseMaxDamage = 200.0f;
+};
+
+//Animation for character and weapon
+USTRUCT(BlueprintType)
+struct FAnimWeaponInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
+		UAnimMontage* CharacterFireAnimMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
+		UAnimMontage* CharacterReloadAnimMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
+		UAnimMontage* WeaponReloadAnimMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
+		UAnimMontage* WeaponFireAnimMontage = nullptr;
+};
+
+//Information about weapon. Link, meshes, emmiters, damages, speed
+USTRUCT(BlueprintType)
+struct FWeaponInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Class")
+		TSubclassOf<class ANR_Weapon> WeaponClass = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+		float RateOfFire = 0.5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+		float ReloadTime = 2.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+		int32 MaxRound = 10;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+		int32 NumberProjectileByShot = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dispersion")
+		float DispersionWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
+		FAnimWeaponInfo AnimWeaponInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+		USoundBase* SoundReloadWeapon = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+		FProjectileInfo ProjectileSetting;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
+		float LaserDamage = 100.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
+		float LaserDistance = 2000.0f;
+
+	//Inv
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		float SwitchTimeWeapon = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		UTexture2D* WeaponIcon = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		UTexture2D* BackgroundIcon = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		EWeaponType WeaponType = EWeaponType::RifleType;
+};
+
+//Addition info for inventory
+USTRUCT(BlueprintType)
+struct FAdditionalWeaponInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Stats")
+		int32 Round = 0;
+};
+
+//Inventory weapon slot
+USTRUCT(BlueprintType)
+struct FWeaponSlot
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
+		FName NameItem;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
+		FAdditionalWeaponInfo AdditionalInfo;
+};
+
+//Inventory ammo slot
+USTRUCT(BlueprintType)
+struct FAmmoSlot
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
+		EWeaponType WeaponType = EWeaponType::RifleType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
+		int32 Cout = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
+		int32 MaxCout = 100;
+};
+
+//Connect enemy with his name
+USTRUCT(BlueprintType)
+struct FEnemyCharacters : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		FName EnemyClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		TSubclassOf<class ANR_EnemyCharacterBase> Enemy = nullptr;
+};
+
+UCLASS()
+class NEURON_API UType : public UBlueprintFunctionLibrary
+{
+	GENERATED_BODY()
+	
+};
