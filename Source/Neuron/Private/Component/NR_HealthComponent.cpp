@@ -10,8 +10,6 @@ UNR_HealthComponent::UNR_HealthComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	MaxHealth = DefaultHealth;
-	Health = MaxHealth;
 	// ...
 }
 

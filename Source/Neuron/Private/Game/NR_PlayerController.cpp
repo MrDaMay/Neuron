@@ -8,7 +8,7 @@ void ANR_PlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	//Key assignment in project settings
-	InputComponent->BindAction("MenuWidget", EInputEvent::IE_Pressed, this, &ANR_PlayerController::OpenCloseMenuWidget);
+	InputComponent->BindAction("MenuWidget", EInputEvent::IE_Pressed, this, &ANR_PlayerController::OpenCloseMenuWidget).bExecuteWhenPaused = true;
 }
 
 void ANR_PlayerController::TryToRespawnPlayer()

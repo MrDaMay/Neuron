@@ -82,6 +82,7 @@ void ANR_Character::BeginPlay()
 float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
+	HealthComponent->ChangeHealthValue(DamageAmount);
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 

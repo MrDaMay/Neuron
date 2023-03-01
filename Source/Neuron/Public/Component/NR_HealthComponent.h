@@ -19,7 +19,7 @@ public:
 	UNR_HealthComponent();
 
 	//Delegate for widget
-	UPROPERTY(BlueprintCallable)
+	UPROPERTY(BlueprintAssignable)
 	FOnHealthChange OnHealthChange;
 	//Delegate for dead
 	FOnDead OnDead;
@@ -32,7 +32,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	float Health = 0.0f;
-	float MaxHealth = 0.0f;
 	bool IsAlive = true;
 
 public:	
@@ -42,9 +41,7 @@ public:
 	//Function for check alive 
 	UFUNCTION(BlueprintCallable, Category = "Health")
 		bool GetIsAlive();
-	//Max Health getter  
-	UFUNCTION(BlueprintCallable, Category = "Health")
-		float GetMaxHealth() { return MaxHealth;  };
+
 	//Function increment Health
 	UFUNCTION(BlueprintCallable, Category = "Health")
 		virtual void ChangeHealthValue(float ChangeValue);
