@@ -16,7 +16,7 @@ void ANR_ProjectileGrenade::Tick(float DeltaTime)
 
 void ANR_ProjectileGrenade::ImpactProjectile()
 {
-	GetWorldTimerManager().SetTimer(ExploseTimerHandle, this, &ANR_ProjectileGrenade::Explose, TimeToExplose, false, 0.0f);
+	GetWorldTimerManager().SetTimer(ExploseTimerHandle, this, &ANR_ProjectileGrenade::Explose, TimeToExplose, false, TimeToExplose);
 }
 
 void ANR_ProjectileGrenade::InitProjectile(FProjectileInfo InitParam)

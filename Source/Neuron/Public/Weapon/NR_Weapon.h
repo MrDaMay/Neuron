@@ -45,12 +45,6 @@ public:
 	void ReloadTick(float DeltaTime);
 	//Tick end
 
-	//Laser start
-	UParticleSystemComponent* Laser = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lazer")
-		UParticleSystem* LaserFx = nullptr;
-	//Laser end
-
 	//Params start
 	UFUNCTION(BlueprintCallable)
 		int32 GetWeaponRound();
@@ -60,6 +54,7 @@ public:
 	FWeaponInfo WeaponSetting;
 	FAdditionalWeaponInfo WeaponInfo;
 	float ReloadTime = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WeaponRateOfFire = 0.0f;
 	//Params end
 
@@ -85,7 +80,8 @@ public:
 	//Shoot end
 
 	//Timers start
-	float FireTimer = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float FireTimer = 100.0f;
 	float ReloadTimer = 0.0f;
 	FTimerHandle FireTimerHandle;
 	//Timers end

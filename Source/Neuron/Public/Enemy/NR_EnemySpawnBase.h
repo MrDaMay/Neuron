@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "Enemy/NR_EnemyCharacterBase.h"
 #include "NR_EnemySpawnBase.generated.h"
 
 UCLASS()
@@ -31,6 +32,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void SpawnEnemy();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<ANR_EnemyCharacterBase> Enemy;
 };

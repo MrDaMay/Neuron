@@ -2,7 +2,6 @@
 
 
 #include "Enemy/NR_EnemySpawnBase.h"
-#include "Enemy/NR_EnemyCharacterBase.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Game/NR_GameMode.h"
@@ -39,7 +38,7 @@ void ANR_EnemySpawnBase::SpawnEnemy()
 	FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxSize);
 	FRotator SpawnRotation = FRotator(0);
 	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-	GetWorld()->SpawnActor(ANR_EnemySpawnBase::StaticClass(), &SpawnLocation, &SpawnRotation, SpawnParameters);
+	GetWorld()->SpawnActor(Enemy, &SpawnLocation, &SpawnRotation, SpawnParameters);
 }

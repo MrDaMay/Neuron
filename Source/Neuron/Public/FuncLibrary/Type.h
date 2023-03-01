@@ -115,6 +115,8 @@ struct FWeaponInfo : public FTableRowBase
 		float LaserDamage = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
 		float LaserDistance = 2000.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
+		UParticleSystem* LaserFx = nullptr;
 
 	//Inv
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")

@@ -92,11 +92,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
 		UAnimMontage* DeadMontage = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
-		UAnimMontage* HitMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
 		UAnimMontage* AttackMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
-		UAnimMontage* ConfuseMontage = nullptr;
 
 	//State
 	UFUNCTION(BlueprintCallable)

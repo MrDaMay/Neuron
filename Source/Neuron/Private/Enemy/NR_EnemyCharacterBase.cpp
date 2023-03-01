@@ -132,7 +132,7 @@ void ANR_EnemyCharacterBase::SetStateMove(bool CanMove)
 
 void ANR_EnemyCharacterBase::AttackAnimEnd(UAnimMontage* Montage, bool bIsSuccess)
 {
-
+	SetStateAttack(true);
 }
 
 void ANR_EnemyCharacterBase::AttackEnemy(FName NotifyName,

@@ -93,20 +93,20 @@ void ANR_Weapon::FireButtonPressed(bool bIsFire)
 		if (FireTimer >= WeaponRateOfFire)
 		{
 			Fire();
-			FireTimer = 0.0f;
 		}
 
-		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::Fire, WeaponRateOfFire, true, 0.0f);
+		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::Fire, WeaponRateOfFire, true, WeaponRateOfFire);
 	}
 	else
 	{
-		if (GetWorldTimerManager().IsTimerActive(FireTimerHandle))
 			GetWorldTimerManager().ClearTimer(FireTimerHandle);
 	}
 }
 
 void ANR_Weapon::Fire()
 {
+	FireTimer = 0.0f;
+
 	UAnimMontage* AnimMontage = nullptr;
 
 	AnimMontage = WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage;
@@ -166,7 +166,7 @@ void ANR_Weapon::Fire()
 			UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, SpawnLocation + ShootLocation->GetForwardVector() * WeaponSetting.LaserDistance,
 				ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
 
-			Laser = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), LaserFx, ShootLocation->GetComponentLocation(), UKismetMathLibrary::FindLookAtRotation(ShootLocation->GetComponentLocation(), ShootLocation->GetComponentLocation() + ShootLocation->GetForwardVector()));
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, ShootLocation->GetComponentLocation(), UKismetMathLibrary::FindLookAtRotation(ShootLocation->GetComponentLocation(), ShootLocation->GetComponentLocation() + ShootLocation->GetForwardVector()));
 
 			if (Hit.GetActor() && Hit.PhysMaterial.IsValid())
 			{
