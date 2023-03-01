@@ -61,7 +61,7 @@ void UNR_HealthComponent::ChangeHealthValue(float ChangeValue)
 		}
 
 		//Say widget what health changed
-		OnHealthChange.Broadcast(Health);
+		OnHealthChange.Broadcast(Health, ChangeValue);
 	}
 }
 

@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "NR_HealthComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChange, float, Health);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChange, float, Health, float, Damage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDead);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -19,6 +19,7 @@ public:
 	UNR_HealthComponent();
 
 	//Delegate for widget
+	UPROPERTY(BlueprintCallable)
 	FOnHealthChange OnHealthChange;
 	//Delegate for dead
 	FOnDead OnDead;

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Component/NR_HealthComponent.h"
+#include "Component/NR_KillScoreComponent.h"
 #include "NR_EnemyCharacterBase.generated.h"
 
 UCLASS()
@@ -15,9 +17,33 @@ public:
 	// Sets default values for this character's properties
 	ANR_EnemyCharacterBase();
 
+	//HealthComponent
+	FORCEINLINE class UNR_HealthComponent* GetHealthComponent() const { return HealthComponent; }
+	//KillScoreComponent
+	FORCEINLINE class UNR_KillScoreComponent* GetKillScoreComponent() const { return KillScoreComponent; }
+
+private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
+		class UNR_HealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = KillDCore, meta = (AllowPrivateAccess = "true"))
+		class UNR_KillScoreComponent* KillScoreComponent;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY()
+		bool CanMovePawn = true;
+	UPROPERTY()
+		bool CanAttackPawn = true;
+
+	UAnimInstance* AnimAttackInstance;
+
+	UFUNCTION()
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 
 public:	
 	// Called every frame
@@ -26,4 +52,67 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Combat
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float BaseAttackDamage = 30.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float RandomRangeAttackDamage = 10.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float RadiusMeleeAttack = 30.0f;
+
+	//AI
+	UFUNCTION(BlueprintCallable)
+		bool CanEnemyAttack();
+	UFUNCTION(BlueprintCallable)
+		bool CanEnemyMove();
+	UFUNCTION(BlueprintCallable)
+		virtual	void StartAttackEnemy();
+
+
+	//Damage
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		FVector SpawnOffsetLocalDamage = FVector(0, 0, 44.0f);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		float CoefDamageResist = 1.0f;
+	UFUNCTION()
+		void HealthChange(float Health, float Damage);
+	UFUNCTION(BlueprintNativeEvent)
+		void HealthChange_BP(float Health, float Damage);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		float DistanceToAttack = 150.0f;
+
+	//Dead
+	UFUNCTION()
+		virtual void CharacterDead();
+	UFUNCTION(BlueprintNativeEvent)
+		void CharacterDead_BP();
+
+
+	//Montage
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+		UAnimMontage* DeadMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+		UAnimMontage* HitMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+		UAnimMontage* AttackMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+		UAnimMontage* ConfuseMontage = nullptr;
+
+	//State
+	UFUNCTION(BlueprintCallable)
+		void SetStateAttack(bool CanAttack);
+	UFUNCTION(BlueprintCallable)
+		void SetStateMove(bool CanMove);
+
+	//Attack
+	UFUNCTION()
+		virtual void AttackAnimEnd(UAnimMontage* Montage, bool bIsSuccess);
+	UFUNCTION()
+		virtual	void AttackEnemy(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+
+
+	//Movement
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+		float MaxSpeed = 400.0f;
 };

@@ -84,8 +84,13 @@ void ANR_Projectile::InitProjectile(FProjectileInfo InitParam)
 	ProjectileSetting = InitParam;
 }
 
+void ANR_Projectile::ImpactProjectile()
+{
+	this->Destroy();
+}
+
 void ANR_Projectile::BulletCollisionSphereHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+                                              UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (OtherActor && Hit.PhysMaterial.IsValid())
 	{
@@ -119,7 +124,7 @@ void ANR_Projectile::BulletCollisionSphereHit(UPrimitiveComponent* HitComp, AAct
 
 		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage, Hit.TraceStart, Hit, GetInstigatorController(), this, NULL);
 
-		this->Destroy();
+		ImpactProjectile();
 	}
 }
 

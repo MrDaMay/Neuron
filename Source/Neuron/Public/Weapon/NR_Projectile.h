@@ -40,6 +40,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void InitProjectile(FProjectileInfo InitParam);
 
+	virtual void ImpactProjectile();
+
 	//Collision start
 	UFUNCTION()
 		virtual void BulletCollisionSphereHit(class UPrimitiveComponent* HitComp, AActor* OtherActor,
