@@ -177,7 +177,6 @@ void ANR_Character::InitWeapon(FName IdWeaponName)
 
 					Weapon->Pawn = this;
 					Weapon->WeaponSetting = WeaponInfo;
-					Weapon->WeaponRateOfFire = WeaponInfo.RateOfFire;
 
 					Weapon->OnWeaponFireStart.AddDynamic(this, &ANR_Character::WeaponFireStart);
 				}

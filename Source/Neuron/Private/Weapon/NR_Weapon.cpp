@@ -70,114 +70,122 @@ void ANR_Weapon::FireButtonPressed(bool bIsFire)
 {
 	if (bIsFire)
 	{
-		if (FireTimer >= WeaponRateOfFire)
+		if (GetProjectile().Projectile)
 		{
-			Fire();
-		}
+			if (FireTimer >= WeaponSetting.RateOfFire)
+			{
+				FireProjectile();
+			}
 
-		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::Fire, WeaponRateOfFire, true, WeaponRateOfFire);
+			GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::FireProjectile, WeaponSetting.RateOfFire, true, WeaponSetting.RateOfFire);
+		}
+		else
+			GetWorldTimerManager().SetTimer(LaserFireTimerHandle, this, &ANR_Weapon::LaserFire, WeaponSetting.DelayLaserForFire, true, WeaponSetting.DelayLaserForFire);
 	}
 	else
 	{
+		if (GetWorldTimerManager().IsTimerActive(LaserFireTimerHandle))
+			GetWorldTimerManager().ClearTimer(LaserFireTimerHandle);
+		else
 			GetWorldTimerManager().ClearTimer(FireTimerHandle);
 	}
 }
 
-void ANR_Weapon::Fire()
+void ANR_Weapon::PreFire()
+{
+	OnWeaponFireStart.Broadcast(WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage);
+
+	FindEndLocation();
+}
+
+void ANR_Weapon::FireProjectile()
 {
 	FireTimer = 0.0f;
 
-	UAnimMontage* AnimMontage = nullptr;
-
-	AnimMontage = WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage;
-
 	uint8 NumberProjectile = WeaponSetting.NumberProjectileByShot;
 
-	OnWeaponFireStart.Broadcast(AnimMontage);
+	PreFire();
 
 	if (ShootLocation)
 	{
-		FVector SpawnLocation = ShootLocation->GetComponentLocation();
-		FRotator SpawnRotation = ShootLocation->GetComponentRotation();
-
-		FindEndLocation();
-
 		FProjectileInfo ProjectileInfo;
 		ProjectileInfo = GetProjectile();
 
-		if (ProjectileInfo.Projectile)
+		FVector SpawnLocation = ShootLocation->GetComponentLocation();
+		FRotator SpawnRotation = ShootLocation->GetComponentRotation();
+
+		float RotationToTarget = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShotEndLocation).Yaw;
+		float RotationToTargetWithDispersion = RotationToTarget + UKismetMathLibrary::RandomFloatInRange(-WeaponSetting.DispersionWeapon, WeaponSetting.DispersionWeapon);
+
+		if (WeaponSetting.AnimWeaponInfo.WeaponFireAnimMontage
+			&& SkeletalMeshWeapon && SkeletalMeshWeapon->GetAnimInstance())
 		{
+			SkeletalMeshWeapon->GetAnimInstance()->Montage_Play(WeaponSetting.AnimWeaponInfo.WeaponFireAnimMontage);
+		}
 
-			float RotationToTarget = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShotEndLocation).Yaw;
-			float RotationToTargetWithDispersion = RotationToTarget + UKismetMathLibrary::RandomFloatInRange(-CoefDispersion, CoefDispersion);
+		int8 CoefConfusionShot = (NumberProjectile / 2) * -Confusion;
+		FActorSpawnParameters SpawmParams;
+		SpawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawmParams.Owner = GetOwner();
+		SpawmParams.Instigator = GetInstigator();
 
-			if (WeaponSetting.AnimWeaponInfo.WeaponFireAnimMontage
-				&& SkeletalMeshWeapon && SkeletalMeshWeapon->GetAnimInstance())
+		for (int8 i = 0; i < NumberProjectile; i++)
+		{
+			SpawnRotation = FRotator(0.0f, RotationToTargetWithDispersion + WeaponSetting.DispersionWeapon * CoefConfusionShot, 0.0f);
+
+			ANR_Projectile* Projectile = Cast<ANR_Projectile>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawmParams));
+			if (Projectile)
 			{
-				SkeletalMeshWeapon->GetAnimInstance()->Montage_Play(WeaponSetting.AnimWeaponInfo.WeaponFireAnimMontage);
+				Projectile->InitProjectile(ProjectileInfo);
 			}
 
-			int8 CoefConfusionShot = (NumberProjectile / 2) * -Confusion;
-			FActorSpawnParameters SpawmParams;
-			SpawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			SpawmParams.Owner = GetOwner();
-			SpawmParams.Instigator = GetInstigator();
+			CoefConfusionShot = CoefConfusionShot + Confusion;
+		}
+	}
+}
 
-			for (int8 i = 0; i < NumberProjectile; i++)
+void ANR_Weapon::LaserFire()
+{
+	PreFire();
+
+	FVector SpawnLocation = ShootLocation->GetComponentLocation();
+
+	FHitResult Hit;
+	TArray<AActor*> Actors;
+
+	UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, (ShotEndLocation - SpawnLocation) * WeaponSetting.LaserDistance,
+		ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, SpawnLocation, UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShotEndLocation));
+
+	if (Hit.GetActor() && Hit.PhysMaterial.IsValid())
+	{
+		if (WeaponSetting.ProjectileSetting.HitDecal)
+		{
+			UMaterialInterface* Material = WeaponSetting.ProjectileSetting.HitDecal;
+
+			if (Material && Hit.GetComponent())
 			{
-				SpawnRotation = FRotator(0.0f, RotationToTargetWithDispersion + CoefDispersion * CoefConfusionShot, 0.0f);
-
-				ANR_Projectile* Projectile = Cast<ANR_Projectile>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawmParams));
-				if (Projectile)
-				{
-					Projectile->InitProjectile(ProjectileInfo);
-				}
-
-				CoefConfusionShot = CoefConfusionShot + Confusion;
+				UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), Hit.GetComponent(), NAME_None, Hit.ImpactPoint,
+					Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
 			}
 		}
-		else
+		if (WeaponSetting.ProjectileSetting.HitFXs)
 		{
-			FHitResult Hit;
-			TArray<AActor*> Actors;
+			UParticleSystem* Particle = WeaponSetting.ProjectileSetting.HitFXs;
 
-			UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, SpawnLocation + ShootLocation->GetForwardVector() * WeaponSetting.LaserDistance,
-				ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
-
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, ShootLocation->GetComponentLocation(), UKismetMathLibrary::FindLookAtRotation(ShootLocation->GetComponentLocation(), ShootLocation->GetComponentLocation() + ShootLocation->GetForwardVector()));
-
-			if (Hit.GetActor() && Hit.PhysMaterial.IsValid())
+			if (Particle)
 			{
-				EPhysicalSurface SurfaceType = UGameplayStatics::GetSurfaceType(Hit);
-
-				if (WeaponSetting.ProjectileSetting.HitDecal)
-				{
-					UMaterialInterface* Material = WeaponSetting.ProjectileSetting.HitDecal;
-
-					if (Material && Hit.GetComponent())
-					{
-						UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), Hit.GetComponent(), NAME_None, Hit.ImpactPoint,
-							Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
-					}
-				}
-				if (WeaponSetting.ProjectileSetting.HitFXs)
-				{
-					UParticleSystem* Particle = WeaponSetting.ProjectileSetting.HitFXs;
-
-					if (Particle)
-					{
-						UGameplayStatics::SpawnEmitterAttached(Particle, Hit.GetComponent(), NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(),
-							EAttachLocation::KeepWorldPosition);
-					}
-				}
-				if (WeaponSetting.ProjectileSetting.HitSound)
-				{
-					UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit.ImpactPoint, 0.3f);
-				}
-
-				UGameplayStatics::ApplyPointDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit.ImpactPoint, Hit, GetOwner()->GetInstigatorController(), this, nullptr);
+				UGameplayStatics::SpawnEmitterAttached(Particle, Hit.GetComponent(), NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(),
+					EAttachLocation::KeepWorldPosition);
 			}
 		}
+		if (WeaponSetting.ProjectileSetting.HitSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit.ImpactPoint, 0.3f);
+		}
+
+		UGameplayStatics::ApplyPointDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit.ImpactPoint, Hit, GetOwner()->GetInstigatorController(), this, nullptr);
 	}
 }
 

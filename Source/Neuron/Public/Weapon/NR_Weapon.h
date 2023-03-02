@@ -46,21 +46,20 @@ public:
 
 	class ANR_Character* Pawn = nullptr;
 	FWeaponInfo WeaponSetting;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float WeaponRateOfFire = 0.0f;
 	//Params end
 
 	//Fire start
 	UFUNCTION()
 		void FireButtonPressed(bool bIsFire);
-	void Fire();
+	void PreFire();
+	void FireProjectile();
+	void LaserFire();
 	//Fire end
 
 	//Shoot start
 	void FindEndLocation();
 	FVector ShotEndLocation = FVector(0.0f);
 	float SizeChanelToChangeShootDirectionLogic = 120.0f;
-	float CoefDispersion = 0.0f;
 	//Shoot end
 
 	//Timers start
@@ -68,6 +67,7 @@ public:
 	float FireTimer = 100.0f;
 	float ReloadTimer = 0.0f;
 	FTimerHandle FireTimerHandle;
+	FTimerHandle LaserFireTimerHandle;
 	//Timers end
 
 	//Confusion

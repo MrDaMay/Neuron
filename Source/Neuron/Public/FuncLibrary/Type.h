@@ -36,6 +36,8 @@ struct FProjectileInfo
 		FTransform ProjectileTrailFxOffset = FTransform();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
+		int32 Penetration = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
 		float ProjectileDamage = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
 		float ProjectileLifeTime = 20.0f;
@@ -115,16 +117,8 @@ struct FWeaponInfo : public FTableRowBase
 		float LaserDistance = 2000.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
 		UParticleSystem* LaserFx = nullptr;
-
-	//Inv
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-		float SwitchTimeWeapon = 1.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-		UTexture2D* WeaponIcon = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-		UTexture2D* BackgroundIcon = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-		EWeaponType WeaponType = EWeaponType::RifleType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
+		float DelayLaserForFire = 1.0f;
 };
 
 //Addition info for inventory

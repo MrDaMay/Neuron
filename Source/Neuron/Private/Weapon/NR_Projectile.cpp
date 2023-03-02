@@ -14,13 +14,11 @@ ANR_Projectile::ANR_Projectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BulletCollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
-
 	BulletCollisionSphere->SetSphereRadius(16.f);
 	BulletCollisionSphere->SetEnableGravity(false);
-
 	BulletCollisionSphere->bReturnMaterialOnMove = true;//hit event return physMaterial
-
 	BulletCollisionSphere->SetCanEverAffectNavigation(false);//collision not affect navigation (P keybord on editor)
+	
 
 	RootComponent = BulletCollisionSphere;
 
@@ -49,7 +47,7 @@ void ANR_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	BulletCollisionSphere->OnComponentHit.AddDynamic(this, &ANR_Projectile::BulletCollisionSphereHit);
+	BulletCollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &ANR_Projectile::BulletCollisionSphereBeginOverlap);
 }
 
 // Called every frame
@@ -86,24 +84,64 @@ void ANR_Projectile::InitProjectile(FProjectileInfo InitParam)
 
 void ANR_Projectile::ImpactProjectile()
 {
-	this->Destroy();
+	if (CurrentPenetration >= ProjectileSetting.Penetration)
+		this->Destroy();
+	else
+		CurrentPenetration++;
+	
+
 }
 
-void ANR_Projectile::BulletCollisionSphereHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-                                              UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor && Hit.PhysMaterial.IsValid())
-	{
-		EPhysicalSurface mySurfacetype = UGameplayStatics::GetSurfaceType(Hit);
+//void ANR_Projectile::BulletCollisionSphereHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+//                                              UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+//{
+//	if (OtherActor)
+//	{
+//		if (ProjectileSetting.HitDecal)
+//		{
+//			UMaterialInterface* Material = ProjectileSetting.HitDecal;
+//
+//			if (Material && OtherComp)
+//			{
+//				UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), OtherComp, NAME_None, Hit.ImpactPoint,
+//					Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
+//			}
+//		}
+//		if (ProjectileSetting.HitFXs)
+//		{
+//			UParticleSystem* Particle = ProjectileSetting.HitFXs;
+//
+//			if (Particle)
+//			{
+//				UGameplayStatics::SpawnEmitterAttached(Particle, OtherComp, NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(),
+//					EAttachLocation::KeepWorldPosition);
+//			}
+//		}
+//		if (ProjectileSetting.HitSound)
+//		{
+//			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ProjectileSetting.HitSound, Hit.ImpactPoint, 0.3f);
+//		}
+//
+//
+//		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage, Hit.TraceStart, Hit, GetInstigatorController(), this, NULL);
+//
+//		ImpactProjectile();
+//	}
+//}
 
+void ANR_Projectile::BulletCollisionSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor)
+	{
 		if (ProjectileSetting.HitDecal)
 		{
 			UMaterialInterface* Material = ProjectileSetting.HitDecal;
 
 			if (Material && OtherComp)
 			{
-				UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), OtherComp, NAME_None, Hit.ImpactPoint,
-					Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
+				UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), OtherComp, NAME_None, SweepResult.ImpactPoint,
+					SweepResult.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
 			}
 		}
 		if (ProjectileSetting.HitFXs)
@@ -112,17 +150,17 @@ void ANR_Projectile::BulletCollisionSphereHit(UPrimitiveComponent* HitComp, AAct
 
 			if (Particle)
 			{
-				UGameplayStatics::SpawnEmitterAttached(Particle, OtherComp, NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(),
+				UGameplayStatics::SpawnEmitterAttached(Particle, OtherComp, NAME_None, SweepResult.ImpactPoint, SweepResult.ImpactNormal.Rotation(),
 					EAttachLocation::KeepWorldPosition);
 			}
 		}
 		if (ProjectileSetting.HitSound)
 		{
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ProjectileSetting.HitSound, Hit.ImpactPoint, 0.3f);
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ProjectileSetting.HitSound, SweepResult.ImpactPoint, 0.3f);
 		}
 
 
-		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage, Hit.TraceStart, Hit, GetInstigatorController(), this, NULL);
+		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage, SweepResult.TraceStart, SweepResult, GetInstigatorController(), this, NULL);
 
 		ImpactProjectile();
 	}
