@@ -10,7 +10,6 @@
 #include "Components/ArrowComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Weapon/NR_Projectile.h"
-#include "Component/NR_InventoryComponent.h"
 
 // Sets default values
 ANR_Weapon::ANR_Weapon()
@@ -60,25 +59,6 @@ void ANR_Weapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	FireTimer += DeltaTime;
-
-	ReloadTick(DeltaTime);
-}
-
-void ANR_Weapon::ReloadTick(float DeltaTime)
-{
-	if (WeaponReloading)
-	{
-		if (ReloadTimer <= 0.0f)
-			EndReload();
-		else
-			ReloadTimer -= DeltaTime;
-	}
-}
-
-
-int32 ANR_Weapon::GetWeaponRound()
-{
-	return WeaponInfo.Round;
 }
 
 FProjectileInfo ANR_Weapon::GetProjectile()
@@ -112,8 +92,6 @@ void ANR_Weapon::Fire()
 	AnimMontage = WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage;
 
 	uint8 NumberProjectile = WeaponSetting.NumberProjectileByShot;
-
-	WeaponInfo.Round = WeaponInfo.Round - 1 * NumberProjectile;
 
 	OnWeaponFireStart.Broadcast(AnimMontage);
 
@@ -201,19 +179,6 @@ void ANR_Weapon::Fire()
 			}
 		}
 	}
-
-	if (GetWeaponRound() <= 0 && !WeaponReloading)
-	{
-		if (CheckWeaponReload())
-		{
-			StartReload();
-		}
-		else
-		{
-			Pawn->TrySwitchWeapon();
-			Pawn->GetInventoryComponent()->OnAmmoTypeEmpty.Broadcast(WeaponSetting.WeaponType);
-		}
-	}
 }
 
 void ANR_Weapon::FindEndLocation()
@@ -231,92 +196,3 @@ void ANR_Weapon::FindEndLocation()
 		ShotEndLocation = ShootLocation->GetComponentLocation() + ShootLocation->GetForwardVector() * 2000.0f;
 	}
 }
-
-void ANR_Weapon::StartReload()
-{
-	WeaponReloading = true;
-	ReloadTimer = WeaponSetting.ReloadTime;
-
-	UAnimMontage* AnimToPlay = WeaponSetting.AnimWeaponInfo.CharacterReloadAnimMontage;
-
-	if (WeaponSetting.AnimWeaponInfo.WeaponReloadAnimMontage
-		&& SkeletalMeshWeapon && SkeletalMeshWeapon->GetAnimInstance())
-	{
-		SkeletalMeshWeapon->GetAnimInstance()->Montage_Play(WeaponSetting.AnimWeaponInfo.WeaponReloadAnimMontage);
-	}
-
-	OnWeaponReloadStart.Broadcast(AnimToPlay);
-}
-
-void ANR_Weapon::EndReload()
-{
-	WeaponReloading = false;
-
-	int8 AviableAmmoFromInventory = GetAviableAmmoForReload();
-
-	if (AviableAmmoFromInventory > WeaponSetting.MaxRound)
-		AviableAmmoFromInventory = WeaponSetting.MaxRound;
-
-	const int32 AmmoTaken = WeaponSetting.MaxRound - WeaponInfo.Round;
-
-	if (WeaponInfo.Round + AviableAmmoFromInventory > WeaponSetting.MaxRound)
-	{
-		WeaponInfo.Round = WeaponSetting.MaxRound;
-	}
-	else
-	{
-		WeaponInfo.Round = WeaponInfo.Round + AviableAmmoFromInventory;
-	}
-
-	OnWeaponReloadEnd.Broadcast(true, -AmmoTaken);
-}
-
-void ANR_Weapon::CancelReload()
-{
-	WeaponReloading = false;
-
-	if (SkeletalMeshWeapon && SkeletalMeshWeapon->GetAnimInstance())
-		SkeletalMeshWeapon->GetAnimInstance()->StopAllMontages(0.15f);
-
-	OnWeaponReloadEnd.Broadcast(false, 0);
-}
-
-bool ANR_Weapon::CheckWeaponReload()
-{
-	bool result = true;
-
-	if (GetOwner())
-	{
-		UNR_InventoryComponent* Inventory = Cast<UNR_InventoryComponent>(GetOwner()->GetComponentByClass(UNR_InventoryComponent::StaticClass()));
-		if (Inventory)
-		{
-			int8 AviableAmmoForWeapon;
-
-			if (!Inventory->CheckAmmoForWeapon(WeaponSetting.WeaponType, AviableAmmoForWeapon))
-			{
-				result = false;
-			}
-		}
-	}
-	return result;
-}
-
-int8 ANR_Weapon::GetAviableAmmoForReload()
-{
-	int8 AvailableAmmoForWeapon = 0;
-
-	if (GetOwner())
-	{
-		UNR_InventoryComponent* myInventory = Cast<UNR_InventoryComponent>(GetOwner()->GetComponentByClass(UNR_InventoryComponent::StaticClass()));
-		if (myInventory)
-		{
-			if (myInventory->CheckAmmoForWeapon(WeaponSetting.WeaponType, AvailableAmmoForWeapon))
-			{
-				AvailableAmmoForWeapon = AvailableAmmoForWeapon;
-			}
-		}
-	}
-
-	return AvailableAmmoForWeapon;
-}
-

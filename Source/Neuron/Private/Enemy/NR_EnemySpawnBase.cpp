@@ -40,5 +40,7 @@ void ANR_EnemySpawnBase::SpawnEnemy()
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-	GetWorld()->SpawnActor(Enemy, &SpawnLocation, &SpawnRotation, SpawnParameters);
+	int32 EnemyIndex = UKismetMathLibrary::RandomInteger64InRange(0, Enemy.Num() - 1);
+
+	GetWorld()->SpawnActor(Enemy[EnemyIndex], &SpawnLocation, &SpawnRotation, SpawnParameters);
 }

@@ -2,6 +2,8 @@
 
 
 #include "Component/NR_HealthComponent.h"
+#include "Game/NR_PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UNR_HealthComponent::UNR_HealthComponent()
@@ -19,7 +21,9 @@ void UNR_HealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	//Delegat for respawn
+	auto PlayerController = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	PlayerController->OnRespawn.AddDynamic(this, &UNR_HealthComponent::RefreshParams);
 	
 }
 
@@ -63,5 +67,19 @@ void UNR_HealthComponent::ChangeHealthValue(float ChangeValue)
 		//Say widget what health changed
 		OnHealthChange.Broadcast(Health, ChangeValue);
 	}
+}
+
+void UNR_HealthComponent::RefreshParams()
+{
+	Health = 100.0f;
+
+	OnHealthChange.Broadcast(Health, 0);
+
+	GetWorld()->GetTimerManager().SetTimer(RefreshAliveTimer, this, &UNR_HealthComponent::RefreshAlive, 5.0f, true, 5.0f);
+}
+
+void UNR_HealthComponent::RefreshAlive()
+{
+	IsAlive = true;
 }
 

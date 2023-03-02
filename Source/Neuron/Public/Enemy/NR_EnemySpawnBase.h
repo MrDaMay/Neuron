@@ -36,5 +36,5 @@ public:
 		void SpawnEnemy();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<ANR_EnemyCharacterBase> Enemy;
+		TArray<TSubclassOf<ANR_EnemyCharacterBase>> Enemy;
 };

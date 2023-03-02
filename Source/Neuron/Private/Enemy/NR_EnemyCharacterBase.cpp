@@ -153,9 +153,7 @@ void ANR_EnemyCharacterBase::AttackEnemy(FName NotifyName,
 			if (Hit.HitObjectHandle.FetchActor()->ActorHasTag("Player"))
 			{
 				const TSubclassOf<UDamageType> DamageType;
-				const float Damage = UKismetMathLibrary::RandomFloatInRange(BaseAttackDamage - RandomRangeAttackDamage, BaseAttackDamage + RandomRangeAttackDamage);
-
-				UGameplayStatics::ApplyDamage(Hit.GetActor(), Damage, GetController(), this, DamageType);
+				UGameplayStatics::ApplyDamage(Hit.GetActor(), BaseAttackDamage, GetController(), this, DamageType);
 			}
 		}
 	}

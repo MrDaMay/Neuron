@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Component/NR_HealthComponent.h"
-#include "Component/NR_InventoryComponent.h"
 #include "Weapon/NR_Weapon.h"
 #include "FuncLibrary/Type.h"
 #include "NR_Character.generated.h"
@@ -30,8 +29,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns InventoryComponent subobject **/
-	FORCEINLINE class UNR_InventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 	/** Returns HealthComponent subobject **/
 	FORCEINLINE class UNR_HealthComponent* GetHealthComponent() const { return HealthComponent; }
 
@@ -43,9 +40,6 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-		class UNR_InventoryComponent* InventoryComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
 		class UNR_HealthComponent* HealthComponent;
@@ -81,26 +75,10 @@ public:
 	//Weapon start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		ANR_Weapon* CurrentWeapon = nullptr;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-		int32 CurrentIndexWeapon = 0;
 	UFUNCTION(BlueprintCallable)
 		ANR_Weapon* GetCurrentWeapon();
 	UFUNCTION(BlueprintCallable)
-		void InitWeapon(FName IdWeaponName, FAdditionalWeaponInfo WeaponAdditionalInfo, int32 NewCurrentIndexWeapon);
-	UFUNCTION()
-		void TryPickUpWeapon();
-	UFUNCTION()
-		void TryReloadWeapon();
-	UFUNCTION(BlueprintCallable)
-		void TrySwitchWeapon();
-	UFUNCTION()
-		void WeaponReloadStart(UAnimMontage* Anim);
-	UFUNCTION()
-		void WeaponReloadEnd(bool bIsSuccess, int32 AmmoSpent);
-	UFUNCTION(BlueprintNativeEvent)
-		void WeaponReloadStart_BP(UAnimMontage* Anim);
-	UFUNCTION(BlueprintNativeEvent)
-		void WeaponReloadEnd_BP(bool bIsSuccess, int32 AmmoSpent);
+		void InitWeapon(FName IdWeaponName);
 	UFUNCTION()
 		void WeaponFireStart(UAnimMontage* Anim);
 	UFUNCTION(BlueprintNativeEvent)

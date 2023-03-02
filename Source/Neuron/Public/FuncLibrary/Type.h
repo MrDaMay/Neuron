@@ -63,6 +63,8 @@ struct FProjectileInfo
 		float ProjectileInnerRadiusDamage = 50.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
 		float ExploseMaxDamage = 200.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
+		float TimeToExplose = 0.5f;
 };
 
 //Animation for character and weapon
@@ -92,10 +94,6 @@ struct FWeaponInfo : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 		float RateOfFire = 0.5f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
-		float ReloadTime = 2.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
-		int32 MaxRound = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 		int32 NumberProjectileByShot = 1;
 
@@ -175,6 +173,7 @@ struct FEnemyCharacters : public FTableRowBase
 		FName EnemyClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		TSubclassOf<class ANR_EnemyCharacterBase> Enemy = nullptr;
+
 };
 
 UCLASS()

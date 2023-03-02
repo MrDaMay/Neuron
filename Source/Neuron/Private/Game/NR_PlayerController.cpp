@@ -20,9 +20,12 @@ void ANR_PlayerController::TryToRespawnPlayer()
 
 	//Сheck of life for the condition of defeat
 	if (PlayerLifes <= 0)
-		OnRespawn.Broadcast();
-	else
+	{
 		OnEndGame.Broadcast(false);
+		OnOpenMenuWidget.Broadcast();
+	}
+	else
+		OnRespawn.Broadcast();
 }
 
 void ANR_PlayerController::OpenCloseMenuWidget()

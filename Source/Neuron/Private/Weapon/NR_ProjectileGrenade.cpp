@@ -2,11 +2,14 @@
 
 
 #include "Weapon/NR_ProjectileGrenade.h"
+#include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void ANR_ProjectileGrenade::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BulletCollisionSphere->SetEnableGravity(true);
 }
 
 void ANR_ProjectileGrenade::Tick(float DeltaTime)
@@ -16,7 +19,7 @@ void ANR_ProjectileGrenade::Tick(float DeltaTime)
 
 void ANR_ProjectileGrenade::ImpactProjectile()
 {
-	GetWorldTimerManager().SetTimer(ExploseTimerHandle, this, &ANR_ProjectileGrenade::Explose, TimeToExplose, false, TimeToExplose);
+	GetWorldTimerManager().SetTimer(ExploseTimerHandle, this, &ANR_ProjectileGrenade::Explose, ProjectileSetting.TimeToExplose, false, ProjectileSetting.TimeToExplose);
 }
 
 void ANR_ProjectileGrenade::InitProjectile(FProjectileInfo InitParam)

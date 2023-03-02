@@ -56,8 +56,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		float BaseAttackDamage = 30.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-		float RandomRangeAttackDamage = 10.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		float RadiusMeleeAttack = 30.0f;
 
 	//AI

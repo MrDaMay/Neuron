@@ -41,30 +41,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//Tick start
-	void ReloadTick(float DeltaTime);
-	//Tick end
-
 	//Params start
-	UFUNCTION(BlueprintCallable)
-		int32 GetWeaponRound();
 	FProjectileInfo GetProjectile();
 
 	class ANR_Character* Pawn = nullptr;
 	FWeaponInfo WeaponSetting;
-	FAdditionalWeaponInfo WeaponInfo;
-	float ReloadTime = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WeaponRateOfFire = 0.0f;
 	//Params end
-
-	//Flags start
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
-		bool WeaponFiring = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reloading")
-		bool WeaponReloading = false;
-	//Flags end
-
 
 	//Fire start
 	UFUNCTION()
@@ -89,13 +73,4 @@ public:
 	//Confusion
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
 		int Confusion = 2;
-
-	//Reload start
-	void StartReload();
-	void EndReload();
-	UFUNCTION(BlueprintCallable)
-		void CancelReload();
-	bool CheckWeaponReload();
-	int8 GetAviableAmmoForReload();
-	//Reload end
 };

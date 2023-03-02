@@ -42,14 +42,6 @@ ANR_Character::ANR_Character()
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	InventoryComponent = CreateDefaultSubobject<UNR_InventoryComponent>(TEXT("InventoryComponent"));
-
-
-	if (InventoryComponent)
-	{
-		InventoryComponent->OnSwichWeapon.AddDynamic(this, &ANR_Character::InitWeapon);
-	}
-
 	HealthComponent = CreateDefaultSubobject<UNR_HealthComponent>(TEXT("CharHealthComponent"));
 	if (HealthComponent)
 	{
@@ -74,15 +66,17 @@ void ANR_Character::BeginPlay()
 		}
 	}
 
-	auto PlayerController = Cast<ANR_PlayerController>(GetController());
+	InitWeapon("Rifle");
 
+	auto PlayerController = Cast<ANR_PlayerController>(GetController());
 	PlayerController->OnEndGame.AddDynamic(this, &ANR_Character::AbsolutelyDead);
 }
 
 float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	HealthComponent->ChangeHealthValue(DamageAmount);
+	HealthComponent->ChangeHealthValue(-DamageAmount);
+
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -117,10 +111,6 @@ void ANR_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Pressed, this, &ANR_Character::InputAttackPressed);
 	PlayerInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Released, this, &ANR_Character::InputAttackReleased);
-
-	PlayerInputComponent->BindAction(TEXT("ReloadEvent"), EInputEvent::IE_Released, this, &ANR_Character::TryReloadWeapon);
-
-	PlayerInputComponent->BindAction(TEXT("SwitchNextWeapon"), EInputEvent::IE_Pressed, this, &ANR_Character::TrySwitchWeapon);
 }
 
 void ANR_Character::InputAxisX(float Value)
@@ -151,8 +141,7 @@ ANR_Weapon* ANR_Character::GetCurrentWeapon()
 	return CurrentWeapon;
 }
 
-void ANR_Character::InitWeapon(FName IdWeaponName, FAdditionalWeaponInfo WeaponAdditionalInfo,
-	int32 NewCurrentIndexWeapon)
+void ANR_Character::InitWeapon(FName IdWeaponName)
 {
 	if (CurrentWeapon)
 	{
@@ -188,92 +177,18 @@ void ANR_Character::InitWeapon(FName IdWeaponName, FAdditionalWeaponInfo WeaponA
 
 					Weapon->Pawn = this;
 					Weapon->WeaponSetting = WeaponInfo;
-					Weapon->WeaponInfo = WeaponAdditionalInfo;
-					Weapon->ReloadTime = WeaponInfo.ReloadTime;
 					Weapon->WeaponRateOfFire = WeaponInfo.RateOfFire;
 
-					//if (InventoryComponent)
-					CurrentIndexWeapon = InventoryComponent->GetWeaponIndexSlotByName(IdWeaponName);
-
-					Weapon->OnWeaponReloadStart.AddDynamic(this, &ANR_Character::WeaponReloadStart);
-					Weapon->OnWeaponReloadEnd.AddDynamic(this, &ANR_Character::WeaponReloadEnd);
 					Weapon->OnWeaponFireStart.AddDynamic(this, &ANR_Character::WeaponFireStart);
-
-					if (Weapon->WeaponInfo.Round <= 0)
-					{
-						TryReloadWeapon();
-					}
 				}
 			}
 		}
 	}
 }
 
-void ANR_Character::TryPickUpWeapon()
-{
-	//if (IsValid(OverlapPickUpWeapon))
-	//{
-	//	InventoryComponent->SwitchWeaponToInventory_OnServer(OverlapPickUpWeapon->WeaponSlot, CurrentIndexWeapon);
-	//}
-}
-
-void ANR_Character::TryReloadWeapon()
-{
-	if (HealthComponent && HealthComponent->GetIsAlive() && CurrentWeapon && CurrentWeapon->WeaponReloading == false)
-	{
-		TryReloadWeapon();
-	}
-}
-
-void ANR_Character::TrySwitchWeapon()
-{
-	if (HealthComponent && HealthComponent->GetIsAlive() && InventoryComponent->WeaponSlots.Num() > 1)
-	{
-		int8 OldIndex = CurrentIndexWeapon;
-		FAdditionalWeaponInfo OldInfo;
-
-		if (CurrentWeapon)
-		{
-			OldInfo = CurrentWeapon->WeaponInfo;
-
-			if (CurrentWeapon->WeaponReloading)
-			{
-				CurrentWeapon->CancelReload();
-			}
-
-			if (InventoryComponent)
-			{
-				InventoryComponent->SwitchWeaponToIndex(OldIndex, OldInfo);
-			}
-		}
-	}
-}
-
-void ANR_Character::WeaponReloadStart(UAnimMontage* Anim)
-{
-	PlayAnimMontage(Anim, 1.0f, "Mesh");
-	WeaponReloadStart_BP(Anim);
-}
-
-void ANR_Character::WeaponReloadEnd(bool bIsSuccess, int32 AmmoSpent)
-{
-	if (!bIsSuccess)
-		StopAnimMontage();
-
-	if (InventoryComponent && CurrentWeapon)
-	{
-		InventoryComponent->AmmoSlotChangeValue(CurrentWeapon->WeaponSetting.WeaponType, AmmoSpent);
-		InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->WeaponInfo);
-	}
-
-	WeaponReloadEnd_BP(bIsSuccess, AmmoSpent);
-}
 
 void ANR_Character::WeaponFireStart(UAnimMontage* Anim)
 {
-	if (InventoryComponent)
-		InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->WeaponInfo);
-
 	PlayAnimMontage(Anim, 1.0f, "Mesh");
 
 	WeaponFireStart_BP(Anim);
@@ -345,14 +260,6 @@ void ANR_Character::StartSwitchWeapon_BP_Implementation()
 }
 
 void ANR_Character::WeaponFireStart_BP_Implementation(UAnimMontage* Anim)
-{
-}
-
-void ANR_Character::WeaponReloadEnd_BP_Implementation(bool bIsSuccess, int32 AmmoSpent)
-{
-}
-
-void ANR_Character::WeaponReloadStart_BP_Implementation(UAnimMontage* Anim)
 {
 }
 

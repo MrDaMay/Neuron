@@ -31,8 +31,10 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	float Health = 0.0f;
+	float Health = 100.0f;
 	bool IsAlive = true;
+
+	FTimerHandle RefreshAliveTimer;
 
 public:	
 	// Called every frame
@@ -45,4 +47,9 @@ public:
 	//Function increment Health
 	UFUNCTION(BlueprintCallable, Category = "Health")
 		virtual void ChangeHealthValue(float ChangeValue);
+
+	UFUNCTION()
+	void RefreshParams();
+
+	void RefreshAlive();
 };
