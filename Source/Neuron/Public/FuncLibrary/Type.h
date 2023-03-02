@@ -177,6 +177,7 @@ struct FEnemyCharacters : public FTableRowBase
 		TSubclassOf<class ANR_EnemyCharacterBase> Enemy = nullptr;
 };
 
+
 UCLASS()
 class NEURON_API UType : public UBlueprintFunctionLibrary
 {
