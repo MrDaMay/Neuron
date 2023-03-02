@@ -121,7 +121,7 @@ void UNR_TokenComponent::UpdateWeaponDamage()
 
 void UNR_TokenComponent::UpdateWeaponRateOfFire()
 {
-	Weapon->WeaponRateOfFire = NewStatValue(Weapon->WeaponRateOfFire, TokensArray[2], 0.02f);
+	Weapon->WeaponSetting.RateOfFire = NewStatValue(Weapon->WeaponSetting.RateOfFire, TokensArray[2], 0.02f);
 }
 
 void UNR_TokenComponent::UpdateMaxHealth()

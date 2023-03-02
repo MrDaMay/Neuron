@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Component/NR_HealthComponent.h"
+#include "Component/NR_TokenComponent.h"
 #include "Weapon/NR_Weapon.h"
 #include "FuncLibrary/Type.h"
 #include "NR_Character.generated.h"
@@ -31,6 +32,8 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns HealthComponent subobject **/
 	FORCEINLINE class UNR_HealthComponent* GetHealthComponent() const { return HealthComponent; }
+	/** Returns HealthComponent subobject **/
+	FORCEINLINE class UNR_TokenComponent* GetTokenComponent() const { return TokenComponent; }
 
 private:
 	/** Top down camera */
@@ -43,6 +46,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
 		class UNR_HealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
+		class UNR_TokenComponent* TokenComponent;
 
 public:	
 	// Called every frame
