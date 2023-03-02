@@ -47,6 +47,12 @@ ANR_Character::ANR_Character()
 	{
 		HealthComponent->OnDead.AddDynamic(this, &ANR_Character::CharDead);
 	}
+
+	TokenComponent = CreateDefaultSubobject<UNR_TokenComponent>(TEXT("CharTokenComponent"));
+	if (TokenComponent)
+	{
+		TokenComponent->InitTokens(GetCharacterMovement(), GetCurrentWeapon(), GetHealthComponent());
+	}
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;

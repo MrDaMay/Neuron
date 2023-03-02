@@ -170,6 +170,7 @@ struct FEnemyCharacters : public FTableRowBase
 
 };
 
+
 UCLASS()
 class NEURON_API UType : public UBlueprintFunctionLibrary
 {
