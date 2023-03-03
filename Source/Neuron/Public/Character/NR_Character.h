@@ -10,6 +10,8 @@
 #include "FuncLibrary/Type.h"
 #include "NR_Character.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponParamsChange, float, CoefFireSpeed, float, CoefDamage);
+
 UCLASS()
 class NEURON_API ANR_Character : public ACharacter
 {
@@ -56,6 +58,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	//Delegate start
+	FOnWeaponParamsChange OnWeaponParamsChange;
+	//Delegate end
 
 	//Cursor start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
@@ -122,4 +128,22 @@ public:
 	UFUNCTION()
 		void AbsolutelyDead(bool IsWin);
 	//Dead end
+
+	//Bonus start
+	void TakeBonus(EBonusType BonusType);
+	FTimerHandle FinishFireBonusTimerHamdle;
+	void FinishFireBonus();
+	FTimerHandle FinishImmortalityBonusTimerHamdle;
+	void FinishImmortalityBonus();
+	FTimerHandle FinishMovementSpeedBonusTimerHamdle;
+	void FinishMovementSpeedBonus();
+	//Bonus end
+
+	//Stats start
+	float CoefMovementSpeed = 1.0f;
+	float CoefFireSpeed = 1.0f;
+	float CoefDamage = 1.0f;
+	bool Immortality = false;
+	float BaseSpeed = 600.0f;
+	//Stats end
 };

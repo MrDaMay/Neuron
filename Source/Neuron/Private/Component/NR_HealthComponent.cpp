@@ -47,7 +47,7 @@ void UNR_HealthComponent::ChangeHealthValue(float ChangeValue)
 	if (IsAlive == true)
 	{
 		//Increment health
-		Health += ChangeValue;
+		Health += ChangeValue * CoefDamageResist;
 
 
 		if (Health > 100.0f)

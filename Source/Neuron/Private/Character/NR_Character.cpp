@@ -81,7 +81,8 @@ void ANR_Character::BeginPlay()
 float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	HealthComponent->ChangeHealthValue(-DamageAmount);
+	if(!Immortality)
+		HealthComponent->ChangeHealthValue(-DamageAmount);
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
@@ -250,6 +251,79 @@ void ANR_Character::CharDead()
 void ANR_Character::AbsolutelyDead(bool IsWin)
 {
 	PlayAnimMontage(DeathMontage);
+}
+
+void ANR_Character::TakeBonus(EBonusType BonusType)
+{
+	switch (BonusType)
+	{
+	case EBonusType::AidType:
+		HealthComponent->ChangeHealthValue(50.0f);
+		break;
+	case EBonusType::FireType:
+		
+		//Change params
+		CoefFireSpeed = CoefFireSpeed * 2;
+		CoefDamage = CoefDamage * 2;
+
+		//Say weapon about changes
+		OnWeaponParamsChange.Broadcast(CoefFireSpeed, CoefDamage);
+
+		//Clean the timer before use
+		if (GetWorldTimerManager().IsTimerActive(FinishFireBonusTimerHamdle))
+			GetWorldTimerManager().ClearTimer(FinishFireBonusTimerHamdle);
+
+		//Set timer
+		GetWorldTimerManager().SetTimer(FinishFireBonusTimerHamdle, this, &ANR_Character::FinishFireBonus, 15.0f, false, 15.0f);
+		break;
+	case EBonusType::SpeedType:
+
+		//Change params
+		CoefMovementSpeed = CoefMovementSpeed * 2;
+		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * CoefMovementSpeed;
+
+		//Clean the timer before use
+		if (GetWorldTimerManager().IsTimerActive(FinishMovementSpeedBonusTimerHamdle))
+			GetWorldTimerManager().ClearTimer(FinishMovementSpeedBonusTimerHamdle);
+
+		//Set timer
+		GetWorldTimerManager().SetTimer(FinishMovementSpeedBonusTimerHamdle, this, &ANR_Character::FinishMovementSpeedBonus, 10.0f, false, 10.0f);
+		break;
+	case EBonusType::ShieldType:
+
+		//Change params
+		Immortality = true;
+
+		//Clean the timer before use
+		if (GetWorldTimerManager().IsTimerActive(FinishImmortalityBonusTimerHamdle))
+			GetWorldTimerManager().ClearTimer(FinishImmortalityBonusTimerHamdle);
+
+		//Set timer
+		GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, 5.0f, false, 5.0f);
+	}
+}
+
+void ANR_Character::FinishFireBonus()
+{
+	//Reset params
+	CoefFireSpeed = CoefFireSpeed / 2;
+	CoefDamage = CoefDamage / 2;
+
+	//Say weapon about changes
+	OnWeaponParamsChange.Broadcast(CoefFireSpeed, CoefDamage);
+}
+
+void ANR_Character::FinishImmortalityBonus()
+{
+	//Reset params
+	Immortality = false;
+}
+
+void ANR_Character::FinishMovementSpeedBonus()
+{
+	//Reset params
+	CoefMovementSpeed = CoefMovementSpeed / 2;
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * CoefMovementSpeed;
 }
 
 void ANR_Character::CharDead_BP_Implementation()

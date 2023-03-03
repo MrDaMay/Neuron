@@ -51,7 +51,7 @@ void ANR_EnemyCharacterBase::BeginPlay()
 float ANR_EnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
-	GetHealthComponent()->ChangeHealthValue(DamageAmount * CoefDamageResist * -1);
+	GetHealthComponent()->ChangeHealthValue(-DamageAmount);
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

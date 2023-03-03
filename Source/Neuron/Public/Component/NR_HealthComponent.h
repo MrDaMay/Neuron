@@ -23,9 +23,6 @@ public:
 	FOnHealthChange OnHealthChange;
 	//Delegate for dead
 	FOnDead OnDead;
-	//
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	float DefaultHealth = 100.f;
 
 protected:
 	// Called when the game starts
@@ -39,6 +36,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		float CoefDamageResist = 1.0f;
 
 	//Function for check alive 
 	UFUNCTION(BlueprintCallable, Category = "Health")

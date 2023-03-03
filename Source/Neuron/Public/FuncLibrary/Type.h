@@ -17,6 +17,16 @@ enum class EWeaponType : uint8
 	LaserType UMETA(DisplayName = "Laser"),
 };
 
+UENUM(BlueprintType)
+enum class EBonusType : uint8
+{
+	AidType UMETA(DisplayName = "Aid"),
+	FireType UMETA(DisplayName = "Fire"),
+	ShieldType UMETA(DisplayName = "Shield"),
+	SpeedType UMETA(DisplayName = "Speed"),
+	FreezeType UMETA(DisplayName = "Freeze"),
+};
+
 
 //Information about projectile. Link, meshes, emmiters, damages, speed
 USTRUCT(BlueprintType)
@@ -61,8 +71,6 @@ struct FProjectileInfo
 		USoundBase* ExploseSound = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
 		float ProjectileMaxRadiusDamage = 200.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
-		float ProjectileInnerRadiusDamage = 50.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")
 		float ExploseMaxDamage = 200.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explose")

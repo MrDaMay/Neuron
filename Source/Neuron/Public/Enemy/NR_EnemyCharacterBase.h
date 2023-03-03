@@ -70,8 +70,6 @@ public:
 	//Damage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 		FVector SpawnOffsetLocalDamage = FVector(0, 0, 44.0f);
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float CoefDamageResist = 1.0f;
 	UFUNCTION()
 		void HealthChange(float Health, float Damage);
 	UFUNCTION(BlueprintNativeEvent)

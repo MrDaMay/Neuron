@@ -51,6 +51,8 @@ void ANR_Weapon::BeginPlay()
 	{
 		StaticMeshWeapon->DestroyComponent(true);
 	}
+
+	FireTimer = 100.0f;
 }
 
 // Called every frame
@@ -150,42 +152,46 @@ void ANR_Weapon::LaserFire()
 
 	FVector SpawnLocation = ShootLocation->GetComponentLocation();
 
-	FHitResult Hit;
+	TArray<FHitResult> Hit;
 	TArray<AActor*> Actors;
 
-	UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, (ShotEndLocation - SpawnLocation) * WeaponSetting.LaserDistance,
-		ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
+
+	UKismetSystemLibrary::LineTraceMulti(GetWorld(), SpawnLocation, (ShotEndLocation - SpawnLocation) * WeaponSetting.LaserDistance,
+		ETraceTypeQuery::TraceTypeQuery3, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, SpawnLocation, UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShotEndLocation));
 
-	if (Hit.GetActor() && Hit.PhysMaterial.IsValid())
+	for (int i = 0; i < Hit.Num(); i++)
 	{
-		if (WeaponSetting.ProjectileSetting.HitDecal)
+		if (Hit[i].GetActor())
 		{
-			UMaterialInterface* Material = WeaponSetting.ProjectileSetting.HitDecal;
-
-			if (Material && Hit.GetComponent())
+			if (WeaponSetting.ProjectileSetting.HitDecal)
 			{
-				UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), Hit.GetComponent(), NAME_None, Hit.ImpactPoint,
-					Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
-			}
-		}
-		if (WeaponSetting.ProjectileSetting.HitFXs)
-		{
-			UParticleSystem* Particle = WeaponSetting.ProjectileSetting.HitFXs;
+				UMaterialInterface* Material = WeaponSetting.ProjectileSetting.HitDecal;
 
-			if (Particle)
+				if (Material && Hit[i].GetComponent())
+				{
+					UGameplayStatics::SpawnDecalAttached(Material, FVector(20.0f), Hit[i].GetComponent(), NAME_None, Hit[i].ImpactPoint,
+						Hit[i].ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
+				}
+			}
+			if (WeaponSetting.ProjectileSetting.HitFXs)
 			{
-				UGameplayStatics::SpawnEmitterAttached(Particle, Hit.GetComponent(), NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(),
-					EAttachLocation::KeepWorldPosition);
-			}
-		}
-		if (WeaponSetting.ProjectileSetting.HitSound)
-		{
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit.ImpactPoint, 0.3f);
-		}
+				UParticleSystem* Particle = WeaponSetting.ProjectileSetting.HitFXs;
 
-		UGameplayStatics::ApplyPointDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit.ImpactPoint, Hit, GetOwner()->GetInstigatorController(), this, nullptr);
+				if (Particle)
+				{
+					UGameplayStatics::SpawnEmitterAttached(Particle, Hit[i].GetComponent(), NAME_None, Hit[i].ImpactPoint, Hit[i].ImpactNormal.Rotation(),
+						EAttachLocation::KeepWorldPosition);
+				}
+			}
+			if (WeaponSetting.ProjectileSetting.HitSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit[i].ImpactPoint, 0.3f);
+			}
+
+			UGameplayStatics::ApplyPointDamage(Hit[i].GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit[i].ImpactPoint, Hit[i], GetOwner()->GetInstigatorController(), this, nullptr);
+		}
 	}
 }
 

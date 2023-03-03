@@ -42,13 +42,12 @@ void ANR_ProjectileGrenade::Explose()
 
 	TArray<AActor*> IgnoredActor;
 
-	UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(),
-		ProjectileSetting.ExploseMaxDamage, ProjectileSetting.ExploseMaxDamage * 0.2f,
-		GetActorLocation(), ProjectileSetting.ProjectileInnerRadiusDamage, ProjectileSetting.ProjectileMaxRadiusDamage, 5, NULL, IgnoredActor, this, GetInstigatorController());
+	UGameplayStatics::ApplyRadialDamage(GetWorld(),
+		ProjectileSetting.ExploseMaxDamage,
+		GetActorLocation(), ProjectileSetting.ProjectileMaxRadiusDamage, NULL, IgnoredActor, this, GetInstigatorController());
 
 	//Debug start
-	DrawDebugSphere(GetWorld(), GetActorLocation(), ProjectileSetting.ProjectileInnerRadiusDamage, 14, FColor(181, 0, 0), true, -1, 0, 2);
-	DrawDebugSphere(GetWorld(), GetActorLocation(), ProjectileSetting.ProjectileMaxRadiusDamage, 28, FColor(0, 0, 181), true, -1, 0, 2);
+	DrawDebugSphere(GetWorld(), GetActorLocation(), ProjectileSetting.ProjectileMaxRadiusDamage, 14, FColor(181, 0, 0), true, -1, 0, 2);
 	//Debug end
 
 	this->Destroy();
