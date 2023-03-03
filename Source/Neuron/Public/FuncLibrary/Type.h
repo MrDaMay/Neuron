@@ -17,6 +17,19 @@ enum class EWeaponType : uint8
 	LaserType UMETA(DisplayName = "Laser"),
 };
 
+// enumeration for tokens // ** Used for an array indexing, do NOT change! ** //
+UENUM(BlueprintType)
+enum class ETokenType : uint8
+{
+	DAMAGE = 0,
+	HEALTH,
+	FIRESPEED,
+	WALKSPEED,
+	MIGHT,
+	LUCK,
+	NUMBER_OF_TOKENS
+};
+
 
 //Information about projectile. Link, meshes, emmiters, damages, speed
 USTRUCT(BlueprintType)

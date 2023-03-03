@@ -51,7 +51,7 @@ ANR_Character::ANR_Character()
 	TokenComponent = CreateDefaultSubobject<UNR_TokenComponent>(TEXT("CharTokenComponent"));
 	if (TokenComponent)
 	{
-		TokenComponent->InitTokens(GetCharacterMovement(), GetCurrentWeapon(), GetHealthComponent());
+		TokenComponent->InitTokens();
 	}
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;

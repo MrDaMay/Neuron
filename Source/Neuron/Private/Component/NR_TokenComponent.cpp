@@ -10,7 +10,7 @@ UNR_TokenComponent::UNR_TokenComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -25,55 +25,62 @@ void UNR_TokenComponent::BeginPlay()
 	
 }
 
-void UNR_TokenComponent::UpdateStats(int idx)
+void UNR_TokenComponent::BeginDestroy()
 {
-	switch (idx)
-	{
-		case 0:
-			UpdateWeaponDamage();
-			break;
-		case 1:
-			UpdateMaxHealth();
-			break;
-		case 2:
-			UpdateWeaponRateOfFire();
-			break;
-		case 3:
-			UpdateMovementSpeed();
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-	}
-	// ...
+	Super::BeginDestroy();
 
+	delete[] Tokens;
 }
 
-// !!Need to ReDO!!
-float UNR_TokenComponent::NewStatValue(float OldStat, int TokenIdx, float Multiplier)
-{
-	float buff = 0;
-	if (bIsIncreasing)
-	{
-		if (TokensArray[TokenIdx] == 1)
-		{
-			buff = OldStat * (1 + TokensArray[TokenIdx] * Multiplier);
-		} // calculating new value
-		else
-		{
-			buff = OldStat / (1 + (TokensArray[TokenIdx] - 1) * Multiplier); // reseting to the default value by normalization to the prevoius Tokens quantity
-			buff *= (1 + TokensArray[TokenIdx] * Multiplier); // calculating new value
-		}
-	}
-	else
-	{
-		buff = OldStat / (1 + (TokensArray[TokenIdx] + 1) * Multiplier);  // reseting to the default value by normalization to the prevoius Tokens quantity
-		buff *= (1 + TokensArray[TokenIdx] * Multiplier); // calculating new value
-	}
+//void UNR_TokenComponent::UpdateStats(int idx)
+//{
+//	switch (idx)
+//	{
+//		case 0:
+//			UpdateWeaponDamage();
+//			break;
+//		case 1:
+//			UpdateMaxHealth();
+//			break;
+//		case 2:
+//			UpdateWeaponRateOfFire();
+//			break;
+//		case 3:
+//			UpdateMovementSpeed();
+//			break;
+//		case 4:
+//			break;
+//		case 5:
+//			break;
+//	}
+//	// ...
+//
+//}
 
-	return buff;
-}
+//// !!Need to ReDO!!
+//float UNR_TokenComponent::NewStatValue(float OldStat, int TokenIdx, float Multiplier)
+//{
+//	float buff = 0;
+//	if (bIsIncreasing)
+//	{
+//		if (TokensArray[TokenIdx] == 1)
+//		{
+//			buff = OldStat * (1 + TokensArray[TokenIdx] * Multiplier);
+//		} // calculating new value
+//		else
+//		{
+//			buff = OldStat / (1 + (TokensArray[TokenIdx] - 1) * Multiplier); // reseting to the default value by normalization to the prevoius Tokens quantity
+//			buff *= (1 + TokensArray[TokenIdx] * Multiplier); // calculating new value
+//		}
+//	}
+//	else
+//	{
+//		buff = OldStat / (1 + (TokensArray[TokenIdx] + 1) * Multiplier);  // reseting to the default value by normalization to the prevoius Tokens quantity
+//		buff *= (1 + TokensArray[TokenIdx] * Multiplier); // calculating new value
+//	}
+//
+//	return buff;
+//}
 
 
 // Called every frame
@@ -84,52 +91,52 @@ void UNR_TokenComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
-void UNR_TokenComponent::InitTokens(UCharacterMovementComponent* MovementPtr, ANR_Weapon* WeaponPtr, UNR_HealthComponent* HealthPtr)
+void UNR_TokenComponent::InitTokens(int InitValue)
 {
-	//Initializing variables
-	Movement = MovementPtr;
-	Weapon = WeaponPtr;
-	Health = HealthPtr;
-}
-
-void UNR_TokenComponent::PutTokenAt(int idx)
-{
-	bIsIncreasing = true;
-	TokensArray[idx] += 1;
-	// ...
-	UpdateStats(idx);
-	OnTokenChangedDelegate.Broadcast(TokensArray[idx]); // Broadcasting new number of idx token
-}
-
-void UNR_TokenComponent::RetrieveTokenFrom(int idx)
-{
-	if (TokensArray[idx] > 0)
+	//Initializing array with zero
+	for (int i = 0; i < length; ++i)
 	{
-		bIsIncreasing = false;
-		TokensArray[idx] -= 1;
-		// ...
-		UpdateStats(idx);
-		OnTokenChangedDelegate.Broadcast(TokensArray[idx]); // Broadcasting new number of idx token
+		Tokens[i] = InitValue;
 	}
 
 }
 
-void UNR_TokenComponent::UpdateWeaponDamage()
+void UNR_TokenComponent::CollectToken(ETokenType Token)
 {
-	// Damage of Weapon??
+	int idx = static_cast<int>(Token);
+	Tokens[idx] += 1;
+	//OnTokenChangedDelegate.Broadcast(TokensArray[idx]); // Broadcasting new number of idx token
 }
 
-void UNR_TokenComponent::UpdateWeaponRateOfFire()
-{
-	Weapon->WeaponSetting.RateOfFire = NewStatValue(Weapon->WeaponSetting.RateOfFire, TokensArray[2], 0.02f);
-}
-
-void UNR_TokenComponent::UpdateMaxHealth()
-{
-	// MaxHealth field in HealthComponent??
-}
-
-void UNR_TokenComponent::UpdateMovementSpeed()
-{
-	Movement->MaxWalkSpeed = NewStatValue(Movement->MaxWalkSpeed, TokensArray[3], 0.05f);
-}
+//void UNR_TokenComponent::RetrieveTokenFrom(int idx)
+//{
+//	if (TokensArray[idx] > 0)
+//	{
+//		bIsIncreasing = false;
+//		TokensArray[idx] -= 1;
+//		// ...
+//		UpdateStats(idx);
+//		OnTokenChangedDelegate.Broadcast(TokensArray[idx]); // Broadcasting new number of idx token
+//	}
+//
+//}
+//
+//void UNR_TokenComponent::UpdateWeaponDamage()
+//{
+//	// Damage of Weapon??
+//}
+//
+//void UNR_TokenComponent::UpdateWeaponRateOfFire()
+//{
+//	Weapon->WeaponSetting.RateOfFire = NewStatValue(Weapon->WeaponSetting.RateOfFire, TokensArray[2], 0.02f);
+//}
+//
+//void UNR_TokenComponent::UpdateMaxHealth()
+//{
+//	// MaxHealth field in HealthComponent??
+//}
+//
+//void UNR_TokenComponent::UpdateMovementSpeed()
+//{
+//	Movement->MaxWalkSpeed = NewStatValue(Movement->MaxWalkSpeed, TokensArray[3], 0.05f);
+//}
