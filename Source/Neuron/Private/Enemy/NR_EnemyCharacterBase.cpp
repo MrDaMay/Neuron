@@ -159,6 +159,17 @@ void ANR_EnemyCharacterBase::AttackEnemy(FName NotifyName,
 	}
 }
 
+void ANR_EnemyCharacterBase::Freeze()
+{
+	SetStateMove(false);
+	GetWorldTimerManager().SetTimer(FreezeTimerHandle, this, &ANR_EnemyCharacterBase::EndFreeze, 5.0f, false, 5.0f);
+}
+
+void ANR_EnemyCharacterBase::EndFreeze()
+{
+	SetStateMove(true);
+}
+
 void ANR_EnemyCharacterBase::CharacterDead_BP_Implementation()
 {
 }

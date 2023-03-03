@@ -137,6 +137,7 @@ public:
 	void FinishImmortalityBonus();
 	FTimerHandle FinishMovementSpeedBonusTimerHamdle;
 	void FinishMovementSpeedBonus();
+	void FreezeBonusFunction();
 	//Bonus end
 
 	//Stats start

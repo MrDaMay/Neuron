@@ -6,10 +6,11 @@
 #include "GameFramework/Character.h"
 #include "Component/NR_HealthComponent.h"
 #include "Component/NR_KillScoreComponent.h"
+#include "Enemy/NR_FreezeInterface.h"
 #include "NR_EnemyCharacterBase.generated.h"
 
 UCLASS()
-class NEURON_API ANR_EnemyCharacterBase : public ACharacter
+class NEURON_API ANR_EnemyCharacterBase : public ACharacter, public INR_FreezeInterface
 {
 	GENERATED_BODY()
 
@@ -102,7 +103,11 @@ public:
 	UFUNCTION()
 		virtual	void AttackEnemy(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 
-
+	//Interface freeze start
+	virtual void Freeze() override;
+	FTimerHandle FreezeTimerHandle;
+	void EndFreeze();
+	//Interface freeze end
 
 	//Movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")

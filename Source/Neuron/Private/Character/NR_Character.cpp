@@ -11,6 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Game/NR_GameInstance.h"
 #include "Game/NR_PlayerController.h"
+#include "Enemy/NR_FreezeInterface.h"
 
 // Sets default values
 ANR_Character::ANR_Character()
@@ -300,6 +301,9 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 
 		//Set timer
 		GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, 5.0f, false, 5.0f);
+	case EBonusType::FreezeType:
+		FreezeBonusFunction();
+		break;
 	}
 }
 
@@ -324,6 +328,23 @@ void ANR_Character::FinishMovementSpeedBonus()
 	//Reset params
 	CoefMovementSpeed = CoefMovementSpeed / 2;
 	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * CoefMovementSpeed;
+}
+
+void ANR_Character::FreezeBonusFunction()
+{
+	TArray<FHitResult> Hit;
+	TArray<AActor*> Actors;
+
+	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetActorLocation(), GetActorLocation(),
+		1000.0f, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
+		EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, 
+		FLinearColor::Red, 5.0f);
+
+	for (int i = 0; i<Hit.Num(); i++)
+	{
+		INR_FreezeInterface* FreezeInterface = Cast<INR_FreezeInterface>(Hit[i].GetActor());
+		FreezeInterface->Freeze();
+	}
 }
 
 void ANR_Character::CharDead_BP_Implementation()
