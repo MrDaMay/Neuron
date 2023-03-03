@@ -21,13 +21,15 @@ enum class EWeaponType : uint8
 UENUM(BlueprintType)
 enum class ETokenType : uint8
 {
-	DAMAGE = 0,
+	DAMAGE,
 	HEALTH,
 	FIRESPEED,
 	WALKSPEED,
 	MIGHT,
 	LUCK,
-	NUMBER_OF_TOKENS
+	NUMBER_OF_TOKENS,
+};
+
 UENUM(BlueprintType)
 enum class EBonusType : uint8
 {
