@@ -9,6 +9,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIncrementLife);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRespawn);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenMenuWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenTokenWidget);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOpenPickupWidget, FName, ObjectName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndGame, bool, bIsWin);
 
@@ -40,6 +41,9 @@ public:
 	//Delegate for open/close pick up widget
 	UPROPERTY(BlueprintAssignable, Category = "Widgets")
 	FOnOpenPickupWidget OnOpenPickupWidget;
+	//Delegate for open/close token widget
+	UPROPERTY(BlueprintAssignable, Category = "Widgets")
+	FOnOpenTokenWidget OnOpenTokenWidget;
 	//Delegate what player was absolutely dead
 	FOnEndGame OnEndGame;
 
@@ -48,6 +52,9 @@ public:
 
 	//Function for open menu widget
 	void OpenCloseMenuWidget();
+
+	//Function for open menu widget
+	void OpenCloseTokenWidget();
 
 	//Fuction for open/close pickup widget
 	void OpenClosePickupWidget(FName ObjectName);
