@@ -33,6 +33,11 @@ void ANR_PlayerController::OpenCloseMenuWidget()
 	OnOpenMenuWidget.Broadcast();
 }
 
+void ANR_PlayerController::OpenCloseTokenWidget()
+{
+	OnOpenTokenWidget.Broadcast();
+}
+
 void ANR_PlayerController::OpenClosePickupWidget(FName ObjectName)
 {
 	OnOpenPickupWidget.Broadcast(ObjectName);

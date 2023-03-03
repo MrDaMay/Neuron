@@ -12,6 +12,7 @@ UNR_TokenComponent::UNR_TokenComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
+	Tokens.Init(0, length);
 	// ...
 }
 
@@ -23,13 +24,6 @@ void UNR_TokenComponent::BeginPlay()
 
 	// ...
 	
-}
-
-void UNR_TokenComponent::BeginDestroy()
-{
-	Super::BeginDestroy();
-
-	delete[] Tokens;
 }
 
 //void UNR_TokenComponent::UpdateStats(int idx)
@@ -94,9 +88,9 @@ void UNR_TokenComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 void UNR_TokenComponent::InitTokens(int InitValue)
 {
 	//Initializing array with zero
-	for (int i = 0; i < length; ++i)
+	for (auto& Token : Tokens)
 	{
-		Tokens[i] = InitValue;
+		Token = InitValue;
 	}
 
 }
@@ -106,6 +100,19 @@ void UNR_TokenComponent::CollectToken(ETokenType Token)
 	int idx = static_cast<int>(Token);
 	Tokens[idx] += 1;
 	//OnTokenChangedDelegate.Broadcast(TokensArray[idx]); // Broadcasting new number of idx token
+}
+
+TArray<int32> UNR_TokenComponent::GetTokenArray()
+{
+	return Tokens;
+}
+
+void UNR_TokenComponent::CopyTokenArray(TArray<int32> Array)
+{
+	for (int i = 0; i < length; ++i)
+	{
+		Tokens[i] = Array[i];
+	}
 }
 
 //void UNR_TokenComponent::RetrieveTokenFrom(int idx)

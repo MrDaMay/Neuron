@@ -25,8 +25,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	// For cleaning TempBuffer at destroy
-	virtual void BeginDestroy() override;
 
 	//*****************************
 	//// Pointers to dependable objects
@@ -37,7 +35,7 @@ protected:
 
 	int length = static_cast<int>(ETokenType::NUMBER_OF_TOKENS);
 	//Tokens array
-	int* Tokens = new int[length]();
+	TArray<int32> Tokens;
 
 	//*****************************
 	////Update Stats corresponding to tokens
@@ -62,7 +60,13 @@ public:
 
 	//Put Token at idx
 	UFUNCTION(BlueprintCallable)
-	void CollectToken (ETokenType Token);
+	void CollectToken(ETokenType Token);
+
+	UFUNCTION(BlueprintCallable)
+	TArray<int32> GetTokenArray();
+
+	UFUNCTION(BlueprintCallable)
+	void CopyTokenArray(TArray<int32> Array);
 	
 	//*****************************
 	////Retrive Token at idx
