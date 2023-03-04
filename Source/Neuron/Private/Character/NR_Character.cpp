@@ -301,7 +301,11 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 
 		//Set timer
 		GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, 5.0f, false, 5.0f);
+		break;
+
 	case EBonusType::FreezeType:
+		
+		//Freeze function
 		FreezeBonusFunction();
 		break;
 	}
@@ -336,14 +340,15 @@ void ANR_Character::FreezeBonusFunction()
 	TArray<AActor*> Actors;
 
 	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetActorLocation(), GetActorLocation(),
-		1000.0f, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
+		4000.0f, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
 		EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, 
 		FLinearColor::Red, 5.0f);
 
 	for (int i = 0; i<Hit.Num(); i++)
 	{
 		INR_FreezeInterface* FreezeInterface = Cast<INR_FreezeInterface>(Hit[i].GetActor());
-		FreezeInterface->Freeze();
+		if(FreezeInterface)
+			FreezeInterface->Freeze();
 	}
 }
 

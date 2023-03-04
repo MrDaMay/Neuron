@@ -130,6 +130,7 @@ public:
 	//Dead end
 
 	//Bonus start
+	UFUNCTION(BlueprintCallable, Category= "Bonus")
 	void TakeBonus(EBonusType BonusType);
 	FTimerHandle FinishFireBonusTimerHamdle;
 	void FinishFireBonus();
