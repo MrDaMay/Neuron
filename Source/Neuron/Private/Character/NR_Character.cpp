@@ -352,6 +352,16 @@ void ANR_Character::FreezeBonusFunction()
 	}
 }
 
+void ANR_Character::AddNewWeaponToWeaponSlot(FName NewWeapon)
+{
+	WeaponSLot.Add(NewWeapon);
+}
+
+TArray<FName> ANR_Character::GetWeaponSlot()
+{
+	return WeaponSLot;
+}
+
 void ANR_Character::CharDead_BP_Implementation()
 {
 }

@@ -140,42 +140,9 @@ struct FWeaponInfo : public FTableRowBase
 		UParticleSystem* LaserFx = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Trace")
 		float DelayLaserForFire = 1.0f;
-};
 
-//Addition info for inventory
-USTRUCT(BlueprintType)
-struct FAdditionalWeaponInfo
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Stats")
-		int32 Round = 0;
-};
-
-//Inventory weapon slot
-USTRUCT(BlueprintType)
-struct FWeaponSlot
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
-		FName NameItem;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
-		FAdditionalWeaponInfo AdditionalInfo;
-};
-
-//Inventory ammo slot
-USTRUCT(BlueprintType)
-struct FAmmoSlot
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
-		EWeaponType WeaponType = EWeaponType::RifleType;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
-		int32 Cout = 100;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
-		int32 MaxCout = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Icon")
+		UTexture* WeaponIcon;
 };
 
 //Connect enemy with his name

@@ -24,6 +24,23 @@ protected:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	//Stats start
+	float CoefMovementSpeed = 1.0f;
+	float CoefFireSpeed = 1.0f;
+	float CoefDamage = 1.0f;
+	bool Immortality = false;
+	float BaseSpeed = 600.0f;
+	//Stats end
+
+	//Inventory system start
+	TArray<FName> WeaponSLot;
+	//Inventory system end
+
+	//Input start
+	float AxisX = 0.0f;
+	float AxisY = 0.0f;
+	//Input end
+
 public:
 	// Sets default values for this character's properties
 	ANR_Character();
@@ -72,8 +89,6 @@ public:
 	//Cursor end
 
 	//Input start
-	float AxisX = 0.0f;
-	float AxisY = 0.0f;
 	UFUNCTION()
 		void InputAxisX(float Value);
 	UFUNCTION()
@@ -141,11 +156,10 @@ public:
 	void FreezeBonusFunction();
 	//Bonus end
 
-	//Stats start
-	float CoefMovementSpeed = 1.0f;
-	float CoefFireSpeed = 1.0f;
-	float CoefDamage = 1.0f;
-	bool Immortality = false;
-	float BaseSpeed = 600.0f;
-	//Stats end
+	//Inventory system start
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+		void AddNewWeaponToWeaponSlot(FName NewWeapon);
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		TArray<FName> GetWeaponSlot();
+	//Inventory system end
 };

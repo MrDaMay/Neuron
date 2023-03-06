@@ -42,37 +42,10 @@ void ANR_CollectableWeapon::Tick(float DeltaTime)
 
 }
 
-//Implemetations of Interface
-void ANR_CollectableWeapon::CollectItem_Implementation(ANR_Character* Character)
-{
-	if (Character)
-	{
-		Character->InitWeapon(WeaponName);
-		Destroy();
-	}
-}
-
 void ANR_CollectableWeapon::EnteredInteractionZone_Implementation(ANR_Character* Character)
 {
 	if (Character)
 	{
-		auto Controller = Cast<ANR_PlayerController>(Character->GetController());
-		if (Controller)
-		{
-			Controller->OpenClosePickupWidget(WeaponName);
-		}
-	}
-}
-
-void ANR_CollectableWeapon::LeftInteractionZone_Implementation(ANR_Character* Character)
-{
-	if (Character)
-	{
-		auto Controller = Cast<ANR_PlayerController>(Character->GetController());
-		if (Controller)
-		{
-			Controller->OpenClosePickupWidget(WeaponName);
-		}
-		
+		Character->AddNewWeaponToWeaponSlot(WeaponName);
 	}
 }
