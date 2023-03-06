@@ -46,3 +46,19 @@ bool UNR_GameInstance::GetEnemyInfoByName(FName NameEnemy, FEnemyCharacters& Ene
 
 	return bIsFind;
 }
+
+void UNR_GameInstance::ApplyAchievements()
+{
+	InitialStats.CoefDamage *= (1 + Achievements[0] + Achievements[2] + Achievements[5] + Achievements[7]);
+
+	InitialStats.CoefFireSpeed *= (1 + Achievements[3] + Achievements[5] + Achievements[7]);
+
+	InitialStats.CoefDamageResist *=  (1 + Achievements[4] + Achievements[5] + Achievements[7]);
+
+	InitialStats.CoefMovementSpeed *= (1 + Achievements[6] + Achievements[5] + Achievements[7]);
+}
+
+void UNR_GameInstance::UpdateAchievementAt(int idx, float LevelMultiplier)
+{
+	Achievements[idx] = LevelMultiplier;
+}

@@ -15,6 +15,13 @@ class NEURON_API UNR_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+protected:
+
+	//Initial Character Stats, based on achivements
+	FCharStats InitialStats;
+	//Achviements Array, contains achievement index and its level
+	TArray<float> Achievements;
+
 public:
 	//Table
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSetting")
@@ -27,4 +34,18 @@ public:
 		bool GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& OutInfo);
 	UFUNCTION(BlueprintCallable)
 		bool GetEnemyInfoByName(FName NameEnemy, FEnemyCharacters& Enemy);
+
+	//Apply achievements on CharacterStats
+	UFUNCTION(BlueprintCallable)
+		void ApplyAchievements();
+
+	//Update achievement at index by certain level
+	UFUNCTION(BlueprintCallable)
+		void UpdateAchievementAt(int idx, float LevelMultiplier);
+
+	//Update Achievement at index by certain level
+	UFUNCTION(BlueprintCallable)
+		FCharStats GetInitialStats() { return InitialStats; }
+
+
 };

@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Game/NR_GameInstance.h"
+#include "Game/NR_GameState.h"
 #include "Game/NR_PlayerController.h"
 #include "Enemy/NR_FreezeInterface.h"
 
@@ -73,6 +74,21 @@ void ANR_Character::BeginPlay()
 		}
 	}
 
+	//Initialize character stats from GameInstance
+	auto GameInstance = Cast<UNR_GameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		Stats = GameInstance->GetInitialStats();
+	}
+
+	//Sending initial stats to GameState for managing any changes and bind to Stats Update
+	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
+	if (GameState)
+	{
+		GameState->SetStats(Stats);
+		GameState->OnCharStatsChanged.AddDynamic(this, &ANR_Character::UpdateStats);
+	}
+
 	InitWeapon("Rifle");
 
 	auto PlayerController = Cast<ANR_PlayerController>(GetController());
@@ -82,7 +98,7 @@ void ANR_Character::BeginPlay()
 float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	if(!Immortality)
+	if(!Stats.Immortality)
 		HealthComponent->ChangeHealthValue(-DamageAmount);
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -264,11 +280,11 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 	case EBonusType::FireType:
 		
 		//Change params
-		CoefFireSpeed = CoefFireSpeed * 2;
-		CoefDamage = CoefDamage * 2;
+		Stats.CoefFireSpeed = Stats.CoefFireSpeed * 2;
+		Stats.CoefDamage = Stats.CoefDamage * 2;
 
 		//Say weapon about changes
-		OnWeaponParamsChange.Broadcast(CoefFireSpeed, CoefDamage);
+		OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
 
 		//Clean the timer before use
 		if (GetWorldTimerManager().IsTimerActive(FinishFireBonusTimerHamdle))
@@ -280,8 +296,8 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 	case EBonusType::SpeedType:
 
 		//Change params
-		CoefMovementSpeed = CoefMovementSpeed * 2;
-		GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * CoefMovementSpeed;
+		Stats.CoefMovementSpeed = Stats.CoefMovementSpeed * 2;
+		GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
 
 		//Clean the timer before use
 		if (GetWorldTimerManager().IsTimerActive(FinishMovementSpeedBonusTimerHamdle))
@@ -293,7 +309,7 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 	case EBonusType::ShieldType:
 
 		//Change params
-		Immortality = true;
+		Stats.Immortality = true;
 
 		//Clean the timer before use
 		if (GetWorldTimerManager().IsTimerActive(FinishImmortalityBonusTimerHamdle))
@@ -314,24 +330,24 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 void ANR_Character::FinishFireBonus()
 {
 	//Reset params
-	CoefFireSpeed = CoefFireSpeed / 2;
-	CoefDamage = CoefDamage / 2;
+	Stats.CoefFireSpeed = Stats.CoefFireSpeed / 2;
+	Stats.CoefDamage = Stats.CoefDamage / 2;
 
 	//Say weapon about changes
-	OnWeaponParamsChange.Broadcast(CoefFireSpeed, CoefDamage);
+	OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
 }
 
 void ANR_Character::FinishImmortalityBonus()
 {
 	//Reset params
-	Immortality = false;
+	Stats.Immortality = false;
 }
 
 void ANR_Character::FinishMovementSpeedBonus()
 {
 	//Reset params
-	CoefMovementSpeed = CoefMovementSpeed / 2;
-	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed * CoefMovementSpeed;
+	Stats.CoefMovementSpeed = Stats.CoefMovementSpeed / 2;
+	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
 }
 
 void ANR_Character::FreezeBonusFunction()
@@ -350,6 +366,12 @@ void ANR_Character::FreezeBonusFunction()
 		if(FreezeInterface)
 			FreezeInterface->Freeze();
 	}
+}
+
+void ANR_Character::UpdateStats(FCharStats NewStats)
+{
+	Stats = NewStats;
+	HealthComponent->CoefDamageResist = Stats.CoefDamageResist;
 }
 
 void ANR_Character::CharDead_BP_Implementation()
