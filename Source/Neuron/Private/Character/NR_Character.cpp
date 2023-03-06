@@ -340,7 +340,7 @@ void ANR_Character::FreezeBonusFunction()
 	TArray<AActor*> Actors;
 
 	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetActorLocation(), GetActorLocation(),
-		4000.0f, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
+		1500.0f, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
 		EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, 
 		FLinearColor::Red, 5.0f);
 

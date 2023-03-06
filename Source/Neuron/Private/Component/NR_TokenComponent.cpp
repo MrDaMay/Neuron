@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Component/NR_TokenComponent.h"
 #include "Weapon/NR_Weapon.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Component/NR_HealthComponent.h"
-#include "Component/NR_TokenComponent.h"
+
 
 // Sets default values for this component's properties
 UNR_TokenComponent::UNR_TokenComponent()

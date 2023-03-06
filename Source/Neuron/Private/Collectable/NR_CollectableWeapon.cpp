@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Collectable/NR_CollectableWeapon.h"
 #include "Character/NR_Character.h"
 #include "Components/SphereComponent.h"
 #include "Game/NR_PlayerController.h"
-#include "Collectable/NR_CollectableWeapon.h"
+
 
 // Sets default values
 ANR_CollectableWeapon::ANR_CollectableWeapon()
