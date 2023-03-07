@@ -69,6 +69,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
 		class UNR_TokenComponent* TokenComponent;
 
+	//Character stats for achievements and tokens implementation
+	FCharStats Stats;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -162,4 +165,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		TArray<FName> GetWeaponSlot();
 	//Inventory system end
+	//Function for updating stats after applying tokens
+	UFUNCTION()
+		void UpdateStats(FCharStats NewStats);
+
+	//Stats start
+	//float CoefMovementSpeed = 1.0f;
+	//float CoefFireSpeed = 1.0f;
+	//float CoefDamage = 1.0f;
+	//bool Immortality = false;
+	//float BaseSpeed = 600.0f;
+	//Stats end
 };

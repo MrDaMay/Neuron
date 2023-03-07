@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/Image.h"
 #include "Engine/DataTable.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Type.generated.h"
@@ -156,6 +157,57 @@ struct FEnemyCharacters : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		TSubclassOf<class ANR_EnemyCharacterBase> Enemy = nullptr;
 
+};
+
+USTRUCT(BlueprintType)
+struct FAchievementLevel
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
+		float Multiplier;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
+	//	UImage* Image;
+};
+
+USTRUCT(BlueprintType)
+struct FAchivementsInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Achievement")
+		FName AchievementName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Achievement")
+		TArray<FAchievementLevel> Levels;
+};
+
+USTRUCT(BlueprintType)
+struct FCharStats
+{
+	GENERATED_BODY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		float CoefMovementSpeed = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		float CoefFireSpeed = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		float CoefDamage = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		float CoefDamageResist = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		bool Immortality = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+		float BaseSpeed = 600.0f;
+
+	FCharStats& operator= (const FCharStats& Stats)
+	{
+		CoefMovementSpeed = Stats.CoefMovementSpeed;
+		CoefFireSpeed = Stats.CoefFireSpeed;
+		CoefDamage = Stats.CoefDamage;
+		CoefDamageResist = Stats.CoefDamageResist;
+		Immortality = Stats.Immortality;
+		BaseSpeed = Stats.BaseSpeed;
+		return *this;
+	}
 };
 
 
