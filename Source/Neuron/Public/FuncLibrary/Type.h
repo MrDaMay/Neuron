@@ -143,7 +143,7 @@ struct FWeaponInfo : public FTableRowBase
 		float DelayLaserForFire = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Icon")
-		UTexture* WeaponIcon;
+		UTexture2D* WeaponIcon;
 };
 
 //Connect enemy with his name
