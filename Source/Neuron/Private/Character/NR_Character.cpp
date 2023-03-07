@@ -376,6 +376,8 @@ void ANR_Character::AddNewWeaponToWeaponSlot(FName NewWeapon)
 TArray<FName> ANR_Character::GetWeaponSlot()
 {
 	return WeaponSLot;
+}
+
 void ANR_Character::UpdateStats(FCharStats NewStats)
 {
 	Stats = NewStats;
