@@ -20,16 +20,31 @@ protected:
 
 	//Score variable
 	float PlayerScore = 0.0f;
+	// 
+	float NumKilled = 0.0f;
+	//
+	float NumBonus = 0.0f;
+	//
+	int CurrentLevel = 0.0f;
+	//
+	//Array ind - achievement num, value - achievement level
+	TArray<int> Achievements;
 
 public:
 
 	//Delegate for widget
-	UPROPERTY(BlueprintAssignable, Category = "IcrementScore")
+	UPROPERTY(BlueprintAssignable, Category = "IncrementScore")
 		FOnIncrementScore OnIncrementScore;
 
 	//Function for increment score
 	void IncrementScore(float MutableScore);
 
+	//Function for incrementing NumBonus
+	void IncrementNumBonus();
+
 	//Function for check win condition (if we have score mechanics)
 	void CheckWinCondition(float CurrentScore);
+
+	//Calculating earn achivements;
+	void CalculateEarnedAchievements();
 };

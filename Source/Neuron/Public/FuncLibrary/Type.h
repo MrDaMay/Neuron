@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/Image.h"
+#include "Engine/Texture2D.h"
 #include "Engine/DataTable.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Type.generated.h"
@@ -199,8 +199,8 @@ struct FAchievementLevel
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
 		float Multiplier;
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
-	//	UImage* Image;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
+		UTexture2D* Texture;
 };
 
 USTRUCT(BlueprintType)
