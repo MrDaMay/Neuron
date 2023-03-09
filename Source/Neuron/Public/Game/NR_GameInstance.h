@@ -19,7 +19,7 @@ protected:
 
 	//Initial Character Stats, based on achivements
 	FCharStats InitialStats;
-	//Achviements Array, contains achievement index and its level
+	//Achviements Array, contains achievement index and its level for stats increasing
 	TArray<float> Achievements;
 
 public:

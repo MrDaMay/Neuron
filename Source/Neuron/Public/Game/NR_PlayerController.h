@@ -9,7 +9,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIncrementLife);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRespawn);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenMenuWidget);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenTokenWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenTokenWidget); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenAchieveWidget);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOpenPickupWidget, FName, ObjectName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndGame, bool, bIsWin);
 
@@ -20,6 +21,11 @@ UCLASS()
 class NEURON_API ANR_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+
+	//For Token widget
+	bool bTokensAvailable = false;
 
 public:
 
@@ -32,13 +38,15 @@ public:
 	FOnRespawn OnRespawn;
 	//Delegate for open/close menu widget
 	UPROPERTY(BlueprintAssignable, Category = "Widgets")
-	FOnOpenMenuWidget OnOpenMenuWidget;
+		FOnOpenMenuWidget OnOpenMenuWidget;
 	//Delegate for open/close pick up widget
 	UPROPERTY(BlueprintAssignable, Category = "Widgets")
-	FOnOpenPickupWidget OnOpenPickupWidget;
+		FOnOpenPickupWidget OnOpenPickupWidget;
 	//Delegate for open/close token widget
 	UPROPERTY(BlueprintAssignable, Category = "Widgets")
-	FOnOpenTokenWidget OnOpenTokenWidget;
+		FOnOpenTokenWidget OnOpenTokenWidget;
+	UPROPERTY(BlueprintAssignable, Category = "Widgets")
+		FOnOpenAchieveWidget OnOpenAchieveWidget;
 	//Delegate what player was absolutely dead
 	FOnEndGame OnEndGame;
 
@@ -50,6 +58,12 @@ public:
 
 	//Function for open menu widget
 	void OpenCloseTokenWidget();
+
+	//Function for open menu widget
+	void OpenCloseAchieveWidget();
+
+	void BlockTokenWidget() { bTokensAvailable = false; }
+	void UnblockTokenWidget() { bTokensAvailable = true; }
 
 	//Fuction for open/close pickup widget
 	void OpenClosePickupWidget(FName ObjectName);

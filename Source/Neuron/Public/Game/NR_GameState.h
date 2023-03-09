@@ -8,6 +8,9 @@
 #include "NR_GameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharStatsChanged, FCharStats, NewStats);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseEnds);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossPhaseStarts);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDies);
 /**
  * 
  */
@@ -21,12 +24,26 @@ public:
 	//Delegate for stats changing
 	UPROPERTY(BlueprintAssignable)
 		FOnCharStatsChanged OnCharStatsChanged;
+	UPROPERTY(BlueprintAssignable)
+		FOnWavePhaseEnds OnWavePhaseEnds;
+	UPROPERTY(BlueprintAssignable)
+		FOnBossPhaseStarts OnBossPhaseStarts;
+	UPROPERTY(BlueprintAssignable)
+		FOnBossDies OnBossDies;
 
 
 protected:
 
 	//Stuct with character stats
 	FCharStats CharStats;
+
+	//Number of enemies
+	int Enemies = 0;
+	bool NotSpawning = true;
+	bool BossAlive = false;
+
+	//Level number
+	int CurrentLevel = 0;
 
 public:
 
@@ -37,5 +54,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetStats(FCharStats Stats) { CharStats = Stats; }
 
-	
+	void IncrementEnemies() { Enemies++; }
+
+	void ToggleSpawningState() { NotSpawning = NotSpawning ? false : true; }
+
+	void ToggleBossState() { BossAlive = BossAlive ? true : false; }
+
+	UFUNCTION(BlueprintCallable)
+		void StartBossPhase();
+
+	UFUNCTION(BlueprintCallable)
+		void BossKilled();
+
+	void TryToChangePhase();
 };

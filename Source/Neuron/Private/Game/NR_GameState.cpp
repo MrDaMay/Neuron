@@ -2,6 +2,8 @@
 
 
 #include "Game/NR_GameState.h"
+#include "Game/NR_PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 {
@@ -19,4 +21,25 @@ void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 	}
 
 	OnCharStatsChanged.Broadcast(CharStats);
+}
+
+void ANR_GameState::StartBossPhase()
+{
+	OnBossPhaseStarts.Broadcast();
+}
+
+void ANR_GameState::BossKilled()
+{
+	OnBossDies.Broadcast();
+}
+
+
+void ANR_GameState::TryToChangePhase()
+{
+	Enemies--;
+	if (Enemies <= 0 && NotSpawning)
+	{
+		auto PlayerController = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		PlayerController->OpenCloseTokenWidget();
+	}
 }

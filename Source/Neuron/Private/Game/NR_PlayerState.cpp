@@ -22,11 +22,17 @@ void ANR_PlayerState::CheckWinCondition(float CurrentScore)
 	//ToDo add code and delegate
 }
 
-void ANR_PlayerState::CalculateEarnedAchievements()
+TArray<int> ANR_PlayerState::GetAchievements()
+{
+	Achievements.Init(0, 9);
+	return Achievements;
+}
+
+TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 {
 	TArray<int> Buff;
 	TArray<FVector2D> EarnedAchievements;
-	Buff.Init(9, 0);
+	Buff.Init(0, 9);
 	
 	Buff[0] = (NumKilled >= 3) + (NumKilled >= 5) + (NumKilled >= 10);
 	Buff[1] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
@@ -36,5 +42,16 @@ void ANR_PlayerState::CalculateEarnedAchievements()
 		if (Buff[i] > Achievements[i]) 
 			EarnedAchievements.Add(FVector2D(i, Buff[i]));
 	}
-	
+
+	//for testing. delete later!!
+	int delta = 3 - EarnedAchievements.Num();
+	if (delta)
+	{
+		for (int i = 0; i < delta; ++i)
+		{
+			EarnedAchievements.Add(FVector2D(0, 0));
+		}
+	}
+
+	return EarnedAchievements;
 }

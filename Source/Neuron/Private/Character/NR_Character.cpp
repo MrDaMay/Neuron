@@ -262,8 +262,10 @@ void ANR_Character::AttackEvent(bool bIsFire)
 void ANR_Character::CharDead()
 {
 	auto PlayerController = Cast<ANR_PlayerController>(GetController());
-
-	PlayerController->TryToRespawnPlayer();
+	if (PlayerController)
+	{
+		PlayerController->TryToRespawnPlayer();
+	}
 }
 
 void ANR_Character::AbsolutelyDead(bool IsWin)
@@ -273,7 +275,11 @@ void ANR_Character::AbsolutelyDead(bool IsWin)
 
 void ANR_Character::TakeBonus(EBonusType BonusType)
 {
-	Cast<ANR_PlayerState>(GetPlayerState())->IncrementNumBonus();
+	auto MyPlayerState = Cast<ANR_PlayerState>(GetPlayerState());
+	if (MyPlayerState)
+	{
+		MyPlayerState->IncrementNumBonus();
+	}
 
 	switch (BonusType)
 	{

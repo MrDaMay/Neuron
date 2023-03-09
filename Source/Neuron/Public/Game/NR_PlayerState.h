@@ -46,5 +46,10 @@ public:
 	void CheckWinCondition(float CurrentScore);
 
 	//Calculating earn achivements;
-	void CalculateEarnedAchievements();
+	UFUNCTION(BlueprintCallable)
+		TArray<FVector2D> GetEarnedAchievements();
+
+	//Getter for achievements array
+	UFUNCTION(BlueprintCallable)
+		TArray<int> GetAchievements();
 };

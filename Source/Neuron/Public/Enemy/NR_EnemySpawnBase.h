@@ -8,6 +8,8 @@
 #include "Enemy/NR_EnemyCharacterBase.h"
 #include "NR_EnemySpawnBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSpawnEnd);
+
 UCLASS()
 class NEURON_API ANR_EnemySpawnBase : public AActor
 {
@@ -28,13 +30,36 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//Calls Remaining
+	float RepeatingCallsRemaining = 0.f;
+	
+	//Spawn Timer
+	FTimerHandle SpawnEnemyTimer;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Delegate for spawn ending
+	FOnSpawnEnd OnSpawnEnd;
+
+	//Spawn details
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Details")
+		float SpawnRate = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Details")
+		float EnemiesNumber = 15.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Details")
+		float SpawnDelay = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Details")
+		TArray<TSubclassOf<ANR_EnemyCharacterBase>> Enemy;
+
+	UFUNCTION()
+		void SpawnBoss();
 	UFUNCTION()
 		void SpawnEnemy();
+	UFUNCTION()
+		void StartSpawn();
+	UFUNCTION()
+		void StopSpawn();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<TSubclassOf<ANR_EnemyCharacterBase>> Enemy;
 };

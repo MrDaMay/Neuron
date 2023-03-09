@@ -16,7 +16,7 @@ void ANR_PlayerController::TryToRespawnPlayer()
 	OnIncrementLife.Broadcast();
 
 	OnEndGame.Broadcast(false);
-	OnOpenMenuWidget.Broadcast();
+	OnOpenAchieveWidget.Broadcast();
 }
 
 void ANR_PlayerController::OpenCloseMenuWidget()
@@ -26,10 +26,15 @@ void ANR_PlayerController::OpenCloseMenuWidget()
 
 void ANR_PlayerController::OpenCloseTokenWidget()
 {
-	OnOpenTokenWidget.Broadcast();
+	 OnOpenTokenWidget.Broadcast();
 }
 
 void ANR_PlayerController::OpenClosePickupWidget(FName ObjectName)
 {
 	OnOpenPickupWidget.Broadcast(ObjectName);
+}
+
+void ANR_PlayerController::OpenCloseAchieveWidget()
+{
+	OnOpenAchieveWidget.Broadcast();
 }

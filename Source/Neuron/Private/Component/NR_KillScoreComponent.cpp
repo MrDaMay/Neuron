@@ -3,6 +3,7 @@
 
 #include "Component/NR_KillScoreComponent.h"
 #include "Game/NR_PlayerState.h"
+#include "Game/NR_GameState.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -39,5 +40,8 @@ void UNR_KillScoreComponent::OwnerWasDead()
 	ANR_PlayerState* PlayerState = Cast<ANR_PlayerState>(UGameplayStatics::GetPlayerState(GetWorld(),0));
 
 	PlayerState->IncrementScore(1); //ToDo need added score from funclibrary and table
+
+	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
+	GameState->TryToChangePhase();
 }
 
