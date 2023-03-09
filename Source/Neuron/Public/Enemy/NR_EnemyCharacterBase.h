@@ -7,6 +7,7 @@
 #include "Component/NR_HealthComponent.h"
 #include "Component/NR_KillScoreComponent.h"
 #include "Enemy/NR_FreezeInterface.h"
+#include "Character/NR_Character.h"
 #include "NR_EnemyCharacterBase.generated.h"
 
 UCLASS()
@@ -46,7 +47,8 @@ protected:
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 
-public:	
+public:
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

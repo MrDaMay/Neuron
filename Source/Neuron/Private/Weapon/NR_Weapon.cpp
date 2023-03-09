@@ -116,7 +116,7 @@ void ANR_Weapon::FireProjectile()
 		FVector SpawnLocation = ShootLocation->GetComponentLocation();
 		FRotator SpawnRotation = ShootLocation->GetComponentRotation();
 
-		float RotationToTarget = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShotEndLocation).Yaw;
+		float RotationToTarget = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShootEndLocation).Yaw;
 		float RotationToTargetWithDispersion = RotationToTarget + UKismetMathLibrary::RandomFloatInRange(-WeaponSetting.DispersionWeapon, WeaponSetting.DispersionWeapon);
 
 		if (WeaponSetting.AnimWeaponInfo.WeaponFireAnimMontage
@@ -156,10 +156,10 @@ void ANR_Weapon::LaserFire()
 	TArray<AActor*> Actors;
 
 
-	UKismetSystemLibrary::LineTraceMulti(GetWorld(), SpawnLocation, (ShotEndLocation - SpawnLocation) * WeaponSetting.LaserDistance,
+	UKismetSystemLibrary::LineTraceMulti(GetWorld(), SpawnLocation, (ShootEndLocation - SpawnLocation) * WeaponSetting.LaserDistance,
 		ETraceTypeQuery::TraceTypeQuery3, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
 
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, SpawnLocation, UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShotEndLocation));
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, SpawnLocation, UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShootEndLocation));
 
 	for (int i = 0; i < Hit.Num(); i++)
 	{
@@ -197,16 +197,23 @@ void ANR_Weapon::LaserFire()
 
 void ANR_Weapon::FindEndLocation()
 {
-	FVector DecalLocation = FMath::LinePlaneIntersection(Pawn->MouseLocation, Pawn->LineEnd, ShootLocation->GetComponentLocation(), FVector(0, 0, 1));
-
-	FVector tmpV = (Pawn->GetActorLocation() - DecalLocation);
-
-	if (tmpV.Size() > SizeChanelToChangeShootDirectionLogic)
+	if (IsPlayer)
 	{
-		ShotEndLocation = DecalLocation;
+		FVector DecalLocation = FMath::LinePlaneIntersection(Pawn->MouseLocation, Pawn->LineEnd, ShootLocation->GetComponentLocation(), FVector(0, 0, 1));
+
+		FVector tmpV = (Pawn->GetActorLocation() - DecalLocation);
+
+		if (tmpV.Size() > SizeChanelToChangeShootDirectionLogic)
+		{
+			ShootEndLocation = DecalLocation;
+		}
+		else
+		{
+			ShootEndLocation = ShootLocation->GetComponentLocation() + ShootLocation->GetForwardVector() * 2000.0f;
+		}
 	}
 	else
 	{
-		ShotEndLocation = ShootLocation->GetComponentLocation() + ShootLocation->GetForwardVector() * 2000.0f;
+		ShootEndLocation = Pawn->GetActorLocation();
 	}
 }

@@ -65,8 +65,6 @@ void ANR_Projectile::InitProjectile(FProjectileInfo InitParam)
 		BulletMesh->SetStaticMesh(InitParam.ProjectileStaticMesh);
 		BulletMesh->SetRelativeTransform(InitParam.ProjectileStaticMeshOffset);
 	}
-	else
-		BulletMesh->DestroyComponent();
 
 	if (InitParam.ProjectileTrailFx)
 	{

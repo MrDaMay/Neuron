@@ -43,7 +43,7 @@ public:
 
 	//Params start
 	FProjectileInfo GetProjectile();
-
+	bool IsPlayer = true;
 	class ANR_Character* Pawn = nullptr;
 	FWeaponInfo WeaponSetting;
 	//Params end
@@ -58,7 +58,7 @@ public:
 
 	//Shoot start
 	void FindEndLocation();
-	FVector ShotEndLocation = FVector(0.0f);
+	FVector ShootEndLocation = FVector(0.0f);
 	float SizeChanelToChangeShootDirectionLogic = 120.0f;
 	//Shoot end
 

@@ -46,6 +46,7 @@ void ANR_EnemyCharacterBase::BeginPlay()
 			AnimAttackInstance->OnMontageEnded.AddDynamic(this, &ANR_EnemyCharacterBase::AttackAnimEnd);
 		}
 	}
+
 }
 
 float ANR_EnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
