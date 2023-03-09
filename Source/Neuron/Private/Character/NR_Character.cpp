@@ -11,6 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Game/NR_GameInstance.h"
 #include "Game/NR_GameState.h"
+#include "Game/NR_PlayerState.h"
 #include "Game/NR_PlayerController.h"
 #include "Enemy/NR_FreezeInterface.h"
 
@@ -272,6 +273,8 @@ void ANR_Character::AbsolutelyDead(bool IsWin)
 
 void ANR_Character::TakeBonus(EBonusType BonusType)
 {
+	Cast<NR_PlayerState>(GetPlayerState())->IncrementNumBonus();
+
 	switch (BonusType)
 	{
 	case EBonusType::AidType:
