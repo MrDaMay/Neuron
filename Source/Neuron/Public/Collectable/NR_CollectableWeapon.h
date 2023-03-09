@@ -38,7 +38,9 @@ public:
 	//Init FName variable
 	void Init(FName Name) { WeaponName = Name; };
 
-	//Interering an interactive zone
+	//Implementing interface
+	void CollectItem_Implementation(ANR_Character* Character) override; // c++ implementation
 	void EnteredInteractionZone_Implementation(ANR_Character* Character) override; // c++ implementation
+	void LeftInteractionZone_Implementation(ANR_Character* Character) override; // c++ implementation
 
 };
