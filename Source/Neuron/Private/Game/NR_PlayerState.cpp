@@ -28,8 +28,8 @@ void ANR_PlayerState::CalculateEarnedAchievements()
 	TArray<FVector2D> EarnedAchievements;
 	Buff.Init(9, 0);
 	
-	Buff[0] = NumKilled >= 3 + NumKilled >= 5 + NumKilled >= 10;
-	Buff[1] = NumBonus >= 3 + NumBonus >= 5 + NumBonus >= 10;
+	Buff[0] = (NumKilled >= 3) + (NumKilled >= 5) + (NumKilled >= 10);
+	Buff[1] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
 
 	for (int i = 0; i < 9; i++)
 	{

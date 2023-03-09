@@ -273,7 +273,7 @@ void ANR_Character::AbsolutelyDead(bool IsWin)
 
 void ANR_Character::TakeBonus(EBonusType BonusType)
 {
-	Cast<NR_PlayerState>(GetPlayerState())->IncrementNumBonus();
+	Cast<ANR_PlayerState>(GetPlayerState())->IncrementNumBonus();
 
 	switch (BonusType)
 	{
