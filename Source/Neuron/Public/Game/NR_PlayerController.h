@@ -21,11 +21,6 @@ class NEURON_API ANR_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-protected:
-
-	//Current life
-	int32 PlayerLifes = 3;
-
 public:
 
 	//Inputs

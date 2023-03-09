@@ -15,17 +15,8 @@ void ANR_PlayerController::TryToRespawnPlayer()
 {
 	OnIncrementLife.Broadcast();
 
-	//Increment life
-	PlayerLifes--;
-
-	//Сheck of life for the condition of defeat
-	if (PlayerLifes <= 0)
-	{
-		OnEndGame.Broadcast(false);
-		OnOpenMenuWidget.Broadcast();
-	}
-	else
-		OnRespawn.Broadcast();
+	OnEndGame.Broadcast(false);
+	OnOpenMenuWidget.Broadcast();
 }
 
 void ANR_PlayerController::OpenCloseMenuWidget()

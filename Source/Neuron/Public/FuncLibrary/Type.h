@@ -100,10 +100,6 @@ struct FAnimWeaponInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
 		UAnimMontage* CharacterFireAnimMontage = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
-		UAnimMontage* CharacterReloadAnimMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
-		UAnimMontage* WeaponReloadAnimMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
 		UAnimMontage* WeaponFireAnimMontage = nullptr;
 };
 
@@ -126,9 +122,6 @@ struct FWeaponInfo : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
 		FAnimWeaponInfo AnimWeaponInfo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-		USoundBase* SoundReloadWeapon = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 		FProjectileInfo ProjectileSetting;
