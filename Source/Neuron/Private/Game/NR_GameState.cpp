@@ -1,9 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Game/NR_GameState.h"
 #include "Enemy/NR_EnemyCharacterBase.h"
 #include "Enemy/Boss/NR_EnemyBoss.h"
-#include "Game/NR_GameState.h"
 #include "Game/NR_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
