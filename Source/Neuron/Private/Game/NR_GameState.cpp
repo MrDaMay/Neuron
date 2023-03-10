@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "Enemy/NR_EnemyCharacterBase.h"
+#include "Enemy/Boss/NR_EnemyBoss.h"
 #include "Game/NR_GameState.h"
 #include "Game/NR_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -25,21 +27,53 @@ void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 
 void ANR_GameState::StartBossPhase()
 {
+	GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
+	TimeLeft = 7.f;
+
 	OnBossPhaseStarts.Broadcast();
 }
 
 void ANR_GameState::BossKilled()
 {
 	OnBossDies.Broadcast();
+	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::StartWavePhase, 5.f, false, 1.f);
 }
 
-
-void ANR_GameState::TryToChangePhase()
+void ANR_GameState::StartWavePhase()
 {
-	Enemies--;
-	if (Enemies <= 0 && NotSpawning)
+	OnWavePhaseStarts.Broadcast();
+	CurrentLevel++;
+}
+
+void ANR_GameState::EndWavePhase()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANR_EnemyCharacterBase::StaticClass(), FoundActors);
+	for (auto Actor : FoundActors)
 	{
-		auto PlayerController = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		PlayerController->OpenCloseTokenWidget();
+		Actor->Destroy();
+	}
+
+	OnWavePhaseEnds.Broadcast();
+
+	GetWorldTimerManager().SetTimer(SpawnBoss, this, &ANR_GameState::StartBossPhase, 2.f, false, 1.f);
+
+}
+
+void ANR_GameState::DecrementEnemy()
+{
+	if (Enemies > 0) Enemies--;
+}
+
+void ANR_GameState::SetBoss(ANR_EnemyBoss* Enemy)
+{
+	Boss = Enemy;
+}
+
+void ANR_GameState::TimeIsOver()
+{
+	if (--TimeLeft <= 0 || !Boss)
+	{
+		GetWorldTimerManager().ClearTimer(BossTimer);
 	}
 }
