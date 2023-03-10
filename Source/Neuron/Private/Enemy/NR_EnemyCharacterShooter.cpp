@@ -19,7 +19,7 @@ void ANR_EnemyCharacterShooter::SpawnWeapon()
 
 	if (GameInstance)
 	{
-		if (GameInstance->GetWeaponInfoByName("Rifle", WeaponInfo))
+		if (GameInstance->GetWeaponInfoByName("EnemyRifle", WeaponInfo))
 		{
 			if (WeaponInfo.WeaponClass)
 			{
