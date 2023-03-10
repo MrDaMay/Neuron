@@ -2,12 +2,32 @@
 
 
 #include "Collectable/NR_CollectableBase.h"
+#include "Components/SphereComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ANR_CollectableBase::ANR_CollectableBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
+	CollisionSphere->SetSphereRadius(34.f);
+	CollisionSphere->SetEnableGravity(false);
+	CollisionSphere->bReturnMaterialOnMove = true;//hit event return physMaterial
+	CollisionSphere->SetCanEverAffectNavigation(false);//collision not affect navigation (P keybord on editor)
+	CollisionSphere->SetCollisionProfileName("OverlapAll");
+
+	RootComponent = CollisionSphere;
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	StaticMesh->SetupAttachment(RootComponent);
+	StaticMesh->SetCanEverAffectNavigation(false);
+	StaticMesh->SetEnableGravity(false);
+	StaticMesh->SetCollisionProfileName("NoCollision");
+
+	LightPartical = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Partical"));
+	LightPartical->SetupAttachment(RootComponent);
 
 }
 

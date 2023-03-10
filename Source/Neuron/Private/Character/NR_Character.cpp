@@ -273,7 +273,7 @@ void ANR_Character::AbsolutelyDead(bool IsWin)
 	PlayAnimMontage(DeathMontage);
 }
 
-void ANR_Character::TakeBonus(EBonusType BonusType)
+void ANR_Character::TakeBonus(FName BonusType)
 {
 	auto MyPlayerState = Cast<ANR_PlayerState>(GetPlayerState());
 	if (MyPlayerState)
@@ -281,58 +281,68 @@ void ANR_Character::TakeBonus(EBonusType BonusType)
 		MyPlayerState->IncrementNumBonus();
 	}
 
-	switch (BonusType)
+	if (BonusType == "Aid")
 	{
-	case EBonusType::AidType:
 		HealthComponent->ChangeHealthValue(50.0f);
-		break;
-	case EBonusType::FireType:
-		
-		//Change params
-		Stats.CoefFireSpeed = Stats.CoefFireSpeed * 2;
-		Stats.CoefDamage = Stats.CoefDamage * 2;
+	}
+	else
+	{
+		if (BonusType == "Fire")
+		{
+			//Change params
+			Stats.CoefFireSpeed = Stats.CoefFireSpeed * 2;
+			Stats.CoefDamage = Stats.CoefDamage * 2;
 
-		//Say weapon about changes
-		OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
+			//Say weapon about changes
+			OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
 
-		//Clean the timer before use
-		if (GetWorldTimerManager().IsTimerActive(FinishFireBonusTimerHamdle))
-			GetWorldTimerManager().ClearTimer(FinishFireBonusTimerHamdle);
+			//Clean the timer before use
+			if (GetWorldTimerManager().IsTimerActive(FinishFireBonusTimerHamdle))
+				GetWorldTimerManager().ClearTimer(FinishFireBonusTimerHamdle);
 
-		//Set timer
-		GetWorldTimerManager().SetTimer(FinishFireBonusTimerHamdle, this, &ANR_Character::FinishFireBonus, 15.0f, false, 15.0f);
-		break;
-	case EBonusType::SpeedType:
+			//Set timer
+			GetWorldTimerManager().SetTimer(FinishFireBonusTimerHamdle, this, &ANR_Character::FinishFireBonus, 15.0f, false, 15.0f);
+		}
+		else
+		{
+			if (BonusType == "Speed")
+			{
+				//Change params
+				Stats.CoefMovementSpeed = Stats.CoefMovementSpeed * 2;
+				GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
 
-		//Change params
-		Stats.CoefMovementSpeed = Stats.CoefMovementSpeed * 2;
-		GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
+				//Clean the timer before use
+				if (GetWorldTimerManager().IsTimerActive(FinishMovementSpeedBonusTimerHamdle))
+					GetWorldTimerManager().ClearTimer(FinishMovementSpeedBonusTimerHamdle);
 
-		//Clean the timer before use
-		if (GetWorldTimerManager().IsTimerActive(FinishMovementSpeedBonusTimerHamdle))
-			GetWorldTimerManager().ClearTimer(FinishMovementSpeedBonusTimerHamdle);
+				//Set timer
+				GetWorldTimerManager().SetTimer(FinishMovementSpeedBonusTimerHamdle, this, &ANR_Character::FinishMovementSpeedBonus, 10.0f, false, 10.0f);
+			}
+			else
+			{
+				if (BonusType == "Immortality")
+				{
+					//Change params
+					Stats.Immortality = true;
 
-		//Set timer
-		GetWorldTimerManager().SetTimer(FinishMovementSpeedBonusTimerHamdle, this, &ANR_Character::FinishMovementSpeedBonus, 10.0f, false, 10.0f);
-		break;
-	case EBonusType::ShieldType:
+					//Clean the timer before use
+					if (GetWorldTimerManager().IsTimerActive(FinishImmortalityBonusTimerHamdle))
+						GetWorldTimerManager().ClearTimer(FinishImmortalityBonusTimerHamdle);
 
-		//Change params
-		Stats.Immortality = true;
+					//Set timer
+					GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, 5.0f, false, 5.0f);
 
-		//Clean the timer before use
-		if (GetWorldTimerManager().IsTimerActive(FinishImmortalityBonusTimerHamdle))
-			GetWorldTimerManager().ClearTimer(FinishImmortalityBonusTimerHamdle);
-
-		//Set timer
-		GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, 5.0f, false, 5.0f);
-		break;
-
-	case EBonusType::FreezeType:
-		
-		//Freeze function
-		FreezeBonusFunction();
-		break;
+				}
+				else
+				{
+					if (BonusType == "Freeze")
+					{
+						//Freeze function
+						FreezeBonusFunction();
+					}
+				}
+			}
+		}
 	}
 }
 

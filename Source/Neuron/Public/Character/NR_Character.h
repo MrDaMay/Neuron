@@ -149,7 +149,7 @@ public:
 
 	//Bonus start
 	UFUNCTION(BlueprintCallable, Category= "Bonus")
-	void TakeBonus(EBonusType BonusType);
+	void TakeBonus(FName BonusType);
 	FTimerHandle FinishFireBonusTimerHamdle;
 	void FinishFireBonus();
 	FTimerHandle FinishImmortalityBonusTimerHamdle;

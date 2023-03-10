@@ -6,7 +6,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Game/NR_PlayerState.h"
+#include "Game/NR_GameInstance.h"
+#include "Collectable/NR_CollectableBase.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ANR_EnemyCharacterBase::ANR_EnemyCharacterBase()
@@ -116,6 +119,8 @@ void ANR_EnemyCharacterBase::CharacterDead()
 	SetStateMove(false);
 	SetStateAttack(false);
 
+	Drop();
+
 	PlayAnimMontage(DeadMontage);
 
 	CharacterDead_BP();
@@ -169,6 +174,32 @@ void ANR_EnemyCharacterBase::Freeze()
 void ANR_EnemyCharacterBase::EndFreeze()
 {
 	SetStateMove(true);
+}
+
+void ANR_EnemyCharacterBase::Drop()
+{
+	if (DropChance >= UKismetMathLibrary::RandomFloatInRange(0.0f, 1.0f))
+	{
+		FDropObjects SpawnObject;
+		int32 DropObjectIndex = UKismetMathLibrary::RandomIntegerInRange(0, DropObjectNames.Num() - 1);
+
+		FVector SpawnLocation = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 94);
+		FRotator SpawnRotator = FRotator(0);
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		auto GameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		GameInstance->GetDropInfoByName(DropObjectNames[DropObjectIndex], SpawnObject);
+
+		auto SpawnActor = Cast<ANR_CollectableBase>(GetWorld()->SpawnActor(SpawnObject.DropItem, &SpawnLocation, &SpawnRotator, SpawnParams));
+		if (SpawnActor)
+		{
+			SpawnActor->StaticMesh->SetStaticMesh(SpawnObject.DropMesh);
+			SpawnActor->LightPartical->Template = SpawnObject.LightPartical;
+			SpawnActor->OverlapSpawnPartical = SpawnObject.OverlapPartical;
+			SpawnActor->ObjectName = DropObjectNames[DropObjectIndex];
+		}
+	}
 }
 
 void ANR_EnemyCharacterBase::CharacterDead_BP_Implementation()

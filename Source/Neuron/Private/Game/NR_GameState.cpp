@@ -39,7 +39,7 @@ void ANR_GameState::TryToChangePhase()
 	Enemies--;
 	if (Enemies <= 0 && NotSpawning)
 	{
-		auto PlayerController = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		PlayerController->OpenCloseTokenWidget();
+		//auto PlayerController = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		//PlayerController->OpenCloseTokenWidget();
 	}
 }

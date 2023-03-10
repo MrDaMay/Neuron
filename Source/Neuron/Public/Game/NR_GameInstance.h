@@ -28,12 +28,15 @@ public:
 		UDataTable* WeaponInfoTable = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		UDataTable* EnemyInfoTable = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+		UDataTable* DropInfoTable = nullptr;
 
 	//Search function by name item
 	UFUNCTION(BlueprintCallable)
 		bool GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& OutInfo);
 	UFUNCTION(BlueprintCallable)
-		bool GetEnemyInfoByName(FName NameEnemy, FEnemyCharacters& Enemy);
+		bool GetDropInfoByName(FName DropEnemy, FDropObjects& DropObject);
+
 
 	//Apply achievements on CharacterStats
 	UFUNCTION(BlueprintCallable)

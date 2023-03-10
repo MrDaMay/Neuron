@@ -19,33 +19,34 @@ bool UNR_GameInstance::GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& OutInf
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("USnowBall_TPSGameInstance::GetWeaponInfoByName - WeaponTable is NULL"))
+		UE_LOG(LogTemp, Warning, TEXT("UNR_GameInstance::GetWeaponInfoByName - WeaponTable is NULL"))
 	}
 
 	return bIsFind;
 }
 
-bool UNR_GameInstance::GetEnemyInfoByName(FName NameEnemy, FEnemyCharacters& Enemy)
+bool UNR_GameInstance::GetDropInfoByName(FName DropEnemy, FDropObjects& DropObject)
 {
 	bool bIsFind = false;
 
-	if (EnemyInfoTable)
+	if (DropInfoTable)
 	{
-		FEnemyCharacters* EnemyInfoRow = EnemyInfoTable->FindRow<FEnemyCharacters>(NameEnemy, "", false);
+		FDropObjects* DropInfoRow = DropInfoTable->FindRow<FDropObjects>(DropEnemy, "", false);
 
-		if (EnemyInfoRow)
+		if (DropInfoRow)
 		{
 			bIsFind = true;
-			Enemy = *EnemyInfoRow;
+			DropObject = *DropInfoRow;
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("USnowBall_TPSGameInstance::GetWeaponInfoByName - WeaponTable is NULL"))
+		UE_LOG(LogTemp, Warning, TEXT("UNR_GameInstance::GetDropInfoByName - WeaponTable is NULL"))
 	}
 
 	return bIsFind;
 }
+
 
 void UNR_GameInstance::ApplyAchievements()
 {

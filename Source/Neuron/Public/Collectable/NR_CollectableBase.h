@@ -16,6 +16,13 @@ public:
 	// Sets default values for this actor's properties
 	ANR_CollectableBase();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class UStaticMeshComponent* StaticMesh = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class USphereComponent* CollisionSphere = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class UParticleSystemComponent* LightPartical = nullptr;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,5 +38,7 @@ public:
 	//Leaving an interactive zone
 	void LeftInteractionZone_Implementation(ANR_Character* Character); // Blueprint editable
 
+	UParticleSystem* OverlapSpawnPartical;
 
+	FName ObjectName;
 };

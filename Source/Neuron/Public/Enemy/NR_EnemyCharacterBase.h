@@ -114,4 +114,12 @@ public:
 	//Movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 		float MaxSpeed = 400.0f;
+
+	//Drop start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+	TArray<FName> DropObjectNames;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+	float DropChance;
+	void Drop();
+	//Drop end
 };

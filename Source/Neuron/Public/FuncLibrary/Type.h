@@ -31,17 +31,6 @@ enum class ETokenType : uint8
 	NUMBER_OF_TOKENS,
 };
 
-UENUM(BlueprintType)
-enum class EBonusType : uint8
-{
-	AidType UMETA(DisplayName = "Aid"),
-	FireType UMETA(DisplayName = "Fire"),
-	ShieldType UMETA(DisplayName = "Shield"),
-	SpeedType UMETA(DisplayName = "Speed"),
-	FreezeType UMETA(DisplayName = "Freeze"),
-};
-
-
 //Information about projectile. Link, meshes, emmiters, damages, speed
 USTRUCT(BlueprintType)
 struct FProjectileInfo
@@ -178,6 +167,7 @@ USTRUCT(BlueprintType)
 struct FCharStats
 {
 	GENERATED_BODY()
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float CoefMovementSpeed = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
@@ -203,6 +193,20 @@ struct FCharStats
 	}
 };
 
+USTRUCT(BlueprintType)
+struct FDropObjects: public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+		TSubclassOf<class AActor> DropItem;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+		UStaticMesh* DropMesh = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+		UParticleSystem* LightPartical = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+		UParticleSystem* OverlapPartical = nullptr;
+};
 
 UCLASS()
 class NEURON_API UType : public UBlueprintFunctionLibrary
