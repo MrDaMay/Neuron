@@ -16,24 +16,20 @@ void ANR_CollectableWeapons::CollectItem_Implementation(ANR_Character* Character
 
 void ANR_CollectableWeapons::EnteredInteractionZone_Implementation(ANR_Character* Character)
 {
-	if (Character)
+	Super::EnteredInteractionZone_Implementation(Character);
+
+	auto Controller = Cast<ANR_PlayerController>(Character->GetController());
+	if (Controller)
 	{
-		auto Controller = Cast<ANR_PlayerController>(Character->GetController());
-		if (Controller)
-		{
-			Controller->OpenClosePickupWidget(ObjectName);
-		}
+		Controller->OpenClosePickupWidget(ObjectName);
 	}
 }
 
 void ANR_CollectableWeapons::LeftInteractionZone_Implementation(ANR_Character* Character)
 {
-	if (Character)
+	auto Controller = Cast<ANR_PlayerController>(Character->GetController());
+	if (Controller)
 	{
-		auto Controller = Cast<ANR_PlayerController>(Character->GetController());
-		if (Controller)
-		{
-			Controller->OpenClosePickupWidget(ObjectName);
-		}
+		Controller->OpenClosePickupWidget(ObjectName);
 	}
 }

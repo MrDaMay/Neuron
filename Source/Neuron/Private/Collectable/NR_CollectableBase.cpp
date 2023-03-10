@@ -3,6 +3,7 @@
 
 #include "Collectable/NR_CollectableBase.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
@@ -52,7 +53,8 @@ void ANR_CollectableBase::CollectItem_Implementation(ANR_Character* Character)
 
 void ANR_CollectableBase::EnteredInteractionZone_Implementation(ANR_Character* Character)
 {
-
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapSpawnPartical, GetActorLocation(),
+		FRotator(0));
 }
 
 void ANR_CollectableBase::LeftInteractionZone_Implementation(ANR_Character* Character)

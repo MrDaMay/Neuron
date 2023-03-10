@@ -5,6 +5,8 @@
 
 void ANR_CollectableBonus::EnteredInteractionZone_Implementation(ANR_Character* Character)
 {
+	Super::EnteredInteractionZone_Implementation(Character);
+
 	Character->TakeBonus(ObjectName);
 	Destroy();
 }
