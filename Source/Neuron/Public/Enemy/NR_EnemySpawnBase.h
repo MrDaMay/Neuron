@@ -9,6 +9,7 @@
 #include "NR_EnemySpawnBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSpawnEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossSpawn);
 
 UCLASS()
 class NEURON_API ANR_EnemySpawnBase : public AActor
@@ -26,6 +27,9 @@ private:
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		UBoxComponent* BoxComponent;
 
+	//GameState reference
+	class ANR_GameState* MyGameState;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,6 +46,8 @@ public:
 
 	//Delegate for spawn ending
 	FOnSpawnEnd OnSpawnEnd;
+
+	FOnBossSpawn OnBossSpawned;
 
 	//Spawn details
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Details")

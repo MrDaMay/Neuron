@@ -2,6 +2,7 @@
 
 
 #include "Component/NR_KillScoreComponent.h"
+#include "Enemy/Boss/NR_EnemyBoss.h"
 #include "Game/NR_PlayerState.h"
 #include "Game/NR_GameState.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,7 +42,15 @@ void UNR_KillScoreComponent::OwnerWasDead()
 
 	PlayerState->IncrementScore(1); //ToDo need added score from funclibrary and table
 
-	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
-	GameState->TryToChangePhase();
+	if (Cast<ANR_EnemyBoss>(GetOwner()))
+	{
+		auto MyGameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
+		if (MyGameState)
+		{
+			MyGameState->BossKilled();
+			PlayerState->IncrementBossKilled();
+			PlayerState->IncrementLevel();
+		}
+	}
 }
 

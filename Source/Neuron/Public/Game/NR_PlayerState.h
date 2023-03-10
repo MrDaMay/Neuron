@@ -25,8 +25,9 @@ protected:
 	//
 	float NumBonus = 0.0f;
 	//
-	int CurrentLevel = 0.0f;
+	int PassedLevels = 0.0f;
 	//
+	int NumBossKilled = 0.0f;
 	//Array ind - achievement num, value - achievement level
 	TArray<int> Achievements;
 
@@ -41,6 +42,12 @@ public:
 
 	//Function for incrementing NumBonus
 	void IncrementNumBonus();
+
+	//Function for incrementing NumBonus
+	void IncrementLevel() { PassedLevels++; }
+
+	//Function for incrementing NumBonus
+	void IncrementBossKilled() { NumBossKilled++; };
 
 	//Function for check win condition (if we have score mechanics)
 	void CheckWinCondition(float CurrentScore);
