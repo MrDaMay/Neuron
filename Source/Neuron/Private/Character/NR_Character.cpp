@@ -88,6 +88,7 @@ void ANR_Character::BeginPlay()
 	{
 		GameState->SetStats(Stats);
 		GameState->OnCharStatsChanged.AddDynamic(this, &ANR_Character::UpdateStats);
+		GameState->StartWavePhase();
 	}
 
 	InitWeapon("Rifle");

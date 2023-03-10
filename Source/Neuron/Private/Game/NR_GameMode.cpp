@@ -7,7 +7,6 @@ void ANR_GameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(SpawnEnemyTimer, this, &ANR_GameMode::SpawnEnemys, 1.f, false, 1.0f);
 }
 
 void ANR_GameMode::EndGame(bool IsWin)

@@ -36,6 +36,13 @@ TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 	
 	Buff[0] = (NumKilled >= 3) + (NumKilled >= 5) + (NumKilled >= 10);
 	Buff[1] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[2] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[3] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[4] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[5] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[6] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[7] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
+	Buff[8] = (NumBonus >= 3) + (NumBonus >= 5) + (NumBonus >= 10);
 
 	for (int i = 0; i < 9; i++)
 	{
