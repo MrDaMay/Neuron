@@ -205,6 +205,7 @@ void ANR_Character::InitWeapon(FName IdWeaponName)
 					Weapon->WeaponSetting = WeaponInfo;
 
 					Weapon->OnWeaponFireStart.AddDynamic(this, &ANR_Character::WeaponFireStart);
+					OnWeaponSwitched.Broadcast(IdWeaponName);
 				}
 			}
 		}

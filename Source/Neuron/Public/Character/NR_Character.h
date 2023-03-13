@@ -11,6 +11,7 @@
 #include "NR_Character.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponParamsChange, float, CoefFireSpeed, float, CoefDamage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponSwitched, FName, WeaponName);
 
 UCLASS()
 class NEURON_API ANR_Character : public ACharacter
@@ -81,6 +82,8 @@ public:
 
 	//Delegate start
 	FOnWeaponParamsChange OnWeaponParamsChange;
+	UPROPERTY(BlueprintAssignable)
+	FOnWeaponSwitched OnWeaponSwitched;
 	//Delegate end
 
 	//Cursor start

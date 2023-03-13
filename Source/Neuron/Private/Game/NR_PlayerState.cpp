@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/KismetMathLibrary.h"
 #include "Game/NR_PlayerState.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void ANR_PlayerState::IncrementScore(float MutableScore)
 {

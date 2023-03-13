@@ -164,6 +164,20 @@ struct FAchivementsInfo : public FTableRowBase
 };
 
 USTRUCT(BlueprintType)
+struct FTokensInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
+		FName TokenName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
+		UTexture2D* Texture;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
+		float Multiplier;
+};
+
+
+USTRUCT(BlueprintType)
 struct FCharStats
 {
 	GENERATED_BODY()
