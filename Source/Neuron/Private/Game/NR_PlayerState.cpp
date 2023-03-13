@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Kismet/KismetMathLibrary.h"
 #include "Game/NR_PlayerState.h"
 
 void ANR_PlayerState::IncrementScore(float MutableScore)
@@ -31,7 +31,8 @@ TArray<int> ANR_PlayerState::GetAchievements()
 TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 {
 	TArray<int> Buff;
-	TArray<FVector2D> EarnedAchievements;
+	TArray<FVector2D> BuffEarnedAchievements;
+
 	Buff.Init(0, 9);
 	
 	Buff[0] = (NumKilled >= 3) + (NumKilled >= 5) + (NumKilled >= 10);
@@ -47,18 +48,21 @@ TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 	for (int i = 0; i < 9; i++)
 	{
 		if (Buff[i] > Achievements[i]) 
-			EarnedAchievements.Add(FVector2D(i, Buff[i]));
+			BuffEarnedAchievements.Add(FVector2D(i, Buff[i]));
 	}
 
-	//for testing. delete later!!
-	int delta = 3 - EarnedAchievements.Num();
-	if (delta)
+	BuffEarnedAchievements.Sort([](const FVector2D& A, const FVector2D& B) {
+			return A.Y > B.Y;
+	});
+
+	if (!BuffEarnedAchievements.IsEmpty())
 	{
-		for (int i = 0; i < delta; ++i)
-		{
-			EarnedAchievements.Add(FVector2D(0, 0));
-		}
+		BuffEarnedAchievements.SetNum(3);
 	}
 
-	return EarnedAchievements;
+	BuffEarnedAchievements.RemoveAll([](FVector2D& A) {
+		return A == FVector2D(0, 0);
+		});
+
+	return BuffEarnedAchievements;
 }
