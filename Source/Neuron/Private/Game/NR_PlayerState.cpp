@@ -55,7 +55,7 @@ TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 			return A.Y > B.Y;
 	});
 
-	if (!BuffEarnedAchievements.IsEmpty())
+	if (BuffEarnedAchievements.Num() > 3)
 	{
 		BuffEarnedAchievements.SetNum(3);
 	}
