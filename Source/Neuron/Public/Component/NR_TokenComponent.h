@@ -7,7 +7,8 @@
 #include "FuncLibrary/Type.h"
 #include "NR_TokenComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTokenChanged, int, Idx);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTokenChanged, FVector2D, Info);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTokensUpdated);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NEURON_API UNR_TokenComponent : public UActorComponent
@@ -18,9 +19,11 @@ public:
 	// Sets default values for this component's properties
 	UNR_TokenComponent();
 
-	// Deelgate for widget updates
+	// Delegates for widget updates
 	UPROPERTY(BlueprintAssignable)
 	FOnTokenChanged OnTokenChangedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnTokensUpdated OnTokensUpdated;
 
 protected:
 	// Called when the game starts
@@ -60,7 +63,7 @@ public:
 
 	//Put Token at idx
 	UFUNCTION(BlueprintCallable)
-	void CollectToken(ETokenType Token);
+	void CollectToken(int idx);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetTokenArray();

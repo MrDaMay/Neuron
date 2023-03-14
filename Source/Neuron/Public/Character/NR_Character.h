@@ -182,6 +182,9 @@ public:
 		TArray<FName> GetWeaponSlot();
 	//Inventory system end
 
+	UFUNCTION(BlueprintCallable, Category = "Tokens")
+		void TakeToken(FName Token);
+
 	//Function for updating stats after applying tokens
 	UFUNCTION()
 		void UpdateStats(FCharStats NewStats);
