@@ -103,6 +103,13 @@ public:
 		void InputAttackPressed();
 	UFUNCTION()
 		void InputAttackReleased();
+	UFUNCTION()
+		void InputRollPressed();
+	UPROPERTY(BlueprintReadWrite)
+		bool RollEnable = false;
+		float RollTime = 0.0f;
+	UPROPERTY(BlueprintReadWrite)
+		float MaxRollTime = 1.0f;
 	//Input end
 
 	//Weapon start
@@ -124,13 +131,21 @@ public:
 		void EndSwitchWeapon();
 	UFUNCTION(BlueprintNativeEvent)
 		void EndSwitchWeapon_BP();
-	//ToDo OverlapPickUpWeapon = nullptr;
 	//Weapon end
 
 	//Tick function start
 	UFUNCTION()
 		void MovementTick(float DeltaTime);
 	//Tick function end
+
+	//AnimMontage start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
+		UAnimMontage* DeathMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
+		UAnimMontage* FireMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
+		UAnimMontage* RollMontage;
+	//AnimMontage end
 
 	//Shoot start
 	FVector MouseLocation;
@@ -144,8 +159,6 @@ public:
 		void CharDead();
 	UFUNCTION(BlueprintNativeEvent)
 		void CharDead_BP();
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
-		UAnimMontage* DeathMontage;
 	UFUNCTION()
 		void AbsolutelyDead(bool IsWin);
 	//Dead end
@@ -168,6 +181,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		TArray<FName> GetWeaponSlot();
 	//Inventory system end
+
 	//Function for updating stats after applying tokens
 	UFUNCTION()
 		void UpdateStats(FCharStats NewStats);

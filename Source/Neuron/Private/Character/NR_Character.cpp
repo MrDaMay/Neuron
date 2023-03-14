@@ -137,6 +137,8 @@ void ANR_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Pressed, this, &ANR_Character::InputAttackPressed);
 	PlayerInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Released, this, &ANR_Character::InputAttackReleased);
+
+	PlayerInputComponent->BindAction(TEXT("RollEvent"), EInputEvent::IE_Pressed, this, &ANR_Character::InputRollPressed);
 }
 
 void ANR_Character::InputAxisX(float Value)
@@ -151,8 +153,9 @@ void ANR_Character::InputAxisY(float Value)
 
 void ANR_Character::InputAttackPressed()
 {
-	if (HealthComponent && HealthComponent->GetIsAlive())
+	if (HealthComponent && HealthComponent->GetIsAlive() && !RollEnable)
 	{
+		PlayAnimMontage(FireMontage);
 		AttackEvent(true);
 	}
 }
@@ -160,6 +163,20 @@ void ANR_Character::InputAttackPressed()
 void ANR_Character::InputAttackReleased()
 {
 	AttackEvent(false);
+}
+
+void ANR_Character::InputRollPressed()
+{
+	if (!RollEnable)
+	{
+		RollEnable = true;
+		PlayAnimMontage(RollMontage);
+		Stats.Immortality = true;
+
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed * 2;
+
+		GetCapsuleComponent()->SetCollisionObjectType(ECC_GameTraceChannel5);
+	}
 }
 
 ANR_Weapon* ANR_Character::GetCurrentWeapon()
@@ -245,10 +262,31 @@ void ANR_Character::MovementTick(float DeltaTime)
 
 	const float RotatingToCursor = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PointUnderCursor).Yaw;
 
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX);
-	AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisY);
+	if (!RollEnable)
+	{
+		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX);
+		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisY);
 
-	SetActorRotation(FQuat(FRotator(0.0f, RotatingToCursor, 0.0f)));
+		SetActorRotation(FQuat(FRotator(0.0f, RotatingToCursor, 0.0f)));
+	}
+	else
+	{
+		if (RollTime < MaxRollTime)
+		{
+			AddMovementInput(GetActorForwardVector());
+			RollTime = RollTime + DeltaTime;
+		}
+		else
+		{
+			RollEnable = false;
+			RollTime = 0.0f;
+			Stats.Immortality = false;
+
+			GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 2;
+
+			GetCapsuleComponent()->SetCollisionObjectType(ECC_Pawn);
+		}
+	}
 }
 
 void ANR_Character::AttackEvent(bool bIsFire)
