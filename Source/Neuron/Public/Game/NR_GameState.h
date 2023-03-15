@@ -9,6 +9,7 @@
 #include "NR_GameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharStatsChanged, FCharStats, NewStats);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTokensChanged, TArray<int>, Tokens);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseStarts);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseEnds);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBossPhaseStarts, TSubclassOf<class ANR_EnemyBoss>, Boss);
@@ -26,6 +27,8 @@ public:
 	//Delegate for stats changing
 	UPROPERTY(BlueprintAssignable)
 		FOnCharStatsChanged OnCharStatsChanged;
+	UPROPERTY(BlueprintAssignable)
+		FOnTokensChanged OnTokensChanged;
 	UPROPERTY(BlueprintAssignable)
 		FOnWavePhaseEnds OnWavePhaseStarts;
 	UPROPERTY(BlueprintAssignable)

@@ -6,4 +6,7 @@
 void ANR_CollectableToken::EnteredInteractionZone_Implementation(ANR_Character* Character)
 {
 	Super::EnteredInteractionZone_Implementation(Character);
+
+	Character->TakeToken(ObjectName);
+	Destroy();
 }
