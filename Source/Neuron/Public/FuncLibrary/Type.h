@@ -130,15 +130,14 @@ struct FWeaponInfo : public FTableRowBase
 
 //Connect enemy with his name
 USTRUCT(BlueprintType)
-struct FEnemyCharacters : public FTableRowBase
+struct FEnemyCharacters
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-		FName EnemyClass;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		TSubclassOf<class ANR_EnemyCharacterBase> Enemy = nullptr;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		int32 CoutToSpawn = 0;
 };
 
 USTRUCT(BlueprintType)

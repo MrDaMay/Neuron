@@ -24,13 +24,11 @@ void ANR_EnemySpawnBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MyGameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
-	MyGameState->OnWavePhaseStarts.AddDynamic(this, &ANR_EnemySpawnBase::StartSpawn);
-	MyGameState->OnBossPhaseStarts.AddDynamic(this, &ANR_EnemySpawnBase::SpawnBoss);
-	OnSpawnEnd.AddDynamic(MyGameState, &ANR_GameState::EndWavePhase);
+	GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
+	GameState->OnBossPhaseStarts.AddDynamic(this, &ANR_EnemySpawnBase::SpawnBoss);
+	OnSpawnEnd.AddDynamic(GameState, &ANR_GameState::EndWavePhase);
 
-	//auto Controller = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	//OnSpawnEnd.AddDynamic(Controller, &ANR_PlayerController::UnblockTokenWidget);
+	AddSpawnBase();
 }
 
 // Called every frame
@@ -40,7 +38,7 @@ void ANR_EnemySpawnBase::Tick(float DeltaTime)
 
 }
 
-void ANR_EnemySpawnBase::SpawnBoss()
+void ANR_EnemySpawnBase::SpawnBoss(TSubclassOf<class ANR_EnemyBoss> BossObject)
 {
 	FVector BoxSize = FVector(BoxComponent->GetScaledBoxExtent().X / 2, BoxComponent->GetScaledBoxExtent().Y / 2, 0.0f);
 	FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxSize);
@@ -48,45 +46,32 @@ void ANR_EnemySpawnBase::SpawnBoss()
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-	auto Boss = Cast<ANR_EnemyBoss>(GetWorld()->SpawnActor(Enemy[3], &SpawnLocation, &SpawnRotation, SpawnParameters));
+	auto Boss = Cast<ANR_EnemyBoss>(GetWorld()->SpawnActor(BossObject, &SpawnLocation, &SpawnRotation, SpawnParameters));
 	if (Boss)
 	{
-		MyGameState->ToggleBossState();
+		GameState->ToggleBossState();
 	}
 }
 
-void ANR_EnemySpawnBase::SpawnEnemy()
+void ANR_EnemySpawnBase::SpawnEnemy(TSubclassOf<ANR_EnemyCharacterBase> EnemyObject)
 {
-	FVector BoxSize = FVector(BoxComponent->GetScaledBoxExtent().X / 2, BoxComponent->GetScaledBoxExtent().Y / 2, 0.0f);
+
+	FVector BoxSize = GetActorLocation();
+
+	if (IsValid(BoxComponent))
+		BoxSize = FVector(BoxComponent->GetScaledBoxExtent().X / 2, BoxComponent->GetScaledBoxExtent().Y / 2, 0.0f);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("ANR_EnemySpawnBase::SpawnEnemy, BoxComponent - null"));
+
 	FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxSize);
 	FRotator SpawnRotation = FRotator(0);
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-	int32 EnemyIndex = UKismetMathLibrary::RandomInteger64InRange(0, Enemy.Num() - 2);
-	if (GetWorld()->SpawnActor(Enemy[EnemyIndex], &SpawnLocation, &SpawnRotation, SpawnParameters))
-	{
-		MyGameState->IncrementEnemies();
-	}
-
-	if (RepeatingCallsRemaining-- <= 0)
-	{
-		StopSpawn();
-	}
+	GetWorld()->SpawnActor(EnemyObject, &SpawnLocation, &SpawnRotation, SpawnParameters);
 }
 
-void ANR_EnemySpawnBase::StartSpawn()
+void ANR_EnemySpawnBase::AddSpawnBase()
 {
-	MyGameState->ToggleSpawningState();
-
-	RepeatingCallsRemaining = EnemiesNumber;
-	GetWorldTimerManager().SetTimer(SpawnEnemyTimer, this, &ANR_EnemySpawnBase::SpawnEnemy, SpawnRate, true, SpawnDelay);
-}
-
-void ANR_EnemySpawnBase::StopSpawn()
-{
-	GetWorldTimerManager().ClearTimer(SpawnEnemyTimer);
-
-	MyGameState->ToggleSpawningState();
-	OnSpawnEnd.Broadcast();
+	GameState->EnemySpawnBase.Add(this);
 }

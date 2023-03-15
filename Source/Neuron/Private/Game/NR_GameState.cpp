@@ -4,7 +4,10 @@
 #include "Enemy/NR_EnemyCharacterBase.h"
 #include "Enemy/Boss/NR_EnemyBoss.h"
 #include "Game/NR_PlayerController.h"
+#include "Game/NR_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+
 
 void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 {
@@ -29,7 +32,7 @@ void ANR_GameState::StartBossPhase()
 	GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
 	TimeLeft = 7.f;
 
-	OnBossPhaseStarts.Broadcast();
+	OnBossPhaseStarts.Broadcast(Boss);
 }
 
 void ANR_GameState::BossKilled()
@@ -64,10 +67,62 @@ void ANR_GameState::DecrementEnemy()
 	if (Enemies > 0) Enemies--;
 }
 
-void ANR_GameState::SetBoss(ANR_EnemyBoss* Enemy)
+void ANR_GameState::StartSpawnEnemyTimer()
 {
-	Boss = Enemy;
+	CurrentCoutEnemy = { 0,0,0 };
+	CurrentCoutEnemies = 0;
+	for (int i = 0; i < EnemyCharacters.Num(); i++)
+	{
+		MaxSpawnEnemies += EnemyCharacters[i].CoutToSpawn;
+	}
+
+	GetWorldTimerManager().SetTimer(SpawnEnemyTimer,this, &ANR_GameState::ChoiseOfEnemyForSpawn, MaxTimeForSpawn / MaxSpawnEnemies, true, 0.0f);
 }
+
+void ANR_GameState::ChoiseOfEnemyForSpawn()
+{
+	if (CurrentCoutEnemies < MaxSpawnEnemies)
+	{
+		float RandomForSpawn = UKismetMathLibrary::RandomFloatInRange(0.0f, 1.0f);
+
+		if (RandomForSpawn <= 0.7f && TrySpawnEnemy(0))
+		{
+		}
+		else
+		{
+			if (RandomForSpawn <= 0.85f && TrySpawnEnemy(1))
+			{
+			}
+			else
+			{
+				TrySpawnEnemy(2);
+			}
+		}
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(SpawnEnemyTimer);
+	}
+}
+
+bool ANR_GameState::TrySpawnEnemy(int i)
+{
+	if (CurrentCoutEnemy[i] < EnemyCharacters[i].CoutToSpawn)
+	{
+		CurrentCoutEnemy[i]++;
+
+		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
+		EnemySpawnBase[IndexSpawnBase]->SpawnEnemy(EnemyCharacters[i].Enemy);
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
 
 void ANR_GameState::TimeIsOver()
 {

@@ -26,8 +26,6 @@ public:
 	//Table
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSetting")
 		UDataTable* WeaponInfoTable = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-		UDataTable* EnemyInfoTable = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
 		UDataTable* DropInfoTable = nullptr;
 

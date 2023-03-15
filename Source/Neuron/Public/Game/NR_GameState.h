@@ -5,12 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
 #include "FuncLibrary/Type.h"
+#include "Enemy/NR_EnemySpawnBase.h"
 #include "NR_GameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharStatsChanged, FCharStats, NewStats);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseStarts);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseEnds);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossPhaseStarts);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBossPhaseStarts, TSubclassOf<class ANR_EnemyBoss>, Boss);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDies);
 /**
  * 
@@ -35,13 +36,14 @@ public:
 		FOnBossDies OnBossDies;
 
 
+
 protected:
 
 	//Timer for measure how fast player will kill the boss
 	FTimerHandle BossTimer;
 	FTimerHandle SpawnBoss;
 	float TimeLeft = 0.f;
-	class ANR_EnemyBoss* Boss = nullptr;
+	TSubclassOf<class ANR_EnemyBoss> Boss = nullptr;
 
 	//Stuct with character stats
 	FCharStats CharStats;
@@ -70,8 +72,6 @@ public:
 
 	void ToggleBossState() { BossAlive = BossAlive ? true : false; }
 
-	void SetBoss(class ANR_EnemyBoss* Enemy); 
-
 	void TimeIsOver();
 
 	UFUNCTION(BlueprintCallable)
@@ -84,4 +84,21 @@ public:
 		void EndWavePhase();
 
 	void DecrementEnemy();
+
+	//Spawn start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
+		TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
+	TArray<int32> CurrentCoutEnemy;
+	int32 MaxSpawnEnemies;
+	int32 CurrentCoutEnemies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
+		float MaxTimeForSpawn = 10.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
+		TArray<FEnemyCharacters> EnemyCharacters;
+	UFUNCTION(BlueprintCallable, Category = "SpawnEnemy")
+		void StartSpawnEnemyTimer();
+	FTimerHandle SpawnEnemyTimer;
+	void ChoiseOfEnemyForSpawn();
+	bool TrySpawnEnemy(int i);
+	//Spawn end
 };

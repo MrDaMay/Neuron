@@ -28,7 +28,7 @@ private:
 		UBoxComponent* BoxComponent;
 
 	//GameState reference
-	class ANR_GameState* MyGameState;
+	class ANR_GameState* GameState;
 
 protected:
 	// Called when the game starts or when spawned
@@ -60,12 +60,9 @@ public:
 		TArray<TSubclassOf<ANR_EnemyCharacterBase>> Enemy;
 
 	UFUNCTION()
-		void SpawnBoss();
+		void SpawnBoss(TSubclassOf<class ANR_EnemyBoss> BossObject);
 	UFUNCTION()
-		void SpawnEnemy();
-	UFUNCTION()
-		void StartSpawn();
-	UFUNCTION()
-		void StopSpawn();
+		void SpawnEnemy(TSubclassOf<ANR_EnemyCharacterBase> EnemyObject);
 
+	void AddSpawnBase();
 };
