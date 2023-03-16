@@ -97,6 +97,11 @@ void ANR_Weapon::PreFire()
 {
 	OnWeaponFireStart.Broadcast(WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage);
 
+	if (WeaponSetting.FireSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.FireSound, GetActorLocation(), 0.3f);
+	}
+
 	FindEndLocation();
 }
 

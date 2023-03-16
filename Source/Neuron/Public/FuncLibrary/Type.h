@@ -109,6 +109,9 @@ struct FWeaponInfo : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dispersion")
 		float DispersionWeapon;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
+		USoundBase* FireSound = nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
 		FAnimWeaponInfo AnimWeaponInfo;
 
