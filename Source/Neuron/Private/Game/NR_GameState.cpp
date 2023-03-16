@@ -25,6 +25,7 @@ void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 	}
 
 	OnCharStatsChanged.Broadcast(CharStats);
+	OnTokensChanged.Broadcast(Tokens);
 }
 
 void ANR_GameState::StartBossPhase()

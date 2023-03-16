@@ -96,11 +96,10 @@ void UNR_TokenComponent::InitTokens(int InitValue)
 
 }
 
-void UNR_TokenComponent::CollectToken(ETokenType Token)
+void UNR_TokenComponent::CollectToken(int idx)
 {
-	int idx = static_cast<int>(Token);
 	Tokens[idx] += 1;
-	//OnTokenChangedDelegate.Broadcast(TokensArray[idx]); // Broadcasting new number of idx token
+	OnTokenChangedDelegate.Broadcast(FVector2D(idx, Tokens[idx])); // Broadcasting new number of idx token
 }
 
 TArray<int32> UNR_TokenComponent::GetTokenArray()
@@ -114,6 +113,7 @@ void UNR_TokenComponent::CopyTokenArray(TArray<int32> Array)
 	{
 		Tokens[i] = Array[i];
 	}
+	OnTokensUpdated.Broadcast();
 }
 
 //void UNR_TokenComponent::RetrieveTokenFrom(int idx)

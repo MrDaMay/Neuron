@@ -437,6 +437,34 @@ TArray<FName> ANR_Character::GetWeaponSlot()
 	return WeaponSLot;
 }
 
+void ANR_Character::TakeToken(FName Token)
+{
+	if (Token == "MoveSpeed")
+	{
+		TokenComponent->CollectToken(0);
+	}
+	if (Token == "Strength")
+	{
+		TokenComponent->CollectToken(1);
+	}
+	if (Token == "Health")
+	{
+		TokenComponent->CollectToken(2);
+	}
+	if (Token == "FireSpeed")
+	{
+		TokenComponent->CollectToken(3);
+	}
+	if (Token == "Power")
+	{
+		TokenComponent->CollectToken(4);
+	}
+	if (Token == "Luck")
+	{
+		TokenComponent->CollectToken(5);
+	}
+}
+
 void ANR_Character::UpdateStats(FCharStats NewStats)
 {
 	Stats = NewStats;
