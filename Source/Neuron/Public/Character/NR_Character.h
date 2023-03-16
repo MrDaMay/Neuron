@@ -142,8 +142,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
 		UAnimMontage* DeathMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
-		UAnimMontage* FireMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimMontage")
 		UAnimMontage* RollMontage;
 	//AnimMontage end
 

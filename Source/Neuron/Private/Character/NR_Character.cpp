@@ -155,7 +155,7 @@ void ANR_Character::InputAttackPressed()
 {
 	if (HealthComponent && HealthComponent->GetIsAlive() && !RollEnable)
 	{
-		PlayAnimMontage(FireMontage);
+		PlayAnimMontage(CurrentWeapon->WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage);
 		AttackEvent(true);
 	}
 }
