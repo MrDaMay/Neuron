@@ -56,9 +56,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//Combat
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
 		float BaseAttackDamage = 30.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	UPROPERTY(BlueprintReadWrite, Category = "Damage")
 		float RadiusMeleeAttack = 30.0f;
 
 	//AI
@@ -71,13 +71,11 @@ public:
 
 
 	//Damage
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		FVector SpawnOffsetLocalDamage = FVector(0, 0, 44.0f);
 	UFUNCTION()
 		void HealthChange(float Health, float Damage);
 	UFUNCTION(BlueprintNativeEvent)
 		void HealthChange_BP(float Health, float Damage);
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	UPROPERTY(BlueprintReadWrite, Category = "Damage")
 		float DistanceToAttack = 150.0f;
 
 	//Dead
@@ -106,7 +104,7 @@ public:
 		virtual	void AttackEnemy(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 
 	//Interface freeze start
-	virtual void Freeze() override;
+	virtual void Freeze(float FreezeTime) override;
 	FTimerHandle FreezeTimerHandle;
 	void EndFreeze();
 	//Interface freeze end

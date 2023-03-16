@@ -165,10 +165,10 @@ void ANR_EnemyCharacterBase::AttackEnemy(FName NotifyName,
 	}
 }
 
-void ANR_EnemyCharacterBase::Freeze()
+void ANR_EnemyCharacterBase::Freeze(float FreezeTime)
 {
 	SetStateMove(false);
-	GetWorldTimerManager().SetTimer(FreezeTimerHandle, this, &ANR_EnemyCharacterBase::EndFreeze, 5.0f, false, 5.0f);
+	GetWorldTimerManager().SetTimer(FreezeTimerHandle, this, &ANR_EnemyCharacterBase::EndFreeze, FreezeTime, false, FreezeTime);
 }
 
 void ANR_EnemyCharacterBase::EndFreeze()

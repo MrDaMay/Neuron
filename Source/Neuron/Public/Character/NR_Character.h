@@ -171,7 +171,27 @@ public:
 	FTimerHandle FinishMovementSpeedBonusTimerHamdle;
 	void FinishMovementSpeedBonus();
 	void FreezeBonusFunction();
+	void BombDamageBonusFunction();
 	//Bonus end
+
+	//Bonus params start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float AidBonusValue = 50.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float DamageBonusValue = 2.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float SpeedBonusValue = 2.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float ImmortalityBonusValue = 5.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float FreezeBonusValue = 5.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float FreezeBonusRadius = 1500.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float BombDamageBonusValue = 50.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
+		float BombDamageBonusRadius = 1000.0f;
+	//Bonus params end
 
 	//Inventory system start
 	UFUNCTION(BlueprintCallable, Category="Weapon")

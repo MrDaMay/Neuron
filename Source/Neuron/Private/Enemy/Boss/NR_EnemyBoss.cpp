@@ -7,7 +7,7 @@ void ANR_EnemyBoss::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(ProjectileWeaponTimer, this, &ANR_EnemyBoss::FireProjectileWeapon, 1.0f, true, 1.0f);
+	GetWorldTimerManager().SetTimer(ProjectileWeaponTimer, this, &ANR_EnemyBoss::FireProjectileWeapon, TimeToProjectileFire, true, TimeToProjectileFire);
 }
 
 void ANR_EnemyBoss::FireProjectileWeapon()

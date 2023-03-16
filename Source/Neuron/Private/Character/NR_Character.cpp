@@ -323,15 +323,15 @@ void ANR_Character::TakeBonus(FName BonusType)
 
 	if (BonusType == "Aid")
 	{
-		HealthComponent->ChangeHealthValue(50.0f);
+		HealthComponent->ChangeHealthValue(AidBonusValue);
 	}
 	else
 	{
 		if (BonusType == "Fire")
 		{
 			//Change params
-			Stats.CoefFireSpeed = Stats.CoefFireSpeed * 2;
-			Stats.CoefDamage = Stats.CoefDamage * 2;
+			Stats.CoefFireSpeed = Stats.CoefFireSpeed * DamageBonusValue;
+			Stats.CoefDamage = Stats.CoefDamage * DamageBonusValue;
 
 			//Say weapon about changes
 			OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
@@ -348,7 +348,7 @@ void ANR_Character::TakeBonus(FName BonusType)
 			if (BonusType == "Speed")
 			{
 				//Change params
-				Stats.CoefMovementSpeed = Stats.CoefMovementSpeed * 2;
+				Stats.CoefMovementSpeed = Stats.CoefMovementSpeed * SpeedBonusValue;
 				GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
 
 				//Clean the timer before use
@@ -370,7 +370,7 @@ void ANR_Character::TakeBonus(FName BonusType)
 						GetWorldTimerManager().ClearTimer(FinishImmortalityBonusTimerHamdle);
 
 					//Set timer
-					GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, 5.0f, false, 5.0f);
+					GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, ImmortalityBonusValue, false, ImmortalityBonusValue);
 
 				}
 				else
@@ -379,6 +379,11 @@ void ANR_Character::TakeBonus(FName BonusType)
 					{
 						//Freeze function
 						FreezeBonusFunction();
+					}
+					else
+					{
+						if (BonusType == "Bomb")
+							BombDamageBonusFunction();
 					}
 				}
 			}
@@ -389,8 +394,8 @@ void ANR_Character::TakeBonus(FName BonusType)
 void ANR_Character::FinishFireBonus()
 {
 	//Reset params
-	Stats.CoefFireSpeed = Stats.CoefFireSpeed / 2;
-	Stats.CoefDamage = Stats.CoefDamage / 2;
+	Stats.CoefFireSpeed = Stats.CoefFireSpeed / DamageBonusValue;
+	Stats.CoefDamage = Stats.CoefDamage / DamageBonusValue;
 
 	//Say weapon about changes
 	OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
@@ -405,7 +410,7 @@ void ANR_Character::FinishImmortalityBonus()
 void ANR_Character::FinishMovementSpeedBonus()
 {
 	//Reset params
-	Stats.CoefMovementSpeed = Stats.CoefMovementSpeed / 2;
+	Stats.CoefMovementSpeed = Stats.CoefMovementSpeed / SpeedBonusValue;
 	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
 }
 
@@ -415,7 +420,7 @@ void ANR_Character::FreezeBonusFunction()
 	TArray<AActor*> Actors;
 
 	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetActorLocation(), GetActorLocation(),
-		1500.0f, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
+		FreezeBonusRadius, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
 		EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, 
 		FLinearColor::Red, 5.0f);
 
@@ -423,7 +428,23 @@ void ANR_Character::FreezeBonusFunction()
 	{
 		INR_FreezeInterface* FreezeInterface = Cast<INR_FreezeInterface>(Hit[i].GetActor());
 		if(FreezeInterface)
-			FreezeInterface->Freeze();
+			FreezeInterface->Freeze(FreezeBonusValue);
+	}
+}
+
+void ANR_Character::BombDamageBonusFunction()
+{
+	TArray<FHitResult> Hit;
+	TArray<AActor*> Actors;
+
+	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetActorLocation(), GetActorLocation(),
+		BombDamageBonusRadius, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
+		EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green,
+		FLinearColor::Red, 5.0f);
+
+	for (int i = 0; i < Hit.Num(); i++)
+	{
+		UGameplayStatics::ApplyPointDamage(Hit[i].GetActor(), BombDamageBonusValue, Hit[i].TraceStart, Hit[i], GetInstigatorController(), this, NULL);
 	}
 }
 

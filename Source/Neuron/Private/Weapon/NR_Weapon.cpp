@@ -195,7 +195,7 @@ void ANR_Weapon::LaserFire()
 				UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit[i].ImpactPoint, 0.3f);
 			}
 
-			UGameplayStatics::ApplyPointDamage(Hit[i].GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit[i].ImpactPoint, Hit[i], GetOwner()->GetInstigatorController(), this, nullptr);
+			UGameplayStatics::ApplyPointDamage(Hit[i].GetActor(), WeaponSetting.LaserDamage, Hit[i].ImpactPoint, Hit[i], GetOwner()->GetInstigatorController(), this, nullptr);
 		}
 	}
 }

@@ -24,5 +24,5 @@ class NEURON_API INR_FreezeInterface
 public:
 
 	UFUNCTION()
-	virtual void Freeze();
+	virtual void Freeze(float FreezeTime);
 };

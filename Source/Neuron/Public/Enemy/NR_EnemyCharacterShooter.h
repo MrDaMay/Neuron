@@ -15,7 +15,6 @@ class NEURON_API ANR_EnemyCharacterShooter : public ANR_EnemyCharacterBase
 	GENERATED_BODY()
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 

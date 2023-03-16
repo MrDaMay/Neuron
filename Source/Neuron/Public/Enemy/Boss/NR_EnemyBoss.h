@@ -33,6 +33,10 @@ public:
 	//LazerWeaponComponent
 	FORCEINLINE class UNR_LazerWeaponBossComponent* GetLazerWeaponComponent() const { return LazerWeapon; }
 
+	//Params
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+		float TimeToProjectileFire = 1.0f;
+
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
