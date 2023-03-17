@@ -48,18 +48,41 @@ bool UNR_GameInstance::GetDropInfoByName(FName DropEnemy, FDropObjects& DropObje
 }
 
 
-void UNR_GameInstance::ApplyAchievements()
-{
-	InitialStats.CoefDamage *= (1 + Achievements[0] + Achievements[2] + Achievements[5] + Achievements[7]);
-
-	InitialStats.CoefFireSpeed *= (1 + Achievements[3] + Achievements[5] + Achievements[7]);
-
-	InitialStats.CoefDamageResist *=  (1 + Achievements[4] + Achievements[5] + Achievements[7]);
-
-	InitialStats.CoefMovementSpeed *= (1 + Achievements[6] + Achievements[5] + Achievements[7]);
-}
 
 void UNR_GameInstance::UpdateAchievementAt(int idx, float LevelMultiplier)
 {
 	Achievements[idx] = LevelMultiplier;
+}
+
+void UNR_GameInstance::AddTokens(TArray<int> Buff)
+{
+	for (int i = 0; i < 6; i++)
+	{
+		Tokens[i] += Buff[i];
+	}
+}
+
+void UNR_GameInstance::InitAchievements()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		Achievements.Add(0);
+	}
+}
+
+void UNR_GameInstance::LoadSavedAchievements(TArray<int> Buff)
+{
+
+	for (int i = 0; i < 9; i++)
+	{
+		Achievements.Add(Buff[i]);
+	}
+}
+
+void UNR_GameInstance::InitTokens()
+{
+	for (int i = 0; i < 6; i++)
+	{
+		Tokens.Add(0);
+	}
 }

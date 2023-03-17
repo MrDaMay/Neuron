@@ -80,18 +80,13 @@ void ANR_Character::BeginPlay()
 	}
 
 	//Initialize character stats from GameInstance
-	auto GameInstance = Cast<UNR_GameInstance>(GetGameInstance());
-	if (GameInstance)
-	{
-		Stats = GameInstance->GetInitialStats();
-	}
+	ApplyParamsOnStats();
 
 	//Sending initial stats to GameState for managing any changes and bind to Stats Update
 	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
 	if (GameState)
 	{
-		GameState->SetStats(Stats);
-		GameState->OnCharStatsChanged.AddDynamic(this, &ANR_Character::UpdateStats);
+		GameState->OnTokensChanged.AddDynamic(this, &ANR_Character::UpdateStats);
 		GameState->StartWavePhase();
 	}
 
@@ -492,11 +487,55 @@ void ANR_Character::TakeToken(FName Token)
 	}
 }
 
-void ANR_Character::UpdateStats(FCharStats NewStats)
+void ANR_Character::UpdateStats(TArray<int> Tokens)
 {
-	Stats = NewStats;
+
+	Stats.CoefDamage += Tokens[0] * 0.02f;
+	Stats.CoefDamageResist += Tokens[1] * 0.1f;
+	Stats.CoefFireSpeed += Tokens[2] * 0.02f;
+	Stats.CoefMovementSpeed += Tokens[3] * 0.05f;
+
+	if (Tokens[4])
+	{
+		Stats.CoefDamage += Tokens[4] * 0.02f;
+		Stats.CoefDamageResist += Tokens[4] * 0.1f;
+		Stats.CoefFireSpeed += Tokens[4] * 0.02f;
+		Stats.CoefMovementSpeed += Tokens[4] * 0.05f;
+	}
+
 	HealthComponent->CoefDamageResist = Stats.CoefDamageResist;
 	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed;
+}
+
+void ANR_Character::ApplyParamsOnStats()
+{
+	auto MyGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	MyGameInstance->InitAchievements();
+	MyGameInstance->InitTokens();
+
+	auto Achievements = MyGameInstance->GetAchievements();
+	auto Tokens = MyGameInstance->GetTokens();
+
+
+
+	Stats.CoefDamage *= (1 + Achievements[0] + Achievements[2] + Achievements[5] + Achievements[7]);
+	Stats.CoefFireSpeed *= (1 + Achievements[3] + Achievements[5] + Achievements[7]);
+	Stats.CoefDamageResist *= (1 + Achievements[4] + Achievements[5] + Achievements[7]);
+	Stats.CoefMovementSpeed *= (1 + Achievements[6] + Achievements[5] + Achievements[7]);
+
+	UpdateStats(Tokens);
+}
+
+TArray<float> ANR_Character::GetStats()
+{
+	TArray<float> Buff;
+	Buff.Add(Stats.CoefDamage);
+	Buff.Add(Stats.CoefFireSpeed);
+	Buff.Add(Stats.CoefDamageResist);
+	Buff.Add(Stats.CoefMovementSpeed);
+
+	return Buff;
 }
 
 void ANR_Character::CharDead_BP_Implementation()
