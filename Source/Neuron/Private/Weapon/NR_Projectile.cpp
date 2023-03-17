@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Envinronment/NR_EnvinronmentObjects.h"
 
 // Sets default values
 ANR_Projectile::ANR_Projectile()
@@ -160,6 +161,10 @@ void ANR_Projectile::BulletCollisionSphereBeginOverlap(UPrimitiveComponent* Over
 
 		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage, SweepResult.TraceStart, SweepResult, GetInstigatorController(), this, NULL);
 
+		if (GetParentNativeClass(OtherActor->GetClass()) == ANR_EnvinronmentObjects::StaticClass())
+		{
+			Destroy();
+		}
 		ImpactProjectile();
 	}
 }

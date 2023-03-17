@@ -25,6 +25,7 @@ void ANR_EnvinronmentFloorAndWall::BeginPlay()
 	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnWavePhaseEnds.AddDynamic(this, &ANR_EnvinronmentFloorAndWall::ChangeObjectForBoss);
 }
 
+
 void ANR_EnvinronmentFloorAndWall::ChangeObjectForBoss()
 {
 	StaticMesh->SetMaterial(0, BossMaterial);

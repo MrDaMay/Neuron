@@ -49,6 +49,13 @@ void ANR_EnemyCharacterShooter::SpawnWeapon()
 	}
 }
 
+void ANR_EnemyCharacterShooter::CharacterDead()
+{
+	Super::CharacterDead();
+
+	CurrentWeapon->Destroy();
+}
+
 void ANR_EnemyCharacterShooter::AttackEnemy(FName NotifyName,
                                             const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {

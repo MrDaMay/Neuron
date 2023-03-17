@@ -2,6 +2,8 @@
 
 
 #include "Envinronment/NR_EnvinronmentObjects.h"
+#include "Game/NR_GameState.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ANR_EnvinronmentObjects::ANR_EnvinronmentObjects()
@@ -42,6 +44,9 @@ void ANR_EnvinronmentObjects::BeginPlay()
 	Super::BeginPlay();
 
 	ZChangeOffset = (FinishZPosition - GetActorLocation().Z) / 20;
+
+	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnWavePhaseEnds.AddDynamic(this, &ANR_EnvinronmentObjects::ChangeObjectForBoss);
+
 }
 
 // Called every frame

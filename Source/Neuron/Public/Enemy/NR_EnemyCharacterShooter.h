@@ -23,6 +23,8 @@ public:
 	//Spawn weapon
 	void SpawnWeapon();
 
+	virtual void CharacterDead() override;
+
 	//Attack override
 	virtual	void AttackEnemy(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload) override;
 

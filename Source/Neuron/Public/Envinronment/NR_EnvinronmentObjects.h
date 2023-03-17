@@ -28,6 +28,7 @@ protected:
 	//Timers for change position end
 
 	//Function for change position start
+	UFUNCTION()
 	void ChangeObjectForBoss();
 	void ChangePosition();
 	void FinishChangePosition();
@@ -35,6 +36,7 @@ protected:
 
 	//Variable for change Z position
 	float ZChangeOffset;
+
 
 public:	
 	// Called every frame
