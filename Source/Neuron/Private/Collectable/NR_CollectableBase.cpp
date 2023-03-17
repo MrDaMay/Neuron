@@ -26,9 +26,13 @@ ANR_CollectableBase::ANR_CollectableBase()
 	StaticMesh->SetCanEverAffectNavigation(false);
 	StaticMesh->SetEnableGravity(false);
 	StaticMesh->SetCollisionProfileName("NoCollision");
+	StaticMesh->SetRenderCustomDepth(true);
+	StaticMesh->CustomDepthStencilValue = 3;
 
 	LightPartical = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Partical"));
 	LightPartical->SetupAttachment(RootComponent);
+
+	
 
 }
 

@@ -50,17 +50,10 @@ void ANR_GameState::StartWavePhase()
 
 void ANR_GameState::EndWavePhase()
 {
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANR_EnemyCharacterBase::StaticClass(), FoundActors);
-	for (auto Actor : FoundActors)
-	{
-		Actor->Destroy();
-	}
+	CurrentCoutEnemiesForKill--;
 
-	OnWavePhaseEnds.Broadcast();
-
-	GetWorldTimerManager().SetTimer(SpawnBoss, this, &ANR_GameState::StartBossPhase, 2.f, false, 1.f);
-
+	if (CurrentCoutEnemiesForKill <= 0)
+		OnWavePhaseEnds.Broadcast();
 }
 
 void ANR_GameState::DecrementEnemy()
@@ -72,10 +65,13 @@ void ANR_GameState::StartSpawnEnemyTimer()
 {
 	CurrentCoutEnemy = { 0,0,0 };
 	CurrentCoutEnemies = 0;
+
 	for (int i = 0; i < EnemyCharacters.Num(); i++)
 	{
 		MaxSpawnEnemies += EnemyCharacters[i].CoutToSpawn;
 	}
+
+	CurrentCoutEnemiesForKill = MaxSpawnEnemies;
 
 	GetWorldTimerManager().SetTimer(SpawnEnemyTimer,this, &ANR_GameState::ChoiseOfEnemyForSpawn, MaxTimeForSpawn / MaxSpawnEnemies, true, 0.0f);
 }

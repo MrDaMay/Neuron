@@ -25,14 +25,6 @@ protected:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	////Stats start
-	//float CoefMovementSpeed = 1.0f;
-	//float CoefFireSpeed = 1.0f;
-	//float CoefDamage = 1.0f;
-	//bool Immortality = false;
-	//float BaseSpeed = 600.0f;
-	////Stats end
-
 	//Inventory system start
 	TArray<FName> WeaponSLot;
 	//Inventory system end

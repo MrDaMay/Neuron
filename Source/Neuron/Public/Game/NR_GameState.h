@@ -89,11 +89,11 @@ public:
 	void DecrementEnemy();
 
 	//Spawn start
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
+	TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
 	TArray<int32> CurrentCoutEnemy;
 	int32 MaxSpawnEnemies;
 	int32 CurrentCoutEnemies;
+	int32 CurrentCoutEnemiesForKill;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
 		float MaxTimeForSpawn = 10.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")

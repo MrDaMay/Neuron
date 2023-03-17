@@ -21,6 +21,10 @@ ANR_Character::ANR_Character()
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
+	//HightLight
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->CustomDepthStencilValue = 2;
+
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -90,6 +94,8 @@ void ANR_Character::BeginPlay()
 		GameState->OnCharStatsChanged.AddDynamic(this, &ANR_Character::UpdateStats);
 		GameState->StartWavePhase();
 	}
+
+	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed;
 
 	InitWeapon("Rifle");
 
@@ -490,6 +496,7 @@ void ANR_Character::UpdateStats(FCharStats NewStats)
 {
 	Stats = NewStats;
 	HealthComponent->CoefDamageResist = Stats.CoefDamageResist;
+	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed;
 }
 
 void ANR_Character::CharDead_BP_Implementation()

@@ -39,15 +39,17 @@ void UNR_KillScoreComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 void UNR_KillScoreComponent::OwnerWasDead()
 {
 	ANR_PlayerState* PlayerState = Cast<ANR_PlayerState>(UGameplayStatics::GetPlayerState(GetWorld(),0));
+	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
 
 	PlayerState->IncrementScore(1); //ToDo need added score from funclibrary and table
+	GameState->EndWavePhase();
 
 	if (Cast<ANR_EnemyBoss>(GetOwner()))
 	{
-		auto MyGameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
-		if (MyGameState)
+		
+		if (GameState)
 		{
-			MyGameState->BossKilled();
+			GameState->BossKilled();
 			PlayerState->IncrementBossKilled();
 			PlayerState->IncrementLevel();
 		}
