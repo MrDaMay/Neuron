@@ -196,6 +196,10 @@ public:
 		void TakeToken(FName Token);
 
 	//Function for updating stats after applying tokens
-	UFUNCTION()
-		void UpdateStats(FCharStats NewStats);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		void UpdateStats(TArray<int> Tokens);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		void ApplyParamsOnStats();
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		TArray<float> GetStats();
 };
