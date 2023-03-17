@@ -17,10 +17,13 @@ class NEURON_API UNR_GameInstance : public UGameInstance
 
 protected:
 
-	//Initial Character Stats, based on achivements
-	FCharStats InitialStats;
 	//Achviements Array, contains achievement index and its level for stats increasing
+
 	TArray<float> Achievements;
+	TArray<int> Tokens;
+	TArray<FName> Weapons;
+
+	FName PlayerName;
 
 public:
 	//Table
@@ -28,6 +31,10 @@ public:
 		UDataTable* WeaponInfoTable = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
 		UDataTable* DropInfoTable = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Achievements")
+		UDataTable* AchievementsInfoTable = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TokensMultiplyers")
+		UDataTable* TokensInfoTable = nullptr;
 
 	//Search function by name item
 	UFUNCTION(BlueprintCallable)
@@ -36,17 +43,25 @@ public:
 		bool GetDropInfoByName(FName DropEnemy, FDropObjects& DropObject);
 
 
-	//Apply achievements on CharacterStats
-	UFUNCTION(BlueprintCallable)
-		void ApplyAchievements();
 
 	//Update achievement at index by certain level
 	UFUNCTION(BlueprintCallable)
 		void UpdateAchievementAt(int idx, float LevelMultiplier);
 
-	//Update Achievement at index by certain level
 	UFUNCTION(BlueprintCallable)
-		FCharStats GetInitialStats() { return InitialStats; }
+	void AddTokens(TArray<int> Buff);
+	TArray<float> GetAchievements() { return Achievements; }
+	TArray<int> GetTokens() { return Tokens; }
+
+	void InitAchievements();
+
+	void LoadSavedAchievements(TArray<int> Achievements);
+	void InitTokens();
+
+	UFUNCTION(BlueprintCallable)
+	void SetName(FName Name) { PlayerName = Name; }
+	UFUNCTION(BlueprintCallable)
+	FName GetName() { return PlayerName; }
 
 
 };
