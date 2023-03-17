@@ -15,6 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	ANR_EnvinronmentObjects();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+		class UStaticMeshComponent* StaticMesh = nullptr;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

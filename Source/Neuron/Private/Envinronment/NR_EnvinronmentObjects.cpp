@@ -9,6 +9,9 @@ ANR_EnvinronmentObjects::ANR_EnvinronmentObjects()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	StaticMesh->SetCollisionProfileName("StaticObjects");
+	StaticMesh->SetupAttachment(RootComponent);
 }
 
 void ANR_EnvinronmentObjects::ChangeObjectForBoss()
