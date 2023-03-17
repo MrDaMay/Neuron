@@ -24,7 +24,7 @@ void ANR_EnvinronmentObjects::ChangeObjectForBoss()
 
 void ANR_EnvinronmentObjects::ChangePosition()
 {
-	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - ZChangeOffset));
+	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + ZChangeOffset));
 }
 
 void ANR_EnvinronmentObjects::FinishChangePosition()

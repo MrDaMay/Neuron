@@ -162,7 +162,7 @@ void ANR_Weapon::LaserFire()
 
 
 	UKismetSystemLibrary::LineTraceMulti(GetWorld(), SpawnLocation, (ShootEndLocation - SpawnLocation) * WeaponSetting.LaserDistance,
-		ETraceTypeQuery::TraceTypeQuery3, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
+		ETraceTypeQuery::TraceTypeQuery3, false, Actors, EDrawDebugTrace::None, Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
 
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.LaserFx, SpawnLocation, UKismetMathLibrary::FindLookAtRotation(SpawnLocation, ShootEndLocation));
 
