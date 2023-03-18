@@ -18,7 +18,7 @@ ANR_EnvinronmentObjects::ANR_EnvinronmentObjects()
 
 void ANR_EnvinronmentObjects::ChangeObjectForBoss()
 {
-	GetWorldTimerManager().SetTimer(ChangePositionTimer, this, &ANR_EnvinronmentObjects::ChangePosition, 0.1f, true, 0.0f);
+	GetWorldTimerManager().SetTimer(ChangePositionTimer, this, &ANR_EnvinronmentObjects::ChangePosition, 0.01f, true, 0.0f);
 	GetWorldTimerManager().SetTimer(FinishChangePositionTimer, this, &ANR_EnvinronmentObjects::FinishChangePosition, 2.0f, false, 2.0f);
 }
 
@@ -43,7 +43,7 @@ void ANR_EnvinronmentObjects::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ZChangeOffset = (FinishZPosition - GetActorLocation().Z) / 20;
+	ZChangeOffset = (FinishZPosition - GetActorLocation().Z) / 200;
 
 	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnWavePhaseEnds.AddDynamic(this, &ANR_EnvinronmentObjects::ChangeObjectForBoss);
 
