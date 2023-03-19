@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharStatsChanged, FCharStats, New
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTokensChanged, TArray<int>, Tokens);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseStarts);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseEnds);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChangeMap);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBossPhaseStarts, TSubclassOf<class ANR_EnemyBoss>, Boss);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDies);
 /**
@@ -38,9 +39,13 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FOnBossDies OnBossDies;
 
+	FOnChangeMap OnChangeMap;
+
 
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	//Timer for measure how fast player will kill the boss
 	FTimerHandle BossTimer;
@@ -58,7 +63,6 @@ protected:
 
 	//Level number
 	FTimerHandle StartNewLevel;
-	int CurrentLevel = 0;
 
 public:
 
@@ -94,10 +98,9 @@ public:
 	int32 MaxSpawnEnemies;
 	int32 CurrentCoutEnemies;
 	int32 CurrentCoutEnemiesForKill;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		float MaxTimeForSpawn = 10.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TArray<FEnemyCharacters> EnemyCharacters;
+
+	FEnemyLevelSettings LevelSettingForSpawn;
+
 	UFUNCTION(BlueprintCallable, Category = "SpawnEnemy")
 		void StartSpawnEnemyTimer();
 	FTimerHandle SpawnEnemyTimer;

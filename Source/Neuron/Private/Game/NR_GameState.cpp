@@ -1,13 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Game/NR_GameState.h"
-#include "Enemy/NR_EnemyCharacterBase.h"
 #include "Enemy/Boss/NR_EnemyBoss.h"
-#include "Game/NR_PlayerController.h"
 #include "Game/NR_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
+
+void ANR_GameState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (myGameInstance)
+	{
+		myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelNumb), LevelSettingForSpawn);
+	}
+}
 
 void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 {
@@ -22,19 +31,24 @@ void ANR_GameState::StartBossPhase()
 	GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
 	TimeLeft = 7.f;
 
+	OnChangeMap.Broadcast();
 	OnBossPhaseStarts.Broadcast(Boss);
 }
 
 void ANR_GameState::BossKilled()
 {
 	OnBossDies.Broadcast();
+
+	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (myGameInstance)
+		myGameInstance->LevelNumb++;
+
 	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::StartWavePhase, 5.f, false, 1.f);
 }
 
 void ANR_GameState::StartWavePhase()
 {
 	OnWavePhaseStarts.Broadcast();
-	CurrentLevel++;
 }
 
 void ANR_GameState::EndWavePhase()
@@ -55,14 +69,14 @@ void ANR_GameState::StartSpawnEnemyTimer()
 	CurrentCoutEnemy = { 0,0,0 };
 	CurrentCoutEnemies = 0;
 
-	for (int i = 0; i < EnemyCharacters.Num(); i++)
+	for (int i = 0; i < LevelSettingForSpawn.EnemyCharacters.Num(); i++)
 	{
-		MaxSpawnEnemies += EnemyCharacters[i].CoutToSpawn;
+		MaxSpawnEnemies += LevelSettingForSpawn.EnemyCharacters[i].CoutToSpawn;
 	}
 
 	CurrentCoutEnemiesForKill = MaxSpawnEnemies;
 
-	GetWorldTimerManager().SetTimer(SpawnEnemyTimer,this, &ANR_GameState::ChoiseOfEnemyForSpawn, MaxTimeForSpawn / MaxSpawnEnemies, true, 0.0f);
+	GetWorldTimerManager().SetTimer(SpawnEnemyTimer,this, &ANR_GameState::ChoiseOfEnemyForSpawn, LevelSettingForSpawn.MaxTimeForSpawn / MaxSpawnEnemies, true, 0.0f);
 }
 
 void ANR_GameState::ChoiseOfEnemyForSpawn()
@@ -71,13 +85,15 @@ void ANR_GameState::ChoiseOfEnemyForSpawn()
 	{
 		float RandomForSpawn = UKismetMathLibrary::RandomFloatInRange(0.0f, 1.0f);
 
-		if (RandomForSpawn <= 0.7f && TrySpawnEnemy(0))
+		if (RandomForSpawn <= 0.7f && TrySpawnEnemy(0) || LevelSettingForSpawn.EnemyCharacters.Num() == 1)
 		{
+			TrySpawnEnemy(0);
 		}
 		else
 		{
-			if (RandomForSpawn <= 0.85f && TrySpawnEnemy(1))
+			if (RandomForSpawn <= 0.85f && TrySpawnEnemy(1) || LevelSettingForSpawn.EnemyCharacters.Num() == 2)
 			{
+				TrySpawnEnemy(1);
 			}
 			else
 			{
@@ -93,12 +109,12 @@ void ANR_GameState::ChoiseOfEnemyForSpawn()
 
 bool ANR_GameState::TrySpawnEnemy(int i)
 {
-	if (CurrentCoutEnemy[i] < EnemyCharacters[i].CoutToSpawn)
+	if (CurrentCoutEnemy[i] < LevelSettingForSpawn.EnemyCharacters[i].CoutToSpawn)
 	{
 		CurrentCoutEnemy[i]++;
 
 		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
-		EnemySpawnBase[IndexSpawnBase]->SpawnEnemy(EnemyCharacters[i].Enemy);
+		EnemySpawnBase[IndexSpawnBase]->SpawnEnemy(LevelSettingForSpawn.EnemyCharacters[i].Enemy);
 
 		return true;
 	}

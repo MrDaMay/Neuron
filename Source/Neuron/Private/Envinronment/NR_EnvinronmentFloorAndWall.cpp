@@ -22,7 +22,7 @@ void ANR_EnvinronmentFloorAndWall::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnWavePhaseEnds.AddDynamic(this, &ANR_EnvinronmentFloorAndWall::ChangeObjectForBoss);
+	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnChangeMap.AddDynamic(this, &ANR_EnvinronmentFloorAndWall::ChangeObjectForBoss);
 }
 
 

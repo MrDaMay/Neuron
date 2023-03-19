@@ -144,6 +144,17 @@ struct FEnemyCharacters
 };
 
 USTRUCT(BlueprintType)
+struct FEnemyLevelSettings : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		TArray<FEnemyCharacters> EnemyCharacters;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		float MaxTimeForSpawn = 10.0f;
+};
+
+USTRUCT(BlueprintType)
 struct FAchievementLevel
 {
 	GENERATED_BODY()

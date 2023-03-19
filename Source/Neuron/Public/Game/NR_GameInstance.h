@@ -35,6 +35,8 @@ public:
 		UDataTable* AchievementsInfoTable = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TokensMultiplyers")
 		UDataTable* TokensInfoTable = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelSettings")
+		UDataTable* LevelSettingsInfoTable = nullptr;
 
 	//Search function by name item
 	UFUNCTION(BlueprintCallable)
@@ -42,6 +44,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool GetDropInfoByName(FName DropEnemy, FDropObjects& DropObject);
 
+	UFUNCTION(BlueprintCallable)
+		bool GetLevelSettingsInfoByName(FName Level, FEnemyLevelSettings& EnemyLevelSettings);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Level")
+		int32 LevelNumb = 1;
 
 
 	//Update achievement at index by certain level
