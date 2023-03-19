@@ -45,7 +45,7 @@ void ANR_EnvinronmentObjects::BeginPlay()
 
 	ZChangeOffset = (FinishZPosition - GetActorLocation().Z) / 200;
 
-	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnWavePhaseEnds.AddDynamic(this, &ANR_EnvinronmentObjects::ChangeObjectForBoss);
+	Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()))->OnChangeMap.AddDynamic(this, &ANR_EnvinronmentObjects::ChangeObjectForBoss);
 
 }
 

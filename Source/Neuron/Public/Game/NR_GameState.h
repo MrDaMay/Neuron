@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharStatsChanged, FCharStats, New
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTokensChanged, TArray<int>, Tokens);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseStarts);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseEnds);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChangeMap);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBossPhaseStarts, TSubclassOf<class ANR_EnemyBoss>, Boss);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDies);
 /**
@@ -37,6 +38,8 @@ public:
 		FOnBossPhaseStarts OnBossPhaseStarts;
 	UPROPERTY(BlueprintAssignable)
 		FOnBossDies OnBossDies;
+
+	FOnChangeMap OnChangeMap;
 
 
 

@@ -31,6 +31,7 @@ void ANR_GameState::StartBossPhase()
 	GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
 	TimeLeft = 7.f;
 
+	OnChangeMap.Broadcast();
 	OnBossPhaseStarts.Broadcast(Boss);
 }
 
