@@ -47,6 +47,27 @@ bool UNR_GameInstance::GetDropInfoByName(FName DropEnemy, FDropObjects& DropObje
 	return bIsFind;
 }
 
+bool UNR_GameInstance::GetLevelSettingsInfoByName(FName Level, FEnemyLevelSettings& EnemyLevelSettings)
+{
+	bool bIsFind = false;
+
+	if (LevelSettingsInfoTable)
+	{
+		FEnemyLevelSettings* LevelSettingsInfoRow = LevelSettingsInfoTable->FindRow<FEnemyLevelSettings>(Level, "", false);
+
+		if (LevelSettingsInfoRow)
+		{
+			bIsFind = true;
+			EnemyLevelSettings = *LevelSettingsInfoRow;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UNR_GameInstance::GetLevelSettingsInfoByName - WeaponTable is NULL"))
+	}
+
+	return bIsFind;
+}
 
 
 void UNR_GameInstance::UpdateAchievementAt(int idx, float LevelMultiplier)

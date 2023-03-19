@@ -41,6 +41,8 @@ public:
 
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	//Timer for measure how fast player will kill the boss
 	FTimerHandle BossTimer;
@@ -58,7 +60,6 @@ protected:
 
 	//Level number
 	FTimerHandle StartNewLevel;
-	int CurrentLevel = 0;
 
 public:
 
@@ -94,10 +95,9 @@ public:
 	int32 MaxSpawnEnemies;
 	int32 CurrentCoutEnemies;
 	int32 CurrentCoutEnemiesForKill;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		float MaxTimeForSpawn = 10.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TArray<FEnemyCharacters> EnemyCharacters;
+
+	FEnemyLevelSettings LevelSettingForSpawn;
+
 	UFUNCTION(BlueprintCallable, Category = "SpawnEnemy")
 		void StartSpawnEnemyTimer();
 	FTimerHandle SpawnEnemyTimer;
