@@ -46,7 +46,6 @@ protected:
 	FTimerHandle BossTimer;
 	FTimerHandle SpawnBoss;
 	float TimeLeft = 0.f;
-	TSubclassOf<class ANR_EnemyBoss> Boss = nullptr;
 
 	//Stuct with character stats
 	FCharStats CharStats;
@@ -73,7 +72,7 @@ public:
 
 	void ToggleSpawningState() { NotSpawning = NotSpawning ? false : true; }
 
-	void ToggleBossState() { BossAlive = BossAlive ? true : false; }
+	void ToggleBossState() { BossAlive = BossAlive ? false : true; }
 
 	void TimeIsOver();
 
@@ -85,6 +84,7 @@ public:
 		void StartWavePhase();
 	UFUNCTION(BlueprintCallable)
 		void EndWavePhase();
+	void ChangeLevel();
 
 	void DecrementEnemy();
 
@@ -97,11 +97,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
 		float MaxTimeForSpawn = 10.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
+		TSubclassOf<class ANR_EnemyBoss> Boss = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
 		TArray<FEnemyCharacters> EnemyCharacters;
 	UFUNCTION(BlueprintCallable, Category = "SpawnEnemy")
 		void StartSpawnEnemyTimer();
 	FTimerHandle SpawnEnemyTimer;
 	void ChoiseOfEnemyForSpawn();
 	bool TrySpawnEnemy(int i);
+	void TrySpawnBoss();
 	//Spawn end
 };
