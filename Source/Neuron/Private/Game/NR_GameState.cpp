@@ -62,7 +62,12 @@ void ANR_GameState::EndWavePhase()
 void ANR_GameState::ChangeLevel()
 {
 	// Change this function
-	UGameplayStatics::OpenLevel(GetWorld(), FName("Arena"));
+	auto LevelTable = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->LevelsTable;
+	TArray<FName> LevelNames = LevelTable->GetRowNames();
+
+	int idx = UKismetMathLibrary::RandomIntegerInRange(2, LevelNames.Num() - 1);
+
+	UGameplayStatics::OpenLevel(GetWorld(), LevelNames[idx]);
 }
 
 void ANR_GameState::DecrementEnemy()

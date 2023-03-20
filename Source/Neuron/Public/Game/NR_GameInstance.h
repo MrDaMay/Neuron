@@ -37,6 +37,8 @@ public:
 		UDataTable* TokensInfoTable = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LevelSettings")
 		UDataTable* LevelSettingsInfoTable = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+		UDataTable* LevelsTable = nullptr;
 
 	//Search function by name item
 	UFUNCTION(BlueprintCallable)
