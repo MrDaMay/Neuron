@@ -29,11 +29,6 @@ void ANR_PlayerController::OpenCloseTokenWidget()
 	 OnOpenTokenWidget.Broadcast();
 }
 
-void ANR_PlayerController::OpenClosePickupWidget(FName ObjectName)
-{
-	OnOpenPickupWidget.Broadcast(ObjectName);
-}
-
 void ANR_PlayerController::OpenCloseAchieveWidget()
 {
 	OnOpenAchieveWidget.Broadcast();

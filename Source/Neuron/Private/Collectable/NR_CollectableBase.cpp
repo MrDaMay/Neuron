@@ -13,7 +13,7 @@ ANR_CollectableBase::ANR_CollectableBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
-	CollisionSphere->SetSphereRadius(34.f);
+	CollisionSphere->SetSphereRadius(60.f);
 	CollisionSphere->SetEnableGravity(false);
 	CollisionSphere->bReturnMaterialOnMove = true;//hit event return physMaterial
 	CollisionSphere->SetCanEverAffectNavigation(false);//collision not affect navigation (P keybord on editor)
@@ -27,6 +27,8 @@ ANR_CollectableBase::ANR_CollectableBase()
 	StaticMesh->SetEnableGravity(false);
 	StaticMesh->SetCollisionProfileName("NoCollision");
 	StaticMesh->SetRenderCustomDepth(true);
+	StaticMesh->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
+	StaticMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 62.0f));
 	StaticMesh->CustomDepthStencilValue = 3;
 
 	LightPartical = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Partical"));

@@ -14,7 +14,10 @@ void ANR_GameState::BeginPlay()
 	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (myGameInstance)
 	{
-		myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelNumb), LevelSettingForSpawn);
+		if(!myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelNumb), LevelSettingForSpawn))
+		{
+			myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelSettingsInfoTable->GetRowNames().Num()), LevelSettingForSpawn);
+		}
 	}
 }
 
@@ -43,7 +46,7 @@ void ANR_GameState::BossKilled()
 	if (myGameInstance)
 		myGameInstance->LevelNumb++;
 
-	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::ChangeLevel, 5.f, false, 1.f);
+	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::ChangeLevel, 20.0f, false, 20.0f);
 }
 
 void ANR_GameState::StartWavePhase()
@@ -51,7 +54,7 @@ void ANR_GameState::StartWavePhase()
 	OnWavePhaseStarts.Broadcast();
 }
 
-void ANR_GameState::EndWavePhase()
+void ANR_GameState::DecreaseEnemies()
 {
 	CurrentCoutEnemiesForKill--;
 
@@ -65,14 +68,9 @@ void ANR_GameState::ChangeLevel()
 	auto LevelTable = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->LevelsTable;
 	TArray<FName> LevelNames = LevelTable->GetRowNames();
 
-	int idx = UKismetMathLibrary::RandomIntegerInRange(2, LevelNames.Num() - 1);
+	int idx = UKismetMathLibrary::RandomIntegerInRange(0, LevelNames.Num() - 1);
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelNames[idx]);
-}
-
-void ANR_GameState::DecrementEnemy()
-{
-	if (Enemies > 0) Enemies--;
 }
 
 void ANR_GameState::StartSpawnEnemyTimer()

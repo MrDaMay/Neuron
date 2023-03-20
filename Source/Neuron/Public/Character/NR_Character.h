@@ -26,7 +26,7 @@ protected:
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//Inventory system start
-	TArray<FName> WeaponSLot;
+	TArray<FName> WeaponSLot {"Rifle"};
 	//Inventory system end
 
 	//Input start
@@ -104,7 +104,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		bool RollEnable = false;
 		float RollTime = 0.0f;
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Roll")
 		float MaxRollTime = 1.0f;
 	//Input end
 
@@ -120,13 +120,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void WeaponFireStart_BP(UAnimMontage* Anim);
 	UFUNCTION(BlueprintCallable)
-		void StartSwitchWeapon();
-	UFUNCTION(BlueprintNativeEvent)
-		void StartSwitchWeapon_BP();
-	UFUNCTION(BlueprintCallable)
-		void EndSwitchWeapon();
-	UFUNCTION(BlueprintNativeEvent)
-		void EndSwitchWeapon_BP();
+		void AddWeaponToInventory(FName WeaponName);
 	//Weapon end
 
 	//Tick function start

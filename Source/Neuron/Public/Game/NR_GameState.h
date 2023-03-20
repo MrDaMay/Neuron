@@ -87,10 +87,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void StartWavePhase();
 	UFUNCTION(BlueprintCallable)
-		void EndWavePhase();
+		void DecreaseEnemies();
 	void ChangeLevel();
-
-	void DecrementEnemy();
 
 	//Spawn start
 	TArray<ANR_EnemySpawnBase*> EnemySpawnBase;

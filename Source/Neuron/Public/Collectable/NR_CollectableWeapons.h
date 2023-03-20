@@ -17,7 +17,5 @@ class NEURON_API ANR_CollectableWeapons : public ANR_CollectableBase
 public:
 
 	//Implementing interface
-	void CollectItem_Implementation(ANR_Character* Character) override; // c++ implementation
 	void EnteredInteractionZone_Implementation(ANR_Character* Character) override; // c++ implementation
-	void LeftInteractionZone_Implementation(ANR_Character* Character) override; // c++ implementation
 };

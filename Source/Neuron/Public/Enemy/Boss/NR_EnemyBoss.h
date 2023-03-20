@@ -24,6 +24,10 @@ protected:
 
 	void FireProjectileWeapon();
 
+	void FindWeaponForSpawn();
+
+	FName SpawnWeaponName = "None";
+
 public:
 	ANR_EnemyBoss();
 
@@ -35,7 +39,12 @@ public:
 
 	//Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
-		float TimeToProjectileFire = 1.0f;
+		float TimeToProjectileFire = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		UAnimMontage* SpawnAnimation = nullptr;
+
+	virtual void Drop() override;
 
 private:
 

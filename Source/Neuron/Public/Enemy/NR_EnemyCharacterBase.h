@@ -113,11 +113,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 		float MaxSpeed = 400.0f;
 
+	//Sound
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+		USoundBase* DeathSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+		USoundBase* SpawnSound;
+
 	//Drop start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
 	TArray<FName> DropObjectNames;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
 	float DropChance;
-	void Drop();
+	virtual void Drop();
 	//Drop end
 };

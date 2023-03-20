@@ -53,6 +53,8 @@ void ANR_EnemyCharacterBase::BeginPlay()
 		}
 	}
 
+	if(SpawnSound)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SpawnSound, GetActorLocation());
 }
 
 float ANR_EnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -125,6 +127,8 @@ void ANR_EnemyCharacterBase::CharacterDead()
 	Drop();
 
 	PlayAnimMontage(DeadMontage);
+	if(DeathSound)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
 
 	CharacterDead_BP();
 }

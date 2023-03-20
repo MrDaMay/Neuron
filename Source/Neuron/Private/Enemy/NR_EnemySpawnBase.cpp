@@ -25,7 +25,6 @@ void ANR_EnemySpawnBase::BeginPlay()
 	Super::BeginPlay();
 
 	GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
-	OnSpawnEnd.AddDynamic(GameState, &ANR_GameState::EndWavePhase);
 
 	AddSpawnBase();
 }
@@ -42,6 +41,7 @@ void ANR_EnemySpawnBase::SpawnBoss(TSubclassOf<class ANR_EnemyBoss> BossObject)
 	FVector BoxSize = FVector(BoxComponent->GetScaledBoxExtent().X / 2, BoxComponent->GetScaledBoxExtent().Y / 2, 0.0f);
 	FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxSize);
 	FRotator SpawnRotation = FRotator(0);
+
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 

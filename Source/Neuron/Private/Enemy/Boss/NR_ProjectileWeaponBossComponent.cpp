@@ -2,6 +2,8 @@
 
 
 #include "Enemy/Boss/NR_ProjectileWeaponBossComponent.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "Weapon/NR_Projectile.h"
 
 
@@ -37,6 +39,8 @@ void UNR_ProjectileWeaponBossComponent::SpawnProjectile()
 
 	float CoefConfusionShot = 0.0f;
 
+	if(ProjectileSpawn)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ProjectileSpawn, GetOwner()->GetActorLocation());
 
 	for (int8 i = 0; i < NumberProjectile; i++)
 	{

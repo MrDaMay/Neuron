@@ -17,7 +17,6 @@ public:
 	// Sets default values for this component's properties
 	UNR_ProjectileWeaponBossComponent();
 
-public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -25,4 +24,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 		FProjectileInfo ProjectileInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sound")
+	USoundBase* ProjectileSpawn;
 };

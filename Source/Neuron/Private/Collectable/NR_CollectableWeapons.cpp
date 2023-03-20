@@ -4,32 +4,12 @@
 #include "Collectable/NR_CollectableWeapons.h"
 #include "Game/NR_PlayerController.h"
 
-void ANR_CollectableWeapons::CollectItem_Implementation(ANR_Character* Character)
-{
-	if (Character)
-	{
-		Character->AddNewWeaponToWeaponSlot(ObjectName);
-		//Character->InitWeapon(WeaponName);
-		Destroy();
-	}
-}
 
 void ANR_CollectableWeapons::EnteredInteractionZone_Implementation(ANR_Character* Character)
 {
 	Super::EnteredInteractionZone_Implementation(Character);
 
-	auto Controller = Cast<ANR_PlayerController>(Character->GetController());
-	if (Controller)
-	{
-		Controller->OpenClosePickupWidget(ObjectName);
-	}
-}
+	Character->AddNewWeaponToWeaponSlot(ObjectName);
 
-void ANR_CollectableWeapons::LeftInteractionZone_Implementation(ANR_Character* Character)
-{
-	auto Controller = Cast<ANR_PlayerController>(Character->GetController());
-	if (Controller)
-	{
-		Controller->OpenClosePickupWidget(ObjectName);
-	}
+	Destroy();
 }

@@ -156,7 +156,8 @@ void ANR_Character::InputAttackPressed()
 {
 	if (HealthComponent && HealthComponent->GetIsAlive() && !RollEnable)
 	{
-		PlayAnimMontage(CurrentWeapon->WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage);
+		if(CurrentWeapon->WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage)
+			PlayAnimMontage(CurrentWeapon->WeaponSetting.AnimWeaponInfo.CharacterFireAnimMontage);
 		AttackEvent(true);
 	}
 }
@@ -238,18 +239,9 @@ void ANR_Character::WeaponFireStart(UAnimMontage* Anim)
 	WeaponFireStart_BP(Anim);
 }
 
-void ANR_Character::StartSwitchWeapon()
+void ANR_Character::AddWeaponToInventory(FName WeaponName)
 {
-	//OverlapPickUpWeapon = Weapon;
-
-	StartSwitchWeapon_BP();
-}
-
-void ANR_Character::EndSwitchWeapon()
-{
-	//OverlapPickUpWeapon = nullptr;
-
-	EndSwitchWeapon_BP();
+	WeaponSLot.Add(WeaponName);
 }
 
 void ANR_Character::MovementTick(float DeltaTime)
@@ -436,7 +428,7 @@ void ANR_Character::FreezeBonusFunction()
 void ANR_Character::BombDamageBonusFunction()
 {
 	TArray<FHitResult> Hit;
-	TArray<AActor*> Actors;
+	TArray<AActor*> Actors {this};
 
 	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetActorLocation(), GetActorLocation(),
 		BombDamageBonusRadius, ETraceTypeQuery::TraceTypeQuery3, false, Actors,
@@ -542,13 +534,6 @@ void ANR_Character::CharDead_BP_Implementation()
 {
 }
 
-void ANR_Character::EndSwitchWeapon_BP_Implementation()
-{
-}
-
-void ANR_Character::StartSwitchWeapon_BP_Implementation()
-{
-}
 
 void ANR_Character::WeaponFireStart_BP_Implementation(UAnimMontage* Anim)
 {

@@ -42,7 +42,7 @@ void UNR_KillScoreComponent::OwnerWasDead()
 	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
 
 	PlayerState->IncrementScore(1); //ToDo need added score from funclibrary and table
-	GameState->EndWavePhase();
+	GameState->DecreaseEnemies();
 
 	if (Cast<ANR_EnemyBoss>(GetOwner()))
 	{

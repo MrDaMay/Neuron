@@ -65,6 +65,4 @@ public:
 	void BlockTokenWidget() { bTokensAvailable = false; }
 	void UnblockTokenWidget() { bTokensAvailable = true; }
 
-	//Fuction for open/close pickup widget
-	void OpenClosePickupWidget(FName ObjectName);
 };
