@@ -28,11 +28,11 @@ void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 
 void ANR_GameState::StartBossPhase()
 {
-	GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
-	TimeLeft = 7.f;
 
+	GetWorldTimerManager().SetTimer(SpawnBoss, this, &ANR_GameState::TrySpawnBoss, 1.f, true, 0.f);
 	OnChangeMap.Broadcast();
 	OnBossPhaseStarts.Broadcast(Boss);
+	
 }
 
 void ANR_GameState::BossKilled()
@@ -57,6 +57,11 @@ void ANR_GameState::EndWavePhase()
 
 	if (CurrentCoutEnemiesForKill <= 0)
 		OnWavePhaseEnds.Broadcast();
+}
+
+void ANR_GameState::ChangeLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), FName("Arena"));
 }
 
 void ANR_GameState::DecrementEnemy()
@@ -104,6 +109,7 @@ void ANR_GameState::ChoiseOfEnemyForSpawn()
 	else
 	{
 		GetWorldTimerManager().ClearTimer(SpawnEnemyTimer);
+		OnWavePhaseEnds.Broadcast();
 	}
 }
 
@@ -123,6 +129,22 @@ bool ANR_GameState::TrySpawnEnemy(int i)
 		return false;
 	}
 
+}
+
+void ANR_GameState::TrySpawnBoss()
+{
+	if (!BossAlive)
+	{
+		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
+		EnemySpawnBase[IndexSpawnBase]->SpawnBoss(Boss);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(SpawnBoss);
+
+		TimeLeft = 7.f;
+		GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
+	}
 }
 
 

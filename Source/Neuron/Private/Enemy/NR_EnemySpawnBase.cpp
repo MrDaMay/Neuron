@@ -25,7 +25,6 @@ void ANR_EnemySpawnBase::BeginPlay()
 	Super::BeginPlay();
 
 	GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
-	GameState->OnBossPhaseStarts.AddDynamic(this, &ANR_EnemySpawnBase::SpawnBoss);
 	OnSpawnEnd.AddDynamic(GameState, &ANR_GameState::EndWavePhase);
 
 	AddSpawnBase();

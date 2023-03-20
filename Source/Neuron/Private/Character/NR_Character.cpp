@@ -490,10 +490,10 @@ void ANR_Character::TakeToken(FName Token)
 void ANR_Character::UpdateStats(TArray<int> Tokens)
 {
 
-	Stats.CoefDamage += Tokens[0] * 0.02f;
-	Stats.CoefDamageResist += Tokens[1] * 0.1f;
-	Stats.CoefFireSpeed += Tokens[2] * 0.02f;
-	Stats.CoefMovementSpeed += Tokens[3] * 0.05f;
+	Stats.CoefDamage += Tokens[1] * 0.02f;
+	Stats.CoefDamageResist += Tokens[2] * 0.1f;
+	Stats.CoefFireSpeed += Tokens[3] * 0.02f;
+	Stats.CoefMovementSpeed += Tokens[0] * 0.05f;
 
 	if (Tokens[4])
 	{

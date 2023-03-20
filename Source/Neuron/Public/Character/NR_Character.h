@@ -62,10 +62,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
 		class UNR_TokenComponent* TokenComponent;
 
-	//Character stats for achievements and tokens implementation
-	FCharStats Stats;
 
 public:	
+
+
+	//Character stats for achievements and tokens implementation
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats")
+	FCharStats Stats;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
