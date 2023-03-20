@@ -19,6 +19,8 @@ void ANR_GameState::BeginPlay()
 			myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelSettingsInfoTable->GetRowNames().Num()), LevelSettingForSpawn);
 		}
 	}
+
+	StartSpawnEnemyTimer();
 }
 
 void ANR_GameState::ApplyChanges(TArray<int> Tokens)

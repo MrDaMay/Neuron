@@ -35,5 +35,5 @@ public:
 	//Event for create finish widget and end game
 	void EndGame(bool IsWin);
 
-	void SpawnEnemys();
+	void SpawnEnemies();
 };

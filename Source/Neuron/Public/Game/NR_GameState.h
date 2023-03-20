@@ -96,7 +96,6 @@ public:
 	int32 MaxSpawnEnemies;
 	int32 CurrentCoutEnemies;
 	int32 CurrentCoutEnemiesForKill;
-
 	FEnemyLevelSettings LevelSettingForSpawn;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")

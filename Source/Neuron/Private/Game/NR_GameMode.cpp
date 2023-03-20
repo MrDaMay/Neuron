@@ -14,7 +14,7 @@ void ANR_GameMode::EndGame(bool IsWin)
 	OnEndGameDelegate.Broadcast(IsWin);
 }
 
-void ANR_GameMode::SpawnEnemys()
+void ANR_GameMode::SpawnEnemies()
 {
 	OnSpawnEnemy.Broadcast();
 }
