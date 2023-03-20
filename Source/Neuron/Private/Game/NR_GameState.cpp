@@ -43,7 +43,7 @@ void ANR_GameState::BossKilled()
 	if (myGameInstance)
 		myGameInstance->LevelNumb++;
 
-	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::StartWavePhase, 5.f, false, 1.f);
+	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::ChangeLevel, 5.f, false, 1.f);
 }
 
 void ANR_GameState::StartWavePhase()
@@ -61,6 +61,7 @@ void ANR_GameState::EndWavePhase()
 
 void ANR_GameState::ChangeLevel()
 {
+	// Change this function
 	UGameplayStatics::OpenLevel(GetWorld(), FName("Arena"));
 }
 
