@@ -125,7 +125,7 @@ bool ANR_GameState::TrySpawnEnemy(int i)
 	{
 		CurrentCoutEnemy[i]++;
 
-		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
+		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(0, EnemySpawnBase.Num() - 1);
 		EnemySpawnBase[IndexSpawnBase]->SpawnEnemy(LevelSettingForSpawn.EnemyCharacters[i].Enemy);
 
 		return true;
