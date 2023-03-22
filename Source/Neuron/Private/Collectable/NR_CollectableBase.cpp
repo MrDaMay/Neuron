@@ -61,6 +61,9 @@ void ANR_CollectableBase::EnteredInteractionZone_Implementation(ANR_Character* C
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapSpawnPartical, GetActorLocation(),
 		FRotator(0));
+
+	if(PickUpSound)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickUpSound, GetActorLocation());
 }
 
 void ANR_CollectableBase::LeftInteractionZone_Implementation(ANR_Character* Character)

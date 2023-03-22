@@ -194,6 +194,9 @@ void ANR_Character::InitWeapon(FName IdWeaponName)
 		CurrentWeapon = nullptr;
 	}
 
+	if(ChangeWeaponSound)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ChangeWeaponSound, GetActorLocation());
+
 	UNR_GameInstance* GameInstance = Cast<UNR_GameInstance>(GetGameInstance());
 	FWeaponInfo WeaponInfo;
 

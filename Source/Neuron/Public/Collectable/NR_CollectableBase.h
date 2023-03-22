@@ -41,4 +41,6 @@ public:
 	UParticleSystem* OverlapSpawnPartical;
 
 	FName ObjectName;
+
+	USoundBase* PickUpSound;
 };

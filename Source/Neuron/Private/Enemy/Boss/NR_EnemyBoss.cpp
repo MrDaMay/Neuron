@@ -82,6 +82,7 @@ void ANR_EnemyBoss::Drop()
 				SpawnActor->LightPartical->Template = SpawnObject.LightPartical;
 				SpawnActor->OverlapSpawnPartical = SpawnObject.OverlapPartical;
 				SpawnActor->ObjectName = SpawnWeaponName;
+				SpawnActor->PickUpSound = SpawnObject.PickUpSound;
 			}
 		}
 	}
