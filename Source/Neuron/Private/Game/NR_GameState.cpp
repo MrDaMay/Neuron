@@ -77,17 +77,20 @@ void ANR_GameState::ChangeLevel()
 
 void ANR_GameState::StartSpawnEnemyTimer()
 {
-	CurrentCoutEnemy = { 0,0,0 };
-	CurrentCoutEnemies = 0;
-
-	for (int i = 0; i < LevelSettingForSpawn.EnemyCharacters.Num(); i++)
+	if (EnemySpawnBase.Num() > 0)
 	{
-		MaxSpawnEnemies += LevelSettingForSpawn.EnemyCharacters[i].CoutToSpawn;
+		CurrentCoutEnemy = { 0,0,0 };
+		CurrentCoutEnemies = 0;
+
+		for (int i = 0; i < LevelSettingForSpawn.EnemyCharacters.Num(); i++)
+		{
+			MaxSpawnEnemies += LevelSettingForSpawn.EnemyCharacters[i].CoutToSpawn;
+		}
+
+		CurrentCoutEnemiesForKill = MaxSpawnEnemies;
+
+		GetWorldTimerManager().SetTimer(SpawnEnemyTimer, this, &ANR_GameState::ChoiseOfEnemyForSpawn, LevelSettingForSpawn.MaxTimeForSpawn / MaxSpawnEnemies, true, 0.0f);
 	}
-
-	CurrentCoutEnemiesForKill = MaxSpawnEnemies;
-
-	GetWorldTimerManager().SetTimer(SpawnEnemyTimer,this, &ANR_GameState::ChoiseOfEnemyForSpawn, LevelSettingForSpawn.MaxTimeForSpawn / MaxSpawnEnemies, true, 0.0f);
 }
 
 void ANR_GameState::ChoiseOfEnemyForSpawn()

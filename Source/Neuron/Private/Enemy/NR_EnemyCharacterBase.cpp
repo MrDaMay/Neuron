@@ -62,6 +62,9 @@ float ANR_EnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const&
 {
 	GetHealthComponent()->ChangeHealthValue(-DamageAmount);
 
+	if (HitSound)
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation());
+
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -205,6 +208,7 @@ void ANR_EnemyCharacterBase::Drop()
 			SpawnActor->LightPartical->Template = SpawnObject.LightPartical;
 			SpawnActor->OverlapSpawnPartical = SpawnObject.OverlapPartical;
 			SpawnActor->ObjectName = DropObjectNames[DropObjectIndex];
+			SpawnActor->PickUpSound = SpawnObject.PickUpSound;
 		}
 	}
 }

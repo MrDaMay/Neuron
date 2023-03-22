@@ -233,6 +233,8 @@ struct FDropObjects: public FTableRowBase
 		UParticleSystem* LightPartical = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
 		UParticleSystem* OverlapPartical = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
+		USoundBase* PickUpSound;
 };
 
 UCLASS()

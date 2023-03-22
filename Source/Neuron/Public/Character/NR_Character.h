@@ -200,4 +200,8 @@ public:
 		void ApplyParamsOnStats();
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 		TArray<float> GetStats();
+
+	//Sound
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+		USoundBase* ChangeWeaponSound;
 };

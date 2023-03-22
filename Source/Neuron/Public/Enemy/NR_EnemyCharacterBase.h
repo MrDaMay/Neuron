@@ -113,11 +113,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 		float MaxSpeed = 400.0f;
 
-	//Sound
+	//Sound start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 		USoundBase* DeathSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 		USoundBase* SpawnSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+		USoundBase* HitSound;
+	//Sound end
 
 	//Drop start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Drop")
