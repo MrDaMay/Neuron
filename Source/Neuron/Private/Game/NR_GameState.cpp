@@ -92,7 +92,7 @@ void ANR_GameState::StartSpawnEnemyTimer()
 
 void ANR_GameState::ChoiseOfEnemyForSpawn()
 {
-	if (CurrentCoutEnemies < MaxSpawnEnemies)
+	if (CurrentCoutEnemies <= MaxSpawnEnemies)
 	{
 		float RandomForSpawn = UKismetMathLibrary::RandomFloatInRange(0.0f, 1.0f);
 
