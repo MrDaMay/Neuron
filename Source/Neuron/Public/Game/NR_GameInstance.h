@@ -21,7 +21,6 @@ protected:
 
 	TArray<float> Achievements;
 	TArray<int> Tokens;
-	TArray<FName> Weapons;
 
 	FName PlayerName;
 
@@ -72,5 +71,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FName GetName() { return PlayerName; }
 
-
+	//Weapon slot in character
+	TArray<FName> Weapons{ "Rifle" };
 };

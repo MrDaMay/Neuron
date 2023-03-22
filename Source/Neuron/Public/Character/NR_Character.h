@@ -26,7 +26,7 @@ protected:
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//Inventory system start
-	TArray<FName> WeaponSLot {"Rifle"};
+	TArray<FName> WeaponSLot;
 	//Inventory system end
 
 	//Input start
@@ -204,4 +204,8 @@ public:
 	//Sound
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 		USoundBase* ChangeWeaponSound;
+
+	//Start change level
+	UFUNCTION()
+	void SaveWeaponToInstance();
 };

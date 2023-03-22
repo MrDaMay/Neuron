@@ -13,6 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTokensChanged, TArray<int>, Token
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseStarts);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWavePhaseEnds);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChangeMap);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartChangeLevel);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBossPhaseStarts, TSubclassOf<class ANR_EnemyBoss>, Boss);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDies);
 /**
@@ -40,6 +41,7 @@ public:
 		FOnBossDies OnBossDies;
 
 	FOnChangeMap OnChangeMap;
+	FOnStartChangeLevel OnStartChangeLevel;
 
 
 

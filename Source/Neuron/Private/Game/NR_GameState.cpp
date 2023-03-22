@@ -19,8 +19,6 @@ void ANR_GameState::BeginPlay()
 			myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelSettingsInfoTable->GetRowNames().Num()), LevelSettingForSpawn);
 		}
 	}
-
-	StartSpawnEnemyTimer();
 }
 
 void ANR_GameState::ApplyChanges(TArray<int> Tokens)
@@ -54,6 +52,8 @@ void ANR_GameState::BossKilled()
 void ANR_GameState::StartWavePhase()
 {
 	OnWavePhaseStarts.Broadcast();
+
+	StartSpawnEnemyTimer();
 }
 
 void ANR_GameState::DecreaseEnemies()
@@ -66,6 +66,8 @@ void ANR_GameState::DecreaseEnemies()
 
 void ANR_GameState::ChangeLevel()
 {
+	OnStartChangeLevel.Broadcast();
+
 	// Change this function
 	auto LevelTable = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->LevelsTable;
 	TArray<FName> LevelNames = LevelTable->GetRowNames();
@@ -77,7 +79,7 @@ void ANR_GameState::ChangeLevel()
 
 void ANR_GameState::StartSpawnEnemyTimer()
 {
-	if (EnemySpawnBase.Num() > 0)
+	if (EnemySpawnBase.Num() > 0 && !GetWorldTimerManager().IsTimerActive(SpawnEnemyTimer))
 	{
 		CurrentCoutEnemy = { 0,0,0 };
 		CurrentCoutEnemies = 0;

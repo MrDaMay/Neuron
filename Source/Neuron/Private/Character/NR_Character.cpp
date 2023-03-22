@@ -13,6 +13,7 @@
 #include "Game/NR_GameState.h"
 #include "Game/NR_PlayerState.h"
 #include "Game/NR_PlayerController.h"
+#include "Game/NR_GameInstance.h"
 #include "Enemy/NR_FreezeInterface.h"
 
 // Sets default values
@@ -87,12 +88,15 @@ void ANR_Character::BeginPlay()
 	if (GameState)
 	{
 		GameState->OnTokensChanged.AddDynamic(this, &ANR_Character::UpdateStats);
-		GameState->StartWavePhase();
+		GameState->OnStartChangeLevel.AddDynamic(this, &ANR_Character::SaveWeaponToInstance);
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed;
 
-	InitWeapon("Rifle");
+	//Init weapon
+	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	WeaponSLot = myGameInstance->Weapons;
+	InitWeapon(WeaponSLot[0]);
 
 	auto PlayerController = Cast<ANR_PlayerController>(GetController());
 	PlayerController->OnEndGame.AddDynamic(this, &ANR_Character::AbsolutelyDead);
@@ -531,6 +535,12 @@ TArray<float> ANR_Character::GetStats()
 	Buff.Add(Stats.CoefMovementSpeed);
 
 	return Buff;
+}
+
+void ANR_Character::SaveWeaponToInstance()
+{
+	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	myGameInstance->Weapons = WeaponSLot;
 }
 
 void ANR_Character::CharDead_BP_Implementation()
