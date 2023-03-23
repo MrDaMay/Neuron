@@ -120,9 +120,7 @@ void UNR_GameInstance::SaveGame()
 		SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::CreateSaveGameObject(UNR_SaveGame::StaticClass()));
 	
 
-	SaveGameSlot->Weapons = Weapons;
 	SaveGameSlot->Achievements = Achievements;
-	SaveGameSlot->Tokens = Tokens;
 
 	UGameplayStatics::SaveGameToSlot(SaveGameSlot, "SaveGame", 0);
 }
@@ -133,8 +131,6 @@ void UNR_GameInstance::LoadGame()
 	{
 		UNR_SaveGame* SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::LoadGameFromSlot("SaveGame", 0));
 
-		Weapons = SaveGameSlot->Weapons;
 		Achievements = SaveGameSlot->Achievements;
-		Tokens = SaveGameSlot->Tokens;
 	}
 }
