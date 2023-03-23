@@ -19,6 +19,8 @@ void ANR_GameState::BeginPlay()
 			myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelSettingsInfoTable->GetRowNames().Num()), LevelSettingForSpawn);
 		}
 	}
+
+	StartWavePhase();
 }
 
 void ANR_GameState::ApplyChanges(TArray<int> Tokens)
@@ -34,7 +36,7 @@ void ANR_GameState::StartBossPhase()
 
 	GetWorldTimerManager().SetTimer(SpawnBoss, this, &ANR_GameState::TrySpawnBoss, 1.f, true, 0.f);
 	OnChangeMap.Broadcast();
-	OnBossPhaseStarts.Broadcast(Boss);
+	OnBossPhaseStarts.Broadcast(LevelSettingForSpawn.Boss);
 	
 }
 
@@ -147,7 +149,7 @@ void ANR_GameState::TrySpawnBoss()
 	if (!BossAlive)
 	{
 		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
-		EnemySpawnBase[IndexSpawnBase]->SpawnBoss(Boss);
+		EnemySpawnBase[IndexSpawnBase]->SpawnBoss(LevelSettingForSpawn.Boss);
 	}
 	else
 	{
@@ -161,7 +163,7 @@ void ANR_GameState::TrySpawnBoss()
 
 void ANR_GameState::TimeIsOver()
 {
-	if (--TimeLeft <= 0 || !Boss)
+	if (--TimeLeft <= 0 || !LevelSettingForSpawn.Boss)
 	{
 		GetWorldTimerManager().ClearTimer(BossTimer);
 	}

@@ -33,8 +33,6 @@ ANR_EnemyCharacterBase::ANR_EnemyCharacterBase()
 
 	GetMesh()->SetRenderCustomDepth(true);
 	GetMesh()->CustomDepthStencilValue = 1;
-
-	GetCharacterMovement()->MaxWalkSpeed = MaxSpeed;
 }
 
 // Called when the game starts or when spawned

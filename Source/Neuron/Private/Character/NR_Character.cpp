@@ -16,6 +16,12 @@
 #include "Game/NR_GameInstance.h"
 #include "Enemy/NR_FreezeInterface.h"
 
+void ANR_Character::RollReload()
+{
+	bIsRollReady = true;
+	OnRollReloadEnd.Broadcast();
+}
+
 // Sets default values
 ANR_Character::ANR_Character()
 {
@@ -173,7 +179,7 @@ void ANR_Character::InputAttackReleased()
 
 void ANR_Character::InputRollPressed()
 {
-	if (!RollEnable)
+	if (!RollEnable && bIsRollReady)
 	{
 		RollEnable = true;
 		PlayAnimMontage(RollMontage);
@@ -262,14 +268,7 @@ void ANR_Character::MovementTick(float DeltaTime)
 
 	const float RotatingToCursor = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PointUnderCursor).Yaw;
 
-	if (!RollEnable)
-	{
-		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX);
-		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisY);
-
-		SetActorRotation(FQuat(FRotator(0.0f, RotatingToCursor, 0.0f)));
-	}
-	else
+	if (RollEnable && bIsRollReady)
 	{
 		if (RollTime < MaxRollTime)
 		{
@@ -280,12 +279,23 @@ void ANR_Character::MovementTick(float DeltaTime)
 		{
 			RollEnable = false;
 			RollTime = 0.0f;
+			bIsRollReady = false;
 			Stats.Immortality = false;
 
 			GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 2;
 
 			GetCapsuleComponent()->SetCollisionObjectType(ECC_Pawn);
+
+			OnRollReloadStart.Broadcast();
+			GetWorldTimerManager().SetTimer(RollReloadHandle, this, &ANR_Character::RollReload, 3.0f, false, 3.0f);
 		}
+	}
+	else
+	{
+		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX);
+		AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisY);
+
+		SetActorRotation(FQuat(FRotator(0.0f, RotatingToCursor, 0.0f)));
 	}
 }
 
@@ -329,31 +339,34 @@ void ANR_Character::TakeBonus(FName BonusType)
 	{
 		if (BonusType == "Fire")
 		{
-			//Change params
-			Stats.CoefFireSpeed = Stats.CoefFireSpeed * DamageBonusValue;
-			Stats.CoefDamage = Stats.CoefDamage * DamageBonusValue;
-
-			//Say weapon about changes
-			OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
-
 			//Clean the timer before use
 			if (GetWorldTimerManager().IsTimerActive(FinishFireBonusTimerHamdle))
 				GetWorldTimerManager().ClearTimer(FinishFireBonusTimerHamdle);
+			else
+			{
+				//Change params
+				Stats.CoefFireSpeed = Stats.CoefFireSpeed * DamageBonusValue;
+				Stats.CoefDamage = Stats.CoefDamage * DamageBonusValue;
+
+				//Say weapon about changes
+				OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
+			}
 
 			//Set timer
-			GetWorldTimerManager().SetTimer(FinishFireBonusTimerHamdle, this, &ANR_Character::FinishFireBonus, 15.0f, false, 15.0f);
+			GetWorldTimerManager().SetTimer(FinishFireBonusTimerHamdle, this, &ANR_Character::FinishFireBonus, 5.0f, false, 5.0f);
 		}
 		else
 		{
 			if (BonusType == "Speed")
 			{
-				//Change params
-				Stats.CoefMovementSpeed = Stats.CoefMovementSpeed * SpeedBonusValue;
-				GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
-
 				//Clean the timer before use
 				if (GetWorldTimerManager().IsTimerActive(FinishMovementSpeedBonusTimerHamdle))
 					GetWorldTimerManager().ClearTimer(FinishMovementSpeedBonusTimerHamdle);
+				else
+				{
+					//Change params
+					GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed + Stats.BaseSpeed * Stats.CoefMovementSpeed;
+				}
 
 				//Set timer
 				GetWorldTimerManager().SetTimer(FinishMovementSpeedBonusTimerHamdle, this, &ANR_Character::FinishMovementSpeedBonus, 10.0f, false, 10.0f);
@@ -362,12 +375,14 @@ void ANR_Character::TakeBonus(FName BonusType)
 			{
 				if (BonusType == "Immortality")
 				{
-					//Change params
-					Stats.Immortality = true;
-
 					//Clean the timer before use
 					if (GetWorldTimerManager().IsTimerActive(FinishImmortalityBonusTimerHamdle))
 						GetWorldTimerManager().ClearTimer(FinishImmortalityBonusTimerHamdle);
+					else
+					{
+						//Change params
+						Stats.Immortality = true;
+					}
 
 					//Set timer
 					GetWorldTimerManager().SetTimer(FinishImmortalityBonusTimerHamdle, this, &ANR_Character::FinishImmortalityBonus, ImmortalityBonusValue, false, ImmortalityBonusValue);
@@ -410,8 +425,7 @@ void ANR_Character::FinishImmortalityBonus()
 void ANR_Character::FinishMovementSpeedBonus()
 {
 	//Reset params
-	Stats.CoefMovementSpeed = Stats.CoefMovementSpeed / SpeedBonusValue;
-	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed - Stats.BaseSpeed * Stats.CoefMovementSpeed;
 }
 
 void ANR_Character::FreezeBonusFunction()

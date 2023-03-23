@@ -99,15 +99,7 @@ public:
 	int32 CurrentCoutEnemies;
 	int32 CurrentCoutEnemiesForKill;
 	FEnemyLevelSettings LevelSettingForSpawn;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		float MaxTimeForSpawn = 10.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TSubclassOf<class ANR_EnemyBoss> Boss = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TArray<FEnemyCharacters> EnemyCharacters;
-	UFUNCTION(BlueprintCallable, Category = "SpawnEnemy")
-		void StartSpawnEnemyTimer();
+	void StartSpawnEnemyTimer();
 	FTimerHandle SpawnEnemyTimer;
 	void ChoiseOfEnemyForSpawn();
 	bool TrySpawnEnemy(int i);

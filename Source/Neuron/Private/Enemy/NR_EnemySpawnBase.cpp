@@ -65,7 +65,7 @@ void ANR_EnemySpawnBase::SpawnEnemy(TSubclassOf<ANR_EnemyCharacterBase> EnemyObj
 	FVector SpawnLocation = UKismetMathLibrary::RandomPointInBoundingBox(GetActorLocation(), BoxSize);
 	FRotator SpawnRotation = FRotator(0);
 	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	GetWorld()->SpawnActor(EnemyObject, &SpawnLocation, &SpawnRotation, SpawnParameters);
 }
