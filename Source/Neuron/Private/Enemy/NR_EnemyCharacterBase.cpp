@@ -63,6 +63,9 @@ float ANR_EnemyCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const&
 	if (HitSound)
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, GetActorLocation());
 
+	if (HitMontage)
+		PlayAnimMontage(HitMontage);
+
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -168,6 +171,9 @@ void ANR_EnemyCharacterBase::AttackEnemy(FName NotifyName,
 		{
 			if (Hit.HitObjectHandle.FetchActor()->ActorHasTag("Player"))
 			{
+				if (AttackSound)
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(), AttackSound, GetActorLocation());
+
 				const TSubclassOf<UDamageType> DamageType;
 				UGameplayStatics::ApplyDamage(Hit.GetActor(), BaseAttackDamage, GetController(), this, DamageType);
 			}

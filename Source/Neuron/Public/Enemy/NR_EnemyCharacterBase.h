@@ -90,6 +90,8 @@ public:
 		UAnimMontage* DeadMontage = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
 		UAnimMontage* AttackMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+		UAnimMontage* HitMontage = nullptr;
 
 	//State
 	UFUNCTION(BlueprintCallable)
@@ -116,6 +118,8 @@ public:
 		USoundBase* SpawnSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 		USoundBase* HitSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+		USoundBase* AttackSound;
 	//Sound end
 
 	//Drop start
