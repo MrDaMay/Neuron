@@ -18,8 +18,4 @@ public:
 
 	//Achivments
 	TArray<float> Achievements;
-	//Tokens
-	TArray<int> Tokens;
-	//CharacterWeapons
-	TArray<FName> Weapons;
 };
