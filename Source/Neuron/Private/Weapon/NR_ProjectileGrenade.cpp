@@ -22,9 +22,9 @@ void ANR_ProjectileGrenade::ImpactProjectile()
 	GetWorldTimerManager().SetTimer(ExploseTimerHandle, this, &ANR_ProjectileGrenade::Explose, ProjectileSetting.TimeToExplose, false, ProjectileSetting.TimeToExplose);
 }
 
-void ANR_ProjectileGrenade::InitProjectile(FProjectileInfo InitParam)
+void ANR_ProjectileGrenade::InitProjectile(FProjectileInfo InitParam, float CoefDamage)
 {
-	Super::InitProjectile(InitParam);
+	Super::InitProjectile(InitParam, CoefDamage);
 }
 
 void ANR_ProjectileGrenade::Explose()

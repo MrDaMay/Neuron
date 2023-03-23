@@ -12,6 +12,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponParamsChange, float, CoefFireSpeed, float, CoefDamage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponSwitched, FName, WeaponName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollReloadStart);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollReloadEnd);
 
 UCLASS()
 class NEURON_API ANR_Character : public ACharacter
@@ -33,6 +35,12 @@ protected:
 	float AxisX = 0.0f;
 	float AxisY = 0.0f;
 	//Input end
+
+	//Reload roll start
+	FTimerHandle RollReloadHandle;
+	bool bIsRollReady = true;
+	void RollReload();
+	//Reload roll end
 
 public:
 	// Sets default values for this character's properties
@@ -80,6 +88,8 @@ public:
 	FOnWeaponParamsChange OnWeaponParamsChange;
 	UPROPERTY(BlueprintAssignable)
 	FOnWeaponSwitched OnWeaponSwitched;
+	FOnRollReloadStart OnRollReloadStart;
+	FOnRollReloadEnd OnRollReloadEnd;
 	//Delegate end
 
 	//Cursor start
@@ -172,15 +182,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
 		float SpeedBonusValue = 2.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
-		float ImmortalityBonusValue = 5.0f;
+		float ImmortalityBonusValue = 3.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
 		float FreezeBonusValue = 5.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
 		float FreezeBonusRadius = 1500.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
-		float BombDamageBonusValue = 50.0f;
+		float BombDamageBonusValue = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
-		float BombDamageBonusRadius = 1000.0f;
+		float BombDamageBonusRadius = 400.0f;
 	//Bonus params end
 
 	//Inventory system start

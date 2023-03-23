@@ -2,6 +2,8 @@
 
 
 #include "Game/NR_GameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "Game/NR_SaveGame.h"
 
 bool UNR_GameInstance::GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& OutInfo)
 {
@@ -105,5 +107,34 @@ void UNR_GameInstance::InitTokens()
 	for (int i = 0; i < 6; i++)
 	{
 		Tokens.Add(0);
+	}
+}
+
+void UNR_GameInstance::SaveGame()
+{
+	UNR_SaveGame* SaveGameSlot;
+
+	if (UGameplayStatics::DoesSaveGameExist("SaveGame", 0))
+		SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::LoadGameFromSlot("SaveGame", 0));
+	else
+		SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::CreateSaveGameObject(UNR_SaveGame::StaticClass()));
+	
+
+	SaveGameSlot->Weapons = Weapons;
+	SaveGameSlot->Achievements = Achievements;
+	SaveGameSlot->Tokens = Tokens;
+
+	UGameplayStatics::SaveGameToSlot(SaveGameSlot, "SaveGame", 0);
+}
+
+void UNR_GameInstance::LoadGame()
+{
+	if(UGameplayStatics::DoesSaveGameExist("SaveGame", 0))
+	{
+		UNR_SaveGame* SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::LoadGameFromSlot("SaveGame", 0));
+
+		Weapons = SaveGameSlot->Weapons;
+		Achievements = SaveGameSlot->Achievements;
+		Tokens = SaveGameSlot->Tokens;
 	}
 }

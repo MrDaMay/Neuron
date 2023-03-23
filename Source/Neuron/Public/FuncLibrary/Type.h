@@ -152,6 +152,8 @@ struct FEnemyLevelSettings : public FTableRowBase
 		TArray<FEnemyCharacters> EnemyCharacters;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		float MaxTimeForSpawn = 10.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		TSubclassOf<class ANR_EnemyBoss> Boss;
 };
 
 USTRUCT(BlueprintType)

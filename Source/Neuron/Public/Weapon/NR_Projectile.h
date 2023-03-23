@@ -40,7 +40,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void InitProjectile(FProjectileInfo InitParam);
+		virtual void InitProjectile(FProjectileInfo InitParam, float CoefDamage);
 
 	virtual void ImpactProjectile();
 
@@ -55,4 +55,6 @@ public:
 
 	//Change velocity
 	virtual void PostNetReceiveVelocity(const FVector& NewVelocity) override;
+
+	float DamageCoef = 1.0f;
 };

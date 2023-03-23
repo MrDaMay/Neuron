@@ -57,7 +57,7 @@ void ANR_Projectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ANR_Projectile::InitProjectile(FProjectileInfo InitParam)
+void ANR_Projectile::InitProjectile(FProjectileInfo InitParam, float CoefDamage)
 {
 	this->SetLifeSpan(InitParam.ProjectileLifeTime);
 
@@ -79,6 +79,8 @@ void ANR_Projectile::InitProjectile(FProjectileInfo InitParam)
 	BulletProjectileMovement->MaxSpeed = InitParam.ProjectMaxSpeed;
 
 	ProjectileSetting = InitParam;
+
+	DamageCoef = CoefDamage;
 }
 
 void ANR_Projectile::ImpactProjectile()
@@ -159,7 +161,7 @@ void ANR_Projectile::BulletCollisionSphereBeginOverlap(UPrimitiveComponent* Over
 		}
 
 
-		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage, SweepResult.TraceStart, SweepResult, GetInstigatorController(), this, NULL);
+		UGameplayStatics::ApplyPointDamage(OtherActor, ProjectileSetting.ProjectileDamage * DamageCoef, SweepResult.TraceStart, SweepResult, GetInstigatorController(), this, NULL);
 
 		if (GetParentNativeClass(OtherActor->GetClass()) == ANR_EnvinronmentObjects::StaticClass())
 		{

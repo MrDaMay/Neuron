@@ -52,7 +52,24 @@ void ANR_Weapon::BeginPlay()
 		StaticMeshWeapon->DestroyComponent(true);
 	}
 
+	if(Pawn && IsPlayer)
+	{
+		Pawn->OnWeaponParamsChange.AddDynamic(this, &ANR_Weapon::UpdateWeaponParams);
+	}
+
 	FireTimer = 100.0f;
+}
+
+void ANR_Weapon::UpdateWeaponParams(float Speed, float Damage)
+{
+	CoefFireSpeed = Speed;
+	CoefFireDamage = Damage;
+
+	if (GetWorldTimerManager().IsTimerActive(FireTimerHandle))
+	{
+		GetWorldTimerManager().ClearTimer(FireTimerHandle);
+		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::FireProjectile, WeaponSetting.RateOfFire * CoefFireSpeed, true, WeaponSetting.RateOfFire * CoefFireSpeed);
+	}
 }
 
 // Called every frame
@@ -79,7 +96,7 @@ void ANR_Weapon::FireButtonPressed(bool bIsFire)
 				FireProjectile();
 			}
 
-			GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::FireProjectile, WeaponSetting.RateOfFire, true, WeaponSetting.RateOfFire);
+			GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ANR_Weapon::FireProjectile, WeaponSetting.RateOfFire * CoefFireSpeed, true, WeaponSetting.RateOfFire * CoefFireSpeed);
 		}
 		else
 			GetWorldTimerManager().SetTimer(LaserFireTimerHandle, this, &ANR_Weapon::LaserFire, WeaponSetting.DelayLaserForFire, true, WeaponSetting.DelayLaserForFire);
@@ -143,7 +160,7 @@ void ANR_Weapon::FireProjectile()
 			ANR_Projectile* Projectile = Cast<ANR_Projectile>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawmParams));
 			if (Projectile)
 			{
-				Projectile->InitProjectile(ProjectileInfo);
+				Projectile->InitProjectile(ProjectileInfo, CoefFireDamage);
 			}
 
 			CoefConfusionShot = CoefConfusionShot + Confusion;

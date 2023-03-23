@@ -73,4 +73,10 @@ public:
 
 	//Weapon slot in character
 	TArray<FName> Weapons{ "Rifle" };
+
+	//Save game
+	UFUNCTION(BlueprintCallable)
+	void SaveGame();
+	UFUNCTION(BlueprintCallable)
+	void LoadGame();
 };

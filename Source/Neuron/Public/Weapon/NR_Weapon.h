@@ -48,6 +48,11 @@ public:
 	FWeaponInfo WeaponSetting;
 	//Params end
 
+	//UpdateWeaponParams
+	void UpdateWeaponParams(float Speed, float Damage);
+	float CoefFireSpeed = 1.0f;
+	float CoefFireDamage = 1.0f;
+
 	//Fire start
 	UFUNCTION()
 		void FireButtonPressed(bool bIsFire);

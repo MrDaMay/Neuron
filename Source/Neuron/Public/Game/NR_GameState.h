@@ -65,6 +65,16 @@ protected:
 	//Level number
 	FTimerHandle StartNewLevel;
 
+	//Spawn start
+	TArray<int32> CurrentCoutEnemy;
+	int32 MaxSpawnEnemies;
+	int32 CurrentCoutEnemies;
+	FTimerHandle SpawnEnemyTimer;
+	void StartSpawnEnemyTimer();
+	void ChoiseOfEnemyForSpawn();
+	bool TrySpawnEnemy(int i);
+	//Spawn end
+
 public:
 
 	//Function for applying changes to CharStats from inserted tokens
@@ -90,27 +100,14 @@ public:
 		void StartWavePhase();
 	UFUNCTION(BlueprintCallable)
 		void DecreaseEnemies();
+	UFUNCTION(BlueprintCallable)
 	void ChangeLevel();
 
 	//Spawn start
-	TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
-	TArray<int32> CurrentCoutEnemy;
-	int32 MaxSpawnEnemies;
-	int32 CurrentCoutEnemies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	int32 CurrentCoutEnemiesForKill;
+	TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
 	FEnemyLevelSettings LevelSettingForSpawn;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		float MaxTimeForSpawn = 10.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TSubclassOf<class ANR_EnemyBoss> Boss = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpawnEnemy")
-		TArray<FEnemyCharacters> EnemyCharacters;
-	UFUNCTION(BlueprintCallable, Category = "SpawnEnemy")
-		void StartSpawnEnemyTimer();
-	FTimerHandle SpawnEnemyTimer;
-	void ChoiseOfEnemyForSpawn();
-	bool TrySpawnEnemy(int i);
 	void TrySpawnBoss();
 	//Spawn end
 };

@@ -24,7 +24,7 @@ public:
 
 	virtual void ImpactProjectile() override;
 
-	virtual void InitProjectile(FProjectileInfo InitParam) override;
+	virtual void InitProjectile(FProjectileInfo InitParam, float CoefDamage) override;
 
 	void Explose();
 

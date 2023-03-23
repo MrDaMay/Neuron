@@ -49,7 +49,7 @@ void UNR_ProjectileWeaponBossComponent::SpawnProjectile()
 
 		ANR_Projectile* Projectile = Cast<ANR_Projectile>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawmParams));
 		if(Projectile)
-			Projectile->InitProjectile(ProjectileInfo);
+			Projectile->InitProjectile(ProjectileInfo, 1.0f);
 
 		CoefConfusionShot = CoefConfusionShot + 30.0f;
 	}

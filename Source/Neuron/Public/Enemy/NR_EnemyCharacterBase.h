@@ -109,10 +109,6 @@ public:
 	void EndFreeze();
 	//Interface freeze end
 
-	//Movement
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-		float MaxSpeed = 400.0f;
-
 	//Sound start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 		USoundBase* DeathSound;
