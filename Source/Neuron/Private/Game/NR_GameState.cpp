@@ -3,6 +3,7 @@
 #include "Game/NR_GameState.h"
 #include "Enemy/Boss/NR_EnemyBoss.h"
 #include "Game/NR_GameInstance.h"
+#include "Game/NR_PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -44,6 +45,12 @@ void ANR_GameState::BossKilled()
 {
 	OnBossDies.Broadcast();
 
+	auto myPlayerState = Cast<ANR_PlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (myPlayerState)
+	{
+		myPlayerState->SetBossTime(TimeLeft);
+	}
+
 	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (myGameInstance)
 		myGameInstance->LevelNumb++;
@@ -73,6 +80,13 @@ void ANR_GameState::ChangeLevel()
 	// Change this function
 	auto LevelTable = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->LevelsTable;
 	TArray<FName> LevelNames = LevelTable->GetRowNames();
+
+	auto myPlayerState = Cast<ANR_PlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (myPlayerState)
+	{
+		myPlayerState->IncrementLevel();
+		myPlayerState->SaveCounters();
+	}
 
 	int idx = UKismetMathLibrary::RandomIntegerInRange(0, LevelNames.Num() - 1);
 
@@ -155,7 +169,7 @@ void ANR_GameState::TrySpawnBoss()
 	{
 		GetWorldTimerManager().ClearTimer(SpawnBoss);
 
-		TimeLeft = 7.f;
+		TimeLeft = 12.f;
 		GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
 	}
 }

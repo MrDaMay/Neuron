@@ -21,6 +21,7 @@ protected:
 
 	TArray<float> Achievements;
 	TArray<int> Tokens;
+	TArray<float> Counters;
 
 	FName PlayerName;
 
@@ -65,6 +66,10 @@ public:
 
 	void LoadSavedAchievements(TArray<int> Achievements);
 	void InitTokens();
+
+	void SetCounters(TArray<float> Buffer) { Counters = Buffer; };
+	TArray<float> GetCounters() { return Counters; }
+	void ClearCounters() { Counters.Empty(); };
 
 	UFUNCTION(BlueprintCallable)
 	void SetName(FName Name) { PlayerName = Name; }
