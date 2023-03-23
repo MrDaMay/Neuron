@@ -100,6 +100,7 @@ public:
 		void StartWavePhase();
 	UFUNCTION(BlueprintCallable)
 		void DecreaseEnemies();
+	UFUNCTION(BlueprintCallable)
 	void ChangeLevel();
 
 	//Spawn start
