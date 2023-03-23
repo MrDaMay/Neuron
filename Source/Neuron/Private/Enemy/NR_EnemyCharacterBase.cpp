@@ -114,6 +114,8 @@ void ANR_EnemyCharacterBase::CharacterDead()
 {
 	KillScoreComponent->OwnerWasDead();
 
+	GetCapsuleComponent()->SetCollisionProfileName("DeadEnemy");
+
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->StopMovementImmediately();
@@ -158,7 +160,7 @@ void ANR_EnemyCharacterBase::AttackEnemy(FName NotifyName,
 	{
 		TArray<AActor*> ActorIgnore;
 		FVector StartTraceVector = GetActorLocation() + GetActorForwardVector() * 50.0f;
-		FVector EndTraceVector = GetActorLocation() + GetActorForwardVector() * 200.0f;
+		FVector EndTraceVector = GetActorLocation() + GetActorForwardVector() * 250.0f;
 		FHitResult Hit;
 		UKismetSystemLibrary::SphereTraceSingle(this, StartTraceVector, EndTraceVector, RadiusMeleeAttack,
 			ETraceTypeQuery::TraceTypeQuery14, false, ActorIgnore, EDrawDebugTrace::ForDuration,
