@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "FuncLibrary/Type.h"
+#include "Game/NR_SaveGame.h"
 #include "NR_GameInstance.generated.h"
 
 /**
@@ -73,4 +74,11 @@ public:
 
 	//Weapon slot in character
 	TArray<FName> Weapons{ "Rifle" };
+
+	//Save game
+	UFUNCTION(BlueprintCallable)
+	void SaveGame();
+	UFUNCTION(BlueprintCallable)
+	void LoadGame();
+	UNR_SaveGame* SaveGameSlot;
 };
