@@ -20,14 +20,15 @@ protected:
 
 	//Score variable
 	float PlayerScore = 0.0f;
-	// 
 	float NumKilled = 0.0f;
-	//
 	float NumBonus = 0.0f;
-	//
-	int PassedLevels = 0.0f;
-	//
-	int NumBossKilled = 0.0f;
+	int BossTime = 0;
+	int SurviveTime = 0;
+	int NoDamageLevels = 0;
+	int PassedLevels = 0;
+	int NumBossKilled = 0;
+	int CurrentLevel = 0;
+	int Tokens = 0;
 	//Array ind - achievement num, value - achievement level
 	TArray<int> Achievements;
 
@@ -51,6 +52,14 @@ public:
 
 	//Function for check win condition (if we have score mechanics)
 	void CheckWinCondition(float CurrentScore);
+
+	void SetNoDamageLevel();
+
+	void SetBossTime(int Seconds);
+
+	//Functions for transmitting data between game loops
+	void SaveCounters();
+	void LoadCounters();
 
 	//Calculating earn achivements;
 	UFUNCTION(BlueprintCallable)
