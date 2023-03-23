@@ -65,6 +65,16 @@ protected:
 	//Level number
 	FTimerHandle StartNewLevel;
 
+	//Spawn start
+	TArray<int32> CurrentCoutEnemy;
+	int32 MaxSpawnEnemies;
+	int32 CurrentCoutEnemies;
+	FTimerHandle SpawnEnemyTimer;
+	void StartSpawnEnemyTimer();
+	void ChoiseOfEnemyForSpawn();
+	bool TrySpawnEnemy(int i);
+	//Spawn end
+
 public:
 
 	//Function for applying changes to CharStats from inserted tokens
@@ -93,16 +103,10 @@ public:
 	void ChangeLevel();
 
 	//Spawn start
-	TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
-	TArray<int32> CurrentCoutEnemy;
-	int32 MaxSpawnEnemies;
-	int32 CurrentCoutEnemies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	int32 CurrentCoutEnemiesForKill;
+	TArray<ANR_EnemySpawnBase*> EnemySpawnBase;
 	FEnemyLevelSettings LevelSettingForSpawn;
-	void StartSpawnEnemyTimer();
-	FTimerHandle SpawnEnemyTimer;
-	void ChoiseOfEnemyForSpawn();
-	bool TrySpawnEnemy(int i);
 	void TrySpawnBoss();
 	//Spawn end
 };
