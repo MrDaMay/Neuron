@@ -14,6 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponParamsChange, float, CoefF
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponSwitched, FName, WeaponName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollReloadStart);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollReloadEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossCausedDamage);
 
 UCLASS()
 class NEURON_API ANR_Character : public ACharacter
@@ -90,7 +91,13 @@ public:
 	FOnWeaponSwitched OnWeaponSwitched;
 	FOnRollReloadStart OnRollReloadStart;
 	FOnRollReloadEnd OnRollReloadEnd;
+	FOnBossCausedDamage OnBossCausedDamage;
 	//Delegate end
+
+	//Boss projectile
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+		TSubclassOf<ANR_Projectile> BossProjectile;
+	//
 
 	//Cursor start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")

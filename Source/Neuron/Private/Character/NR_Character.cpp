@@ -99,9 +99,18 @@ void ANR_Character::BeginPlay()
 
 	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed;
 
+	auto myPlayerState = Cast<ANR_PlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (myPlayerState)
+	{
+		myPlayerState->LoadCounters();
+	}
+
 	//Init weapon
 	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	WeaponSLot = myGameInstance->Weapons;
+	if (myGameInstance)
+	{
+		WeaponSLot = myGameInstance->Weapons;
+	}
 	InitWeapon(WeaponSLot[0]);
 
 	auto PlayerController = Cast<ANR_PlayerController>(GetController());
@@ -115,6 +124,11 @@ float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 		HealthComponent->ChangeHealthValue(-DamageAmount);
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	//if ()
+	//{
+	//	OnBossCausedDamage.Broadcast();
+	//}
 }
 
 // Called every frame
@@ -517,7 +531,7 @@ void ANR_Character::UpdateStats(TArray<int> Tokens)
 	}
 
 	HealthComponent->CoefDamageResist = Stats.CoefDamageResist;
-	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
 }
 
 void ANR_Character::ApplyParamsOnStats()
