@@ -22,12 +22,12 @@ protected:
 	float PlayerScore = 0.0f;
 	float NumKilled = 0.0f;
 	float NumBonus = 0.0f;
-	int BossTime = 0;
+	int BossTime = 100;
 	int SurviveTime = 0;
 	int NoDamageLevels = 0;
 	int PassedLevels = 0;
-	int NumBossKilled = 0;
 	int CurrentLevel = 0;
+	int NumBossKilled = 0;
 	int Tokens = 0;
 	//Array ind - achievement num, value - achievement level
 	TArray<int> Achievements;
@@ -56,6 +56,8 @@ public:
 	void SetNoDamageLevel();
 
 	void SetBossTime(int Seconds);
+
+	void AddTokens(int Num);
 
 	//Functions for transmitting data between game loops
 	void SaveCounters();

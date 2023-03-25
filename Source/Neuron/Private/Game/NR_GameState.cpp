@@ -6,6 +6,7 @@
 #include "Game/NR_PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Collectable/NR_CollectableBase.h"
 
 
 void ANR_GameState::BeginPlay()
@@ -30,11 +31,20 @@ void ANR_GameState::ApplyChanges(TArray<int> Tokens)
 	MyGameInstance->AddTokens(Tokens);
 
 	OnTokensChanged.Broadcast(Tokens);
+
+	int count = 0;
+	for (int i = 0; i < 6; ++i)
+	{
+		count += Tokens[i];
+	}
+
+	Cast<ANR_PlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0))->AddTokens(count);
 }
 
 void ANR_GameState::StartBossPhase()
 {
 
+	ClearLevel();
 	GetWorldTimerManager().SetTimer(SpawnBoss, this, &ANR_GameState::TrySpawnBoss, 1.f, true, 0.f);
 	OnChangeMap.Broadcast();
 	OnBossPhaseStarts.Broadcast(LevelSettingForSpawn.Boss);
@@ -88,9 +98,20 @@ void ANR_GameState::ChangeLevel()
 		myPlayerState->SaveCounters();
 	}
 
-	int idx = UKismetMathLibrary::RandomIntegerInRange(0, LevelNames.Num() - 1);
+	int idx = UKismetMathLibrary::RandomIntegerInRange(0, LevelNames.Num() - 2);
 
 	UGameplayStatics::OpenLevel(GetWorld(), LevelNames[idx]);
+}
+
+void ANR_GameState::ClearLevel()
+{
+	TArray<AActor*> DroppedObjects;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANR_CollectableBase::StaticClass(), DroppedObjects);
+
+	for (auto Object : DroppedObjects)
+	{
+		Object->Destroy();
+	}
 }
 
 void ANR_GameState::StartSpawnEnemyTimer()
@@ -169,7 +190,7 @@ void ANR_GameState::TrySpawnBoss()
 	{
 		GetWorldTimerManager().ClearTimer(SpawnBoss);
 
-		TimeLeft = 12.f;
+		TimeLeft = 0.f;
 		GetWorldTimerManager().SetTimer(BossTimer, this, &ANR_GameState::TimeIsOver, 1.f, true, 1.f);
 	}
 }
@@ -177,7 +198,7 @@ void ANR_GameState::TrySpawnBoss()
 
 void ANR_GameState::TimeIsOver()
 {
-	if (--TimeLeft <= 0 || !LevelSettingForSpawn.Boss)
+	if (++TimeLeft > 12 || !LevelSettingForSpawn.Boss)
 	{
 		GetWorldTimerManager().ClearTimer(BossTimer);
 	}

@@ -106,8 +106,14 @@ void UNR_GameInstance::InitTokens()
 {
 	for (int i = 0; i < 6; i++)
 	{
-		Tokens.Add(0);
+		Tokens[i] = 0;
 	}
+}
+
+void UNR_GameInstance::ResetInstance()
+{
+	InitTokens();
+	Counters.Empty();
 }
 
 void UNR_GameInstance::SaveGame()
@@ -131,6 +137,7 @@ void UNR_GameInstance::LoadGame()
 	{
 		UNR_SaveGame* SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::LoadGameFromSlot("SaveGame", 0));
 
-		Achievements = SaveGameSlot->Achievements;
+		if(!SaveGameSlot->Achievements.IsEmpty() && SaveGameSlot->Achievements.Num() == 9)
+			Achievements = SaveGameSlot->Achievements;
 	}
 }

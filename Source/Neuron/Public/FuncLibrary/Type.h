@@ -165,6 +165,8 @@ struct FAchievementLevel
 		float Multiplier;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
 		UTexture2D* Texture;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Info")
+		int Requirement;
 };
 
 USTRUCT(BlueprintType)
@@ -176,6 +178,10 @@ struct FAchivementsInfo : public FTableRowBase
 		FName AchievementName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Achievement")
 		TArray<FAchievementLevel> Levels;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Achievement")
+		FText AchievementDescription;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Achievement")
+		FText AchievementCondition;
 };
 
 USTRUCT(BlueprintType)
@@ -188,7 +194,9 @@ struct FTokensInfo : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
 		UTexture2D* Texture;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
-		float Multiplier;
+		float CharMultiplier;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
+		float BossMultiplier;
 };
 
 
