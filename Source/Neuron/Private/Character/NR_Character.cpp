@@ -86,9 +86,6 @@ void ANR_Character::BeginPlay()
 		}
 	}
 
-	//Initialize character stats from GameInstance
-	ApplyParamsOnStats();
-
 	//Sending initial stats to GameState for managing any changes and bind to Stats Update
 	auto GameState = Cast<ANR_GameState>(UGameplayStatics::GetGameState(GetWorld()));
 	if (GameState)
@@ -109,9 +106,13 @@ void ANR_Character::BeginPlay()
 	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (myGameInstance)
 	{
+		myGameInstance->LoadGame();
 		WeaponSLot = myGameInstance->Weapons;
 	}
 	InitWeapon(WeaponSLot[0]);
+
+	//Initialize character stats from GameInstance
+	ApplyParamsOnStats();
 
 	auto PlayerController = Cast<ANR_PlayerController>(GetController());
 	PlayerController->OnEndGame.AddDynamic(this, &ANR_Character::AbsolutelyDead);
@@ -125,7 +126,7 @@ float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	//if ()
+	//if (Cast<TSubclassOf<ANR_Projectile>>(DamageCauser))
 	//{
 	//	OnBossCausedDamage.Broadcast();
 	//}
@@ -359,7 +360,7 @@ void ANR_Character::TakeBonus(FName BonusType)
 			else
 			{
 				//Change params
-				Stats.CoefFireSpeed = Stats.CoefFireSpeed * DamageBonusValue;
+				Stats.CoefFireSpeed = Stats.CoefFireSpeed / DamageBonusValue;
 				Stats.CoefDamage = Stats.CoefDamage * DamageBonusValue;
 
 				//Say weapon about changes
@@ -423,7 +424,7 @@ void ANR_Character::TakeBonus(FName BonusType)
 void ANR_Character::FinishFireBonus()
 {
 	//Reset params
-	Stats.CoefFireSpeed = Stats.CoefFireSpeed / DamageBonusValue;
+	Stats.CoefFireSpeed = Stats.CoefFireSpeed * DamageBonusValue;
 	Stats.CoefDamage = Stats.CoefDamage / DamageBonusValue;
 
 	//Say weapon about changes
@@ -439,7 +440,7 @@ void ANR_Character::FinishImmortalityBonus()
 void ANR_Character::FinishMovementSpeedBonus()
 {
 	//Reset params
-	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed - Stats.BaseSpeed * Stats.CoefMovementSpeed;
+	GetCharacterMovement()->MaxWalkSpeed -= Stats.BaseSpeed * Stats.CoefMovementSpeed;
 }
 
 void ANR_Character::FreezeBonusFunction()
@@ -517,39 +518,65 @@ void ANR_Character::TakeToken(FName Token)
 void ANR_Character::UpdateStats(TArray<int> Tokens)
 {
 
-	Stats.CoefDamage += Tokens[1] * 0.02f;
-	Stats.CoefDamageResist += Tokens[2] * 0.1f;
-	Stats.CoefFireSpeed += Tokens[3] * 0.02f;
-	Stats.CoefMovementSpeed += Tokens[0] * 0.05f;
+	auto GameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	auto Table = GameInstance->TokensInfoTable;
+
+	TArray<FName> RowNames = Table->GetRowNames();
+	TArray<float> Multipliers;
+
+	for (auto Name : RowNames)
+	{
+		auto Row = Table->FindRow<FTokensInfo>(Name, "");
+		Multipliers.Add(Row->CharMultiplier);
+
+	}
+
+	Stats.CoefMovementSpeed += Tokens[0] * Multipliers[0];
+	Stats.CoefDamage += Tokens[1] * Multipliers[1];
+	Stats.CoefDamageResist += Tokens[2] * Multipliers[2];
+	Stats.CoefFireSpeed += Tokens[3] * Multipliers[3];
 
 	if (Tokens[4])
 	{
-		Stats.CoefDamage += Tokens[4] * 0.02f;
-		Stats.CoefDamageResist += Tokens[4] * 0.1f;
-		Stats.CoefFireSpeed += Tokens[4] * 0.02f;
-		Stats.CoefMovementSpeed += Tokens[4] * 0.05f;
+		Stats.CoefMovementSpeed += Tokens[4] * Multipliers[4];
+		Stats.CoefDamage += Tokens[4] * Multipliers[4];
+		Stats.CoefDamageResist += Tokens[4] * Multipliers[4];
+		Stats.CoefFireSpeed += Tokens[4] * Multipliers[4];
 	}
 
 	HealthComponent->CoefDamageResist = Stats.CoefDamageResist;
 	GetCharacterMovement()->MaxWalkSpeed = Stats.BaseSpeed * Stats.CoefMovementSpeed;
+	OnWeaponParamsChange.Broadcast(Stats.CoefFireSpeed, Stats.CoefDamage);
+
 }
 
 void ANR_Character::ApplyParamsOnStats()
 {
 	auto MyGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
-	MyGameInstance->InitAchievements();
-	MyGameInstance->InitTokens();
-
 	auto Achievements = MyGameInstance->GetAchievements();
 	auto Tokens = MyGameInstance->GetTokens();
 
+	TArray<float> Multipliers;
+
+	auto GameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	auto Table = GameInstance->AchievementsInfoTable;
+
+	TArray<FName> RowNames = Table->GetRowNames();
+
+	for (int i = 0; i < 9; i++)
+	{
+		auto Row = Table->FindRow<FAchivementsInfo>(RowNames[i], "");
+		auto Levels = Row->Levels;
+
+		Multipliers.Add(Levels[Achievements[i]].Multiplier);
+	}
 
 
-	Stats.CoefDamage *= (1 + Achievements[0] + Achievements[2] + Achievements[5] + Achievements[7]);
-	Stats.CoefFireSpeed *= (1 + Achievements[3] + Achievements[5] + Achievements[7]);
-	Stats.CoefDamageResist *= (1 + Achievements[4] + Achievements[5] + Achievements[7]);
-	Stats.CoefMovementSpeed *= (1 + Achievements[6] + Achievements[5] + Achievements[7]);
+	Stats.CoefDamage *= (1 + Multipliers[0] + Multipliers[2] + Multipliers[5] + Multipliers[7]);
+	Stats.CoefFireSpeed *= (1 + Multipliers[3] + Multipliers[5] + Multipliers[7]);
+	Stats.CoefDamageResist *= (1 + Multipliers[4] + Multipliers[5] + Multipliers[7]);
+	Stats.CoefMovementSpeed *= (1 + Multipliers[6] + Multipliers[5] + Multipliers[7]);
 
 	UpdateStats(Tokens);
 }

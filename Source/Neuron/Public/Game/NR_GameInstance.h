@@ -19,8 +19,8 @@ protected:
 
 	//Achviements Array, contains achievement index and its level for stats increasing
 
-	TArray<float> Achievements;
-	TArray<int> Tokens;
+	TArray<float> Achievements = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	TArray<int> Tokens = {0, 0, 0, 0, 0, 0};
 	TArray<float> Counters;
 
 	FName PlayerName;
@@ -59,7 +59,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddTokens(TArray<int> Buff);
+	UFUNCTION(BlueprintCallable)
 	TArray<float> GetAchievements() { return Achievements; }
+	UFUNCTION(BlueprintCallable)
 	TArray<int> GetTokens() { return Tokens; }
 
 	void InitAchievements();
@@ -78,6 +80,10 @@ public:
 
 	//Weapon slot in character
 	TArray<FName> Weapons{ "Rifle" };
+
+	//Reset for a new loop
+	UFUNCTION(BlueprintCallable)
+	void ResetInstance();
 
 	//Save game
 	UFUNCTION(BlueprintCallable)

@@ -34,6 +34,11 @@ void ANR_PlayerState::SetBossTime(int Seconds)
 	BossTime = Seconds;
 }
 
+void ANR_PlayerState::AddTokens(int Num)
+{
+	Tokens += Num;
+}
+
 void ANR_PlayerState::SaveCounters()
 {
 	TArray<float> Buffer;
@@ -83,21 +88,39 @@ TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 {
 	TArray<int> Buff;
 	TArray<FVector2D> BuffEarnedAchievements;
+	TArray<int> Conditions;
+
+	auto GameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	auto Table = GameInstance->AchievementsInfoTable;
+	
+	TArray<FName> RowNames = Table->GetRowNames();
+
+	for (auto Name : RowNames)
+	{
+		auto Row = Table->FindRow<FAchivementsInfo>(Name, "");
+		auto Levels = Row->Levels;
+
+		for (auto Level : Levels)
+		{
+			Conditions.Add(Level.Requirement);
+		}
+	}
+
 
 	Buff.Init(0, 9);
 	
-	Buff[0] = (NumKilled >= 100) + (NumKilled >= 300) + (NumKilled >= 1000);
-	Buff[1] = (NumBonus >= 10) + (NumBonus >= 20) + (NumBonus >= 50);
+	Buff[0] = (NumKilled >= Conditions[0]) + (NumKilled >= Conditions[1]) + (NumKilled >= Conditions[2]);
+	Buff[1] = (NumBonus >= Conditions[4]) + (NumBonus >= Conditions[5]) + (NumBonus >= Conditions[6]);
 	Buff[2] = 0;
-	Buff[3] = (BossTime > 0) + (BossTime >= 5) + (BossTime >= 7);
-	Buff[4] = (SurviveTime >= 1) + (SurviveTime >= 2) + (SurviveTime >= 5);
-	Buff[5] = (NoDamageLevels >= 1) + (NoDamageLevels >= 2) + (NoDamageLevels >= 3);
-	Buff[6] = (CurrentLevel >= 3) + (CurrentLevel >= 5) + (CurrentLevel >= 7);
-	Buff[7] = (Tokens >= 10) + (Tokens >= 20) + (Tokens >= 35);
-	
+	Buff[3] = (BossTime <= Conditions[12]) + (BossTime <= Conditions[13]) + (BossTime <= Conditions[14]);
+	Buff[4] = (SurviveTime >= Conditions[16]) + (SurviveTime >= Conditions[17]) + (SurviveTime >= Conditions[18]);
+	Buff[5] = (NoDamageLevels >= Conditions[20]) + (NoDamageLevels >= Conditions[21]) + (NoDamageLevels >= Conditions[22]);
+	Buff[6] = ((PassedLevels + 1) >= Conditions[24]) + ((PassedLevels + 1) >= Conditions[25]) + ((PassedLevels + 1) >= Conditions[26]);
+	Buff[7] = (Tokens >= Conditions[28]) + (Tokens >= Conditions[29]) + (Tokens >= Conditions[30]);
+	Buff[8] = 1;
+
 	for (int i = 0; i < 8; i++)
 	{
-		Buff[8] = 1;
 		if (Buff[i] == 0)
 		{
 			Buff[8] = 0;

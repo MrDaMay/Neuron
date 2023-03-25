@@ -2,7 +2,7 @@
 
 
 #include "Enemy/Boss/NR_ProjectileWeaponBossComponent.h"
-
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Weapon/NR_Projectile.h"
 
@@ -37,7 +37,9 @@ void UNR_ProjectileWeaponBossComponent::SpawnProjectile()
 	SpawmParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawmParams.Owner = GetOwner();
 
-	float CoefConfusionShot = 0.0f;
+
+	int Shift = UKismetMathLibrary::RandomIntegerInRange(0, 4);
+	float CoefConfusionShot = 0.0f + 7.5 * Shift;
 
 	if(ProjectileSpawn)
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ProjectileSpawn, GetOwner()->GetActorLocation());

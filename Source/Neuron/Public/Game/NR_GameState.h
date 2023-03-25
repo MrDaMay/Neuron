@@ -101,7 +101,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DecreaseEnemies();
 	UFUNCTION(BlueprintCallable)
-	void ChangeLevel();
+		void ChangeLevel();
+	UFUNCTION(BlueprintCallable)
+		void ClearLevel();
 
 	//Spawn start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")

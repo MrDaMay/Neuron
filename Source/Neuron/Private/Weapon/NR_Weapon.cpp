@@ -91,7 +91,7 @@ void ANR_Weapon::FireButtonPressed(bool bIsFire)
 	{
 		if (GetProjectile().Projectile)
 		{
-			if (FireTimer >= WeaponSetting.RateOfFire)
+			if (FireTimer >= WeaponSetting.RateOfFire * CoefFireSpeed)
 			{
 				FireProjectile();
 			}

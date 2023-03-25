@@ -79,6 +79,7 @@ void ANR_EnemyBoss::Drop()
 			if (SpawnActor)
 			{
 				SpawnActor->StaticMesh->SetStaticMesh(SpawnObject.DropMesh);
+				SpawnActor->SetActorScale3D(FVector(2.0f, 2.0f, 2.0f));
 				SpawnActor->LightPartical->Template = SpawnObject.LightPartical;
 				SpawnActor->OverlapSpawnPartical = SpawnObject.OverlapPartical;
 				SpawnActor->ObjectName = SpawnWeaponName;
