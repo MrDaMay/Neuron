@@ -92,6 +92,7 @@ TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 
 	auto GameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	auto Table = GameInstance->AchievementsInfoTable;
+
 	
 	TArray<FName> RowNames = Table->GetRowNames();
 

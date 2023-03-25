@@ -70,4 +70,8 @@ public:
 	//Getter for achievements array
 	UFUNCTION(BlueprintCallable)
 		TArray<int> GetAchievements();
+
+	//Getter for achievements array
+	UFUNCTION(BlueprintCallable)
+		void SetAchievements(TArray<int> Buff) { Achievements = Buff; }
 };
