@@ -112,11 +112,11 @@ TArray<FVector2D> ANR_PlayerState::GetEarnedAchievements()
 	Buff[0] = (NumKilled >= Conditions[0]) + (NumKilled >= Conditions[1]) + (NumKilled >= Conditions[2]);
 	Buff[1] = (NumBonus >= Conditions[4]) + (NumBonus >= Conditions[5]) + (NumBonus >= Conditions[6]);
 	Buff[2] = 0;
-	Buff[3] = (BossTime <= Conditions[11]) + (BossTime <= Conditions[12]) + (BossTime <= Conditions[13]);
-	Buff[4] = (SurviveTime >= Conditions[15]) + (SurviveTime >= Conditions[16]) + (SurviveTime >= Conditions[17]);
-	Buff[5] = (NoDamageLevels >= Conditions[19]) + (NoDamageLevels >= Conditions[20]) + (NoDamageLevels >= Conditions[21]);
-	Buff[6] = ((PassedLevels + 1) >= Conditions[23]) + ((PassedLevels + 1) >= Conditions[24]) + ((PassedLevels + 1) >= Conditions[25]);
-	Buff[7] = (Tokens >= Conditions[27]) + (Tokens >= Conditions[28]) + (Tokens >= Conditions[29]);
+	Buff[3] = (BossTime <= Conditions[12]) + (BossTime <= Conditions[13]) + (BossTime <= Conditions[14]);
+	Buff[4] = (SurviveTime >= Conditions[16]) + (SurviveTime >= Conditions[17]) + (SurviveTime >= Conditions[18]);
+	Buff[5] = (NoDamageLevels >= Conditions[20]) + (NoDamageLevels >= Conditions[21]) + (NoDamageLevels >= Conditions[22]);
+	Buff[6] = ((PassedLevels + 1) >= Conditions[24]) + ((PassedLevels + 1) >= Conditions[25]) + ((PassedLevels + 1) >= Conditions[26]);
+	Buff[7] = (Tokens >= Conditions[28]) + (Tokens >= Conditions[29]) + (Tokens >= Conditions[30]);
 	Buff[8] = 1;
 
 	for (int i = 0; i < 8; i++)
