@@ -18,4 +18,12 @@ public:
 
 	//Achivments
 	TArray<float> Achievements;
+
+	//StoryMode
+	bool StoryMode;
+	int StoryPhase;
+	int Died;
+	int Score;
+	bool bIsCountScore;
+
 };

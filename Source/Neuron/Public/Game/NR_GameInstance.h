@@ -23,6 +23,11 @@ protected:
 	TArray<int> Tokens = {0, 0, 0, 0, 0, 0};
 	TArray<float> Counters;
 
+	//For dialogues and plot
+	int StoryPhase = 0;
+	bool StoryMode = false;
+	bool bIsCountScore = false;
+
 	FName PlayerName;
 
 public:
@@ -51,7 +56,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Level")
 		int32 LevelNumb = 1;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statistics")
+		int Died = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Statistics")
+		int Score = 0;
 
 	//Update achievement at index by certain level
 	UFUNCTION(BlueprintCallable)
@@ -90,4 +98,20 @@ public:
 	void SaveGame();
 	UFUNCTION(BlueprintCallable)
 	void LoadGame();
+
+	//Story mode regulation
+	UFUNCTION(BlueprintCallable)
+		int GetsStoryPhase() { return StoryPhase; }
+	UFUNCTION(BlueprintCallable)
+		void SetStoryPhase(int Phase) { StoryPhase = Phase; }
+	UFUNCTION(BlueprintCallable)
+		void EnableStoryMode() { StoryMode = true; }
+	UFUNCTION(BlueprintCallable)
+		void DisableStoryMode() { StoryMode = false; }
+	UFUNCTION(BlueprintCallable)
+		bool IsStoryModeActive() { return StoryMode; }
+	UFUNCTION(BlueprintCallable)
+		void StartCountScore() { bIsCountScore = true; }
+	UFUNCTION(BlueprintCallable)
+		bool isCountingScore() { return bIsCountScore; }
 };

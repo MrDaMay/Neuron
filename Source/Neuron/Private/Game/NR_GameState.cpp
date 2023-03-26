@@ -19,6 +19,7 @@ void ANR_GameState::BeginPlay()
 		if(!myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelNumb), LevelSettingForSpawn))
 		{
 			myGameInstance->GetLevelSettingsInfoByName(*FString::FromInt(myGameInstance->LevelSettingsInfoTable->GetRowNames().Num()), LevelSettingForSpawn);
+			myGameInstance->LoadGame();
 		}
 	}
 
@@ -183,8 +184,11 @@ void ANR_GameState::TrySpawnBoss()
 {
 	if (!BossAlive)
 	{
-		int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
-		EnemySpawnBase[IndexSpawnBase]->SpawnBoss(LevelSettingForSpawn.Boss);
+		if (!EnemySpawnBase.IsEmpty())
+		{
+			int32 IndexSpawnBase = UKismetMathLibrary::RandomIntegerInRange(1, EnemySpawnBase.Num() - 1);
+			EnemySpawnBase[IndexSpawnBase]->SpawnBoss(LevelSettingForSpawn.Boss);
+		}
 	}
 	else
 	{
