@@ -127,6 +127,11 @@ void UNR_GameInstance::SaveGame()
 	
 
 	SaveGameSlot->Achievements = Achievements;
+	SaveGameSlot->StoryMode = StoryMode;
+	SaveGameSlot->StoryPhase = StoryPhase;
+	SaveGameSlot->Died = Died;
+	SaveGameSlot->Score = Score;
+	SaveGameSlot->bIsCountScore = bIsCountScore;
 
 	UGameplayStatics::SaveGameToSlot(SaveGameSlot, "SaveGame", 0);
 }
@@ -137,7 +142,14 @@ void UNR_GameInstance::LoadGame()
 	{
 		UNR_SaveGame* SaveGameSlot = Cast<UNR_SaveGame>(UGameplayStatics::LoadGameFromSlot("SaveGame", 0));
 
-		if(!SaveGameSlot->Achievements.IsEmpty() && SaveGameSlot->Achievements.Num() == 9)
+		if (!SaveGameSlot->Achievements.IsEmpty() && SaveGameSlot->Achievements.Num() == 9)
+		{
 			Achievements = SaveGameSlot->Achievements;
+			StoryMode = SaveGameSlot->StoryMode;
+			StoryPhase = SaveGameSlot->StoryPhase;
+			Died = SaveGameSlot->Died;
+			Score = SaveGameSlot->Score;
+			bIsCountScore = SaveGameSlot->bIsCountScore;
+		}
 	}
 }

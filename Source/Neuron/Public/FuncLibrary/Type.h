@@ -194,6 +194,8 @@ struct FTokensInfo : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
 		UTexture2D* Texture;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
+		FText Description;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
 		float CharMultiplier;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Token")
 		float BossMultiplier;
