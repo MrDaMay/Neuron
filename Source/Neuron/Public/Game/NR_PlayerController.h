@@ -7,7 +7,6 @@
 #include "NR_PlayerController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnIncrementLife);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRespawn);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenMenuWidget);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenTokenWidget); 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenAchieveWidget);
@@ -34,8 +33,6 @@ public:
 
 	//Delegate for change life
 	FOnIncrementLife OnIncrementLife;
-	//Delegate for respawn character
-	FOnRespawn OnRespawn;
 	//Delegate for open/close menu widget
 	UPROPERTY(BlueprintAssignable, Category = "Widgets")
 		FOnOpenMenuWidget OnOpenMenuWidget;
@@ -51,7 +48,7 @@ public:
 	FOnEndGame OnEndGame;
 
 	//Function for respawn
-	void TryToRespawnPlayer();
+	void CharacterDead();
 
 	//Function for open menu widget
 	void OpenCloseMenuWidget();

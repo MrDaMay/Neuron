@@ -43,6 +43,14 @@ protected:
 	void RollReload();
 	//Reload roll end
 
+	//Switch weapon function start
+	void SwitchToWeaponOne();
+	void SwitchToWeaponTwo();
+	void SwitchToWeaponThree();
+	void SwitchToWeaponFour();
+	//Switch weapon function start
+
+
 public:
 	// Sets default values for this character's properties
 	ANR_Character();

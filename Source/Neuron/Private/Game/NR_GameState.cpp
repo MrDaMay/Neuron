@@ -46,6 +46,7 @@ void ANR_GameState::StartBossPhase()
 {
 
 	ClearLevel();
+
 	GetWorldTimerManager().SetTimer(SpawnBoss, this, &ANR_GameState::TrySpawnBoss, 1.f, true, 0.f);
 	OnChangeMap.Broadcast();
 	OnBossPhaseStarts.Broadcast(LevelSettingForSpawn.Boss);

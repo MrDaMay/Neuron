@@ -2,6 +2,8 @@
 
 
 #include "Game/NR_PlayerController.h"
+#include "Game/NR_GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 void ANR_PlayerController::SetupInputComponent()
 {
@@ -11,9 +13,10 @@ void ANR_PlayerController::SetupInputComponent()
 	InputComponent->BindAction("MenuWidget", EInputEvent::IE_Pressed, this, &ANR_PlayerController::OpenCloseMenuWidget).bExecuteWhenPaused = true;
 }
 
-void ANR_PlayerController::TryToRespawnPlayer()
+void ANR_PlayerController::CharacterDead()
 {
-	OnIncrementLife.Broadcast();
+
+	Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(0))->LevelNumb = 1;
 
 	OnEndGame.Broadcast(false);
 	OnOpenAchieveWidget.Broadcast();

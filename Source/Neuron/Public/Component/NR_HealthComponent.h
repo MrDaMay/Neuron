@@ -47,9 +47,4 @@ public:
 	//Function increment Health
 	UFUNCTION(BlueprintCallable, Category = "Health")
 		virtual void ChangeHealthValue(float ChangeValue);
-
-	UFUNCTION()
-	void RefreshParams();
-
-	void RefreshAlive();
 };

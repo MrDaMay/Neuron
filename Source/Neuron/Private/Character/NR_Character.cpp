@@ -22,6 +22,42 @@ void ANR_Character::RollReload()
 	OnRollReloadEnd.Broadcast();
 }
 
+void ANR_Character::SwitchToWeaponOne()
+{
+	if(WeaponSLot.IsValidIndex(0))
+	{
+		if(WeaponSLot[0] != CurrentWeapon->WeaponName)
+			InitWeapon(WeaponSLot[0]);
+	}
+}
+
+void ANR_Character::SwitchToWeaponTwo()
+{
+	if (WeaponSLot.IsValidIndex(1))
+	{
+		if (WeaponSLot[1] != CurrentWeapon->WeaponName)
+			InitWeapon(WeaponSLot[1]);
+	}
+}
+
+void ANR_Character::SwitchToWeaponThree()
+{
+	if (WeaponSLot.IsValidIndex(2))
+	{
+		if (WeaponSLot[2] != CurrentWeapon->WeaponName)
+			InitWeapon(WeaponSLot[2]);
+	}
+}
+
+void ANR_Character::SwitchToWeaponFour()
+{
+	if (WeaponSLot.IsValidIndex(3))
+	{
+		if (WeaponSLot[3] != CurrentWeapon->WeaponName)
+			InitWeapon(WeaponSLot[3]);
+	}
+}
+
 // Sets default values
 ANR_Character::ANR_Character()
 {
@@ -165,6 +201,11 @@ void ANR_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Released, this, &ANR_Character::InputAttackReleased);
 
 	PlayerInputComponent->BindAction(TEXT("RollEvent"), EInputEvent::IE_Pressed, this, &ANR_Character::InputRollPressed);
+
+	PlayerInputComponent->BindAction(TEXT("SwitchToWeapon1"), EInputEvent::IE_Pressed, this, &ANR_Character::SwitchToWeaponOne);
+	PlayerInputComponent->BindAction(TEXT("SwitchToWeapon2"), EInputEvent::IE_Pressed, this, &ANR_Character::SwitchToWeaponTwo);
+	PlayerInputComponent->BindAction(TEXT("SwitchToWeapon3"), EInputEvent::IE_Pressed, this, &ANR_Character::SwitchToWeaponThree);
+	PlayerInputComponent->BindAction(TEXT("SwitchToWeapon4"), EInputEvent::IE_Pressed, this, &ANR_Character::SwitchToWeaponFour);
 }
 
 void ANR_Character::InputAxisX(float Value)
@@ -250,6 +291,7 @@ void ANR_Character::InitWeapon(FName IdWeaponName)
 
 					Weapon->Pawn = this;
 					Weapon->WeaponSetting = WeaponInfo;
+					Weapon->WeaponName = IdWeaponName;
 
 					Weapon->OnWeaponFireStart.AddDynamic(this, &ANR_Character::WeaponFireStart);
 					OnWeaponSwitched.Broadcast(IdWeaponName);
@@ -329,7 +371,7 @@ void ANR_Character::CharDead()
 	auto PlayerController = Cast<ANR_PlayerController>(GetController());
 	if (PlayerController)
 	{
-		PlayerController->TryToRespawnPlayer();
+		PlayerController->CharacterDead();
 	}
 }
 

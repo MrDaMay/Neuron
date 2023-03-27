@@ -23,7 +23,6 @@ void UNR_HealthComponent::BeginPlay()
 
 	//Delegat for respawn
 	auto PlayerController = Cast<ANR_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	PlayerController->OnRespawn.AddDynamic(this, &UNR_HealthComponent::RefreshParams);
 	
 }
 
@@ -67,19 +66,5 @@ void UNR_HealthComponent::ChangeHealthValue(float ChangeValue)
 		//Say widget what health changed
 		OnHealthChange.Broadcast(Health, ChangeValue);
 	}
-}
-
-void UNR_HealthComponent::RefreshParams()
-{
-	Health = 100.0f;
-
-	OnHealthChange.Broadcast(Health, 0);
-
-	GetWorld()->GetTimerManager().SetTimer(RefreshAliveTimer, this, &UNR_HealthComponent::RefreshAlive, 5.0f, true, 5.0f);
-}
-
-void UNR_HealthComponent::RefreshAlive()
-{
-	IsAlive = true;
 }
 

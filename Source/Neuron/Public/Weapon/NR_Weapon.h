@@ -46,6 +46,7 @@ public:
 	bool IsPlayer = true;
 	class ANR_Character* Pawn = nullptr;
 	FWeaponInfo WeaponSetting;
+	FName WeaponName;
 	//Params end
 
 	//UpdateWeaponParams
