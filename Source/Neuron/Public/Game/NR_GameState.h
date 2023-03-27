@@ -39,8 +39,9 @@ public:
 		FOnBossPhaseStarts OnBossPhaseStarts;
 	UPROPERTY(BlueprintAssignable)
 		FOnBossDies OnBossDies;
+	UPROPERTY(BlueprintAssignable)
+		FOnChangeMap OnChangeMap;
 
-	FOnChangeMap OnChangeMap;
 	FOnStartChangeLevel OnStartChangeLevel;
 
 

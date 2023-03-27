@@ -11,7 +11,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenMenuWidget);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenTokenWidget); 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenAchieveWidget);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOpenPickupWidget, FName, ObjectName);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEndGame, bool, bIsWin);
 
 /**
  * 
@@ -44,8 +43,6 @@ public:
 		FOnOpenTokenWidget OnOpenTokenWidget;
 	UPROPERTY(BlueprintAssignable, Category = "Widgets")
 		FOnOpenAchieveWidget OnOpenAchieveWidget;
-	//Delegate what player was absolutely dead
-	FOnEndGame OnEndGame;
 
 	//Function for respawn
 	void CharacterDead();

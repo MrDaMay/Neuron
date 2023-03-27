@@ -172,8 +172,6 @@ public:
 		void CharDead();
 	UFUNCTION(BlueprintNativeEvent)
 		void CharDead_BP();
-	UFUNCTION()
-		void AbsolutelyDead(bool IsWin);
 	//Dead end
 
 	//Bonus start

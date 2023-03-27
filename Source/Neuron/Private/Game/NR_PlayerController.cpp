@@ -15,10 +15,8 @@ void ANR_PlayerController::SetupInputComponent()
 
 void ANR_PlayerController::CharacterDead()
 {
+	Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()))->LevelNumb = 1;
 
-	Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(0))->LevelNumb = 1;
-
-	OnEndGame.Broadcast(false);
 	OnOpenAchieveWidget.Broadcast();
 }
 

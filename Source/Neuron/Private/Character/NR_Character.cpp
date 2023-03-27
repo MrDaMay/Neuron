@@ -149,9 +149,6 @@ void ANR_Character::BeginPlay()
 
 	//Initialize character stats from GameInstance
 	ApplyParamsOnStats();
-
-	auto PlayerController = Cast<ANR_PlayerController>(GetController());
-	PlayerController->OnEndGame.AddDynamic(this, &ANR_Character::AbsolutelyDead);
 }
 
 float ANR_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -373,13 +370,9 @@ void ANR_Character::CharDead()
 	{
 		PlayerController->CharacterDead();
 	}
-}
 
-void ANR_Character::AbsolutelyDead(bool IsWin)
-{
 	PlayAnimMontage(DeathMontage);
 }
-
 void ANR_Character::TakeBonus(FName BonusType)
 {
 	auto MyPlayerState = Cast<ANR_PlayerState>(GetPlayerState());
