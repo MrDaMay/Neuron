@@ -622,6 +622,11 @@ TArray<float> ANR_Character::GetStats()
 	Buff.Add(Stats.CoefFireSpeed);
 	Buff.Add(Stats.CoefDamageResist);
 	Buff.Add(Stats.CoefMovementSpeed);
+	
+	auto Tokens = TokenComponent->GetTokenArray();
+
+	Buff.Add(Tokens[4]);
+	Buff.Add(Tokens[5]);
 
 	return Buff;
 }
