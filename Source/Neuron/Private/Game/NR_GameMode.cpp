@@ -9,13 +9,3 @@ void ANR_GameMode::BeginPlay()
 
 }
 
-void ANR_GameMode::EndGame(bool IsWin)
-{
-	OnEndGameDelegate.Broadcast(IsWin);
-}
-
-void ANR_GameMode::SpawnEnemies()
-{
-	OnSpawnEnemy.Broadcast();
-}
-

@@ -23,17 +23,4 @@ protected:
 
 public:
 
-	//Spawn timer
-	FTimerHandle SpawnEnemyTimer;
-
-	//Delegate for widget
-	UPROPERTY(BlueprintAssignable, Category = "EndGame")
-		FOnEndGameDelegate OnEndGameDelegate;
-
-	FOnSpawnEnemy OnSpawnEnemy;
-
-	//Event for create finish widget and end game
-	void EndGame(bool IsWin);
-
-	void SpawnEnemies();
 };
