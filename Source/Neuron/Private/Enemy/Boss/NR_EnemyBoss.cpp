@@ -4,6 +4,7 @@
 #include "Enemy/Boss/NR_EnemyBoss.h"
 #include "Collectable/NR_CollectableBase.h"
 #include "Game/NR_GameInstance.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -18,6 +19,8 @@ void ANR_EnemyBoss::BeginPlay()
 	{
 		PlayAnimMontage(SpawnAnimation);
 	}
+
+	StartUpSpeedTimer();
 }
 
 void ANR_EnemyBoss::FireProjectileWeapon()
@@ -47,6 +50,25 @@ void ANR_EnemyBoss::FindWeaponForSpawn()
 			}
 		}
 	}
+}
+
+void ANR_EnemyBoss::UpSpeed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 700.0f;
+	GetWorldTimerManager().SetTimer(EndUpSpeed, this, &ANR_EnemyBoss::DownSpeed, 5.0f, false, 5.0f);
+}
+
+void ANR_EnemyBoss::DownSpeed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+	StartUpSpeedTimer();
+}
+
+void ANR_EnemyBoss::StartUpSpeedTimer()
+{
+	float TimeForUpSpeed = UKismetMathLibrary::RandomFloatInRange(8.0f, 15.0f);
+
+	GetWorldTimerManager().SetTimer(StartUpSpeed, this, &ANR_EnemyBoss::UpSpeed, TimeForUpSpeed, false, TimeForUpSpeed);
 }
 
 

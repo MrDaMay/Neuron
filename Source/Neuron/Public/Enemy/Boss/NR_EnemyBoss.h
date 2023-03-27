@@ -21,12 +21,18 @@ protected:
 	virtual void BeginPlay() override;
 
 	FTimerHandle ProjectileWeaponTimer;
+	FTimerHandle StartUpSpeed;
+	FTimerHandle EndUpSpeed;
 
 	void FireProjectileWeapon();
 
 	void FindWeaponForSpawn();
 
 	FName SpawnWeaponName = "None";
+
+	void UpSpeed();
+	void DownSpeed();
+	void StartUpSpeedTimer();
 
 public:
 	ANR_EnemyBoss();
