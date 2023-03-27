@@ -66,8 +66,6 @@ void ANR_GameState::BossKilled()
 	auto myGameInstance = Cast<UNR_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (myGameInstance)
 		myGameInstance->LevelNumb++;
-
-	GetWorldTimerManager().SetTimer(StartNewLevel, this, &ANR_GameState::ChangeLevel, 20.0f, false, 20.0f);
 }
 
 void ANR_GameState::StartWavePhase()
@@ -81,7 +79,7 @@ void ANR_GameState::DecreaseEnemies()
 {
 	CurrentCoutEnemiesForKill--;
 
-	if (CurrentCoutEnemiesForKill <= 0)
+	if (CurrentCoutEnemiesForKill == 0)
 		OnWavePhaseEnds.Broadcast();
 }
 
@@ -159,7 +157,6 @@ void ANR_GameState::ChoiseOfEnemyForSpawn()
 	else
 	{
 		GetWorldTimerManager().ClearTimer(SpawnEnemyTimer);
-		OnWavePhaseEnds.Broadcast();
 	}
 }
 
