@@ -203,7 +203,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
 		float BombDamageBonusValue = 100.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bonus")
-		float BombDamageBonusRadius = 400.0f;
+		float BombDamageBonusRadius = 600.0f;
 	//Bonus params end
 
 	//Inventory system start
