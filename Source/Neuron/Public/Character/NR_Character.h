@@ -11,7 +11,7 @@
 #include "NR_Character.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponParamsChange, float, CoefFireSpeed, float, CoefDamage);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponSwitched, FName, WeaponName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponSwitched, FName, WeaponName, int, WeaponIndex);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollReloadStart);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRollReloadEnd);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossCausedDamage);
@@ -139,7 +139,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		ANR_Weapon* GetCurrentWeapon();
 	UFUNCTION(BlueprintCallable)
-		void InitWeapon(FName IdWeaponName);
+		void InitWeapon(FName IdWeaponName, int WeaponIndex);
 	UFUNCTION()
 		void WeaponFireStart(UAnimMontage* Anim);
 	UFUNCTION(BlueprintNativeEvent)

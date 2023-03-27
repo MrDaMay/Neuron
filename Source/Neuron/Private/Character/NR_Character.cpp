@@ -13,7 +13,6 @@
 #include "Game/NR_GameState.h"
 #include "Game/NR_PlayerState.h"
 #include "Game/NR_PlayerController.h"
-#include "Game/NR_GameInstance.h"
 #include "Enemy/NR_FreezeInterface.h"
 
 void ANR_Character::RollReload()
@@ -27,7 +26,7 @@ void ANR_Character::SwitchToWeaponOne()
 	if(WeaponSLot.IsValidIndex(0))
 	{
 		if(WeaponSLot[0] != CurrentWeapon->WeaponName)
-			InitWeapon(WeaponSLot[0]);
+			InitWeapon(WeaponSLot[0], 0);
 	}
 }
 
@@ -36,7 +35,7 @@ void ANR_Character::SwitchToWeaponTwo()
 	if (WeaponSLot.IsValidIndex(1))
 	{
 		if (WeaponSLot[1] != CurrentWeapon->WeaponName)
-			InitWeapon(WeaponSLot[1]);
+			InitWeapon(WeaponSLot[1], 1);
 	}
 }
 
@@ -45,7 +44,7 @@ void ANR_Character::SwitchToWeaponThree()
 	if (WeaponSLot.IsValidIndex(2))
 	{
 		if (WeaponSLot[2] != CurrentWeapon->WeaponName)
-			InitWeapon(WeaponSLot[2]);
+			InitWeapon(WeaponSLot[2], 2);
 	}
 }
 
@@ -54,7 +53,7 @@ void ANR_Character::SwitchToWeaponFour()
 	if (WeaponSLot.IsValidIndex(3))
 	{
 		if (WeaponSLot[3] != CurrentWeapon->WeaponName)
-			InitWeapon(WeaponSLot[3]);
+			InitWeapon(WeaponSLot[3], 3);
 	}
 }
 
@@ -145,7 +144,7 @@ void ANR_Character::BeginPlay()
 		myGameInstance->LoadGame();
 		WeaponSLot = myGameInstance->Weapons;
 	}
-	InitWeapon(WeaponSLot[0]);
+	InitWeapon(WeaponSLot[0], 0);
 
 	//Initialize character stats from GameInstance
 	ApplyParamsOnStats();
@@ -249,7 +248,7 @@ ANR_Weapon* ANR_Character::GetCurrentWeapon()
 	return CurrentWeapon;
 }
 
-void ANR_Character::InitWeapon(FName IdWeaponName)
+void ANR_Character::InitWeapon(FName IdWeaponName, int WeaponIndex)
 {
 	if (CurrentWeapon)
 	{
@@ -291,7 +290,7 @@ void ANR_Character::InitWeapon(FName IdWeaponName)
 					Weapon->WeaponName = IdWeaponName;
 
 					Weapon->OnWeaponFireStart.AddDynamic(this, &ANR_Character::WeaponFireStart);
-					OnWeaponSwitched.Broadcast(IdWeaponName);
+					OnWeaponSwitched.Broadcast(IdWeaponName, WeaponIndex);
 				}
 			}
 		}
