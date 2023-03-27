@@ -20,7 +20,4 @@ class NEURON_API ANR_GameMode : public AGameModeBase
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-public:
-
 };
