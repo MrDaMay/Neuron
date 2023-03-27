@@ -114,4 +114,8 @@ public:
 		void StartCountScore() { bIsCountScore = true; }
 	UFUNCTION(BlueprintCallable)
 		bool isCountingScore() { return bIsCountScore; }
+
+	//Refresh inventory
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	void RefreshWeaponInventory();
 };

@@ -153,3 +153,8 @@ void UNR_GameInstance::LoadGame()
 		}
 	}
 }
+
+void UNR_GameInstance::RefreshWeaponInventory()
+{
+	Weapons = { "Rifle" };
+}
